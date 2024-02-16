@@ -1,47 +1,59 @@
-import tkinter as tk
-import os
+# Import required libraries
+# from tkinter import *
+# from PIL import ImageTk, Image as im
+
+# Import required libraries
+from tkinter import *
 from PIL import ImageTk, Image
 
+# Create an instance of tkinter window
+win = Tk()
+win.title("Team8Photon")
+win.geometry("300x300")
 
-class Application(tk.Frame):
-    def __init__(self, master=None):
-        tk.Frame.__init__(self, master)
+path = "logo.jpg"
+
+img = ImageTk.PhotoImage(Image.open(path))
+original_image = Image.open(path)
+resized_image = original_image.resize((300, 300))
+
+img = ImageTk.PhotoImage(resized_image)
+
+label = Label(win, image=img)
+label.grid()
+
+
+win.after(3000, win.destroy)
+win.mainloop()
+
+
+class Application(Frame):
+    def __init__(self, master):
+        Frame.__init__(self, master)
+        self.master = master
+        self.master.title("Team8Photon")
+        self.frame1 = Frame(master, background='#990000')
+        self.frame1.place(x=0, y=0, relwidth=0.5,
+                          relheight=1.0, anchor="nw")
+        self.frame2 = Frame(master, background="#346C4E",)
+        self.frame2.place(relx=0.5, y=0, relwidth=0.5,
+                          relheight=1.0, anchor="nw")
         self.grid()
         self.createWidgets()
-        self.img = None
 
     def createWidgets(self):
-        self.quitButton = tk.Button(self, text='Quit',
-                                    command=self.quit)
-
-        self.quitButton.grid()
-# Get the current script's directory
-#        current_directory = os.path.dirname(os.path.realpath(__file__))
-
-# Move up one directory to reach the parent directory
-#       parent_directory = os.path.abspath(
-#          os.path.join(current_directory, os.pardir))
-
-# Construct the path to the photo
-#     photo_path = os.path.join(parent_directory, 'redtower-arena.png')
-        try:
-            self.img = ImageTk.PhotoImage(Image.open('logo.jpg'))
-        except Exception as e:
-            print(f"Error loading image: {e}")
-
-#        print(f"Photo path: {photo_path}")
-
-        canvas = tk.Canvas(self, width=300, height=300)
-        canvas.grid()
-        canvas.create_image(20, 20, anchor=tk.NW, image=self.img)
-
         for i in range(15):
-            self.entry = tk.Entry()
-            self.entry.grid()
+            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry.config(highlightbackground="#990000",
+                              highlightcolor="#990000")
+            self.entry.grid(row=i, column=0)
         for i in range(15):
-            self.entry = tk.Entry()
-            self.entry.grid(row=i+1, column=1)
+            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry.config(highlightbackground="#346C4E",
+                              highlightcolor="#346C4E")
+            self.entry.grid(row=i, column=1)
 
 
-app = Application()
-app.mainloop()
+root = Tk()
+app = Application(root)
+root.mainloop()
