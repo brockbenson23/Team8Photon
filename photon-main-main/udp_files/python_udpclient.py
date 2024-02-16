@@ -1,5 +1,6 @@
 import socket
 
+print("in client")
 msgFromClient = "Hello UDP Server"
 bytesToSend = str.encode(msgFromClient)
 serverAddressPort = ("127.0.0.1", 20001)
