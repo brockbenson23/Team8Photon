@@ -1,7 +1,7 @@
-pushd udp_files
+@echo off
 echo "in udp"
-python python_udpserver.py &
-python python_udpclient.py &
-popd
-python python_graphics.py
+start python3 python_udpserver.py
+start python3 python_udpclient.py
+python3 python_graphics.py
 echo "done"
+
