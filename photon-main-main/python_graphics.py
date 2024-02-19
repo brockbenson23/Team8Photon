@@ -28,6 +28,7 @@ win.mainloop()
 
 red = '#990000'
 green = '#346C4E'
+blue = '#4169e1'
 
 class Application(Frame):
     def __init__(self, master):
