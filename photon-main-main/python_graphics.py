@@ -48,12 +48,10 @@ class Application(Frame):
 
     def createWidgets(self):
         self.Label = Label(text='Enter First and Last Name', bg=blue, fg='white')
-        self.Label.grid(row=0, column=2)
-        self.Label = Label(text='Red Team', bg=red, fg='white')
         self.Label.grid(row=0, column=0)
-        self.Label = Label(text='Green Team', bg=green, fg='white')
+        self.Label = Label(text='Red Team', bg=red, fg='white')
         self.Label.grid(row=0, column=1)
-        self.Label = Label(text='Enter First and Last Name', bg=blue, fg='white')
+        self.Label = Label(text='Green Team', bg=green, fg='white')
         self.Label.grid(row=0, column=2)
 
         for i in range(2):
