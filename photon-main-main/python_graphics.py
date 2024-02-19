@@ -61,6 +61,18 @@ class Application(Frame):
             self.entry.config(highlightbackground=green,
                               highlightcolor=green)
             self.entry.grid(row=i+1, column=1)
+            
+        l1 = Label(win, text = "First:")
+        l2 = Label(win, text = "Second:")
+
+        l1.grid(row = 0, column = 0, sticky = W, pady = 2)
+        l2.grid(row = 1, column = 0, sticky = W, pady = 2)
+
+        e1 = Entry(master)
+        e2 = Entry(master)
+
+        e1.grid(row  = 0, column = 1, pady = 2)
+        e2.grid(row  = 1, column = 1, pady = 2)
 
 
 root = Tk()
