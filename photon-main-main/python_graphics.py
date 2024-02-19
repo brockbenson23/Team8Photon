@@ -47,6 +47,8 @@ class Application(Frame):
         self.master.rowconfigure(0, weight=1)
 
     def createWidgets(self):
+        self.Label = Label(text='Enter First and Last Name', bg=blue, fg='white')
+        self.Label.grid(row=0, column=2)
         self.Label = Label(text='Red Team', bg=red, fg='white')
         self.Label.grid(row=0, column=0)
         self.Label = Label(text='Green Team', bg=green, fg='white')
@@ -54,6 +56,11 @@ class Application(Frame):
         self.Label = Label(text='Enter First and Last Name', bg=blue, fg='white')
         self.Label.grid(row=0, column=2)
 
+        for i in range(2):
+            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry.config(highlightbackground=blue,
+                              highlightcolor=blue)
+            self.entry.grid(row=i+1, column=2)
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=red,
@@ -64,11 +71,7 @@ class Application(Frame):
             self.entry.config(highlightbackground=green,
                               highlightcolor=green)
             self.entry.grid(row=i+1, column=1)
-        for i in range(2):
-            self.entry = Entry(bg="white", fg="black", bd=0)
-            self.entry.config(highlightbackground=blue,
-                              highlightcolor=blue)
-            self.entry.grid(row=i+1, column=1)
+        
         
             
         # l1 = Label(win, text = "First:")
