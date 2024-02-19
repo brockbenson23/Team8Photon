@@ -9,13 +9,13 @@ from PIL import ImageTk, Image
 # Create an instance of tkinter window
 win = Tk()
 win.title("Team8Photon")
-win.geometry("300x300")
+win.geometry("700x700")
 
 path = "logo.jpg"
 
 img = ImageTk.PhotoImage(Image.open(path))
 original_image = Image.open(path)
-resized_image = original_image.resize((300, 300))
+resized_image = original_image.resize((700, 700))
 
 img = ImageTk.PhotoImage(resized_image)
 
@@ -47,20 +47,43 @@ class Application(Frame):
 
     def createWidgets(self):
         self.Label = Label(text='Red Team', bg=red, fg='white')
-        self.Label.grid(row=0, column=0)
+        self.Label.configure(padx=20, pady=20)
+        self.Label.grid(row=0, column=0, columnspan=2)
         self.Label = Label(text='Green Team', bg=green, fg='white')
-        self.Label.grid(row=0, column=1)
+        self.Label.configure(padx=20, pady=20)
+        self.Label.grid(row=0, column=2, columnspan=2)
+        self.Label = Label(text='ID', bg=red, fg='white')
+        self.Label.grid(row=1, column=0)
+        self.Label = Label(text='Codename', bg=red, fg='white')
+        self.Label.grid(row=1, column=1)
+        self.Label = Label(text='ID', bg=green, fg='white')
+        self.Label.grid(row=1, column=2)
+        self.Label = Label(text='Codename', bg=green, fg='white')
+        self.Label.grid(row=1, column=3)
+
+
 
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=red,
                               highlightcolor=red)
-            self.entry.grid(row=i+1, column=0)
+            self.entry.grid(row=i+2, column=1)
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=green,
                               highlightcolor=green)
-            self.entry.grid(row=i+1, column=1)
+            self.entry.grid(row=i+2, column=3)
+        for i in range(15):
+            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry.config(highlightbackground=red,
+                              highlightcolor=red)
+            self.entry.grid(row=i+2, column=0)
+        for i in range(15):
+            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry.config(highlightbackground=green,
+                              highlightcolor=green)
+            self.entry.grid(row=i+2, column=2)
+
 
 
 root = Tk()
