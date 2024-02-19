@@ -60,17 +60,17 @@ class Application(Frame):
             self.entry = Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=blue,
                               highlightcolor=blue)
-            self.entry.grid(row=i+1, column=2)
+            self.entry.grid(row=i+1, column=0)
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=red,
                               highlightcolor=red)
-            self.entry.grid(row=i+1, column=0)
+            self.entry.grid(row=i+1, column=1)
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=green,
                               highlightcolor=green)
-            self.entry.grid(row=i+1, column=1)
+            self.entry.grid(row=i+1, column=2)
         
         
             
