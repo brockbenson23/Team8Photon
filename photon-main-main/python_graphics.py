@@ -72,6 +72,7 @@ class Application(Frame):
             self.entry = Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=green,
                               highlightcolor=green)
+<<<<<<< HEAD
             self.entry.grid(row=i+2, column=3)
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=0)
@@ -84,6 +85,23 @@ class Application(Frame):
                               highlightcolor=green)
             self.entry.grid(row=i+2, column=2)
 
+=======
+            self.entry.grid(row=i+1, column=1)
+        
+        
+            
+        # l1 = Label(win, text = "First:")
+        # l2 = Label(win, text = "Second:")
+
+        # l1.grid(row = 0, column = 0, sticky = W, pady = 2)
+        # l2.grid(row = 1, column = 0, sticky = W, pady = 2)
+
+        # e1 = Entry(master)
+        # e2 = Entry(master)
+
+        # e1.grid(row  = 0, column = 1, pady = 2)
+        # e2.grid(row  = 1, column = 1, pady = 2)
+>>>>>>> 6bd9a4f3f04aa781d0ba5024bd90964706fefb4f
 
 
 root = Tk()
