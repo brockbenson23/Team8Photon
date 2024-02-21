@@ -29,6 +29,7 @@ win.mainloop()
 red = '#990000'
 green = '#346C4E'
 
+
 class Application(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
@@ -61,35 +62,34 @@ class Application(Frame):
         self.Label = Label(text='Codename', bg=green, fg='white')
         self.Label.grid(row=1, column=3)
 
-
-
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=red,
                               highlightcolor=red)
+#           f = open("player.sql", "r():")
+#           for line in f:
+#               str = f.readline()
+#               if "VALUE (1," in str:
+#                   code = str[10:]
+
+
             self.entry.grid(row=i+2, column=1)
         for i in range(15):
-            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry=Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=green,
                               highlightcolor=green)
-<<<<<<< HEAD
             self.entry.grid(row=i+2, column=3)
         for i in range(15):
-            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry=Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=red,
                               highlightcolor=red)
             self.entry.grid(row=i+2, column=0)
         for i in range(15):
-            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry=Entry(bg="white", fg="black", bd=0)
             self.entry.config(highlightbackground=green,
                               highlightcolor=green)
             self.entry.grid(row=i+2, column=2)
 
-=======
-            self.entry.grid(row=i+1, column=1)
-        
-        
-            
         # l1 = Label(win, text = "First:")
         # l2 = Label(win, text = "Second:")
 
@@ -99,11 +99,9 @@ class Application(Frame):
         # e1 = Entry(master)
         # e2 = Entry(master)
 
+
         # e1.grid(row  = 0, column = 1, pady = 2)
         # e2.grid(row  = 1, column = 1, pady = 2)
->>>>>>> 6bd9a4f3f04aa781d0ba5024bd90964706fefb4f
-
-
-root = Tk()
-app = Application(root)
+root=Tk()
+app=Application(root)
 root.mainloop()
