@@ -64,8 +64,8 @@ class Application(Frame):
         self.Label.grid(row=1, column=3)
 
         for i in range(15):
-            self.entry = Entry(bg="white", fg="black", bd=0)
-            self.entry.config(font=('Times 26'), highlightbackground=red,
+            self.entry = Entry(bg="white", fg="black", bd=2)
+            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
                               highlightcolor=red)
 #           f = open("player.sql", "r():")
 #           for line in f:
@@ -75,18 +75,18 @@ class Application(Frame):
 
             self.entry.grid(row=i+2, column=1)
         for i in range(15):
-            self.entry = Entry(bg="white", fg="black", bd=0)
-            self.entry.config(font=('Times 26'), highlightbackground=green,
+            self.entry = Entry(bg="white", fg="black", bd=2)
+            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=green,
                               highlightcolor=green)
             self.entry.grid(row=i+2, column=3)
         for i in range(15):
-            self.entry = Entry(bg="white", fg="black", bd=0)
-            self.entry.config(font=('Times 26'), highlightbackground=red,
+            self.entry = Entry(bg="white", fg="black", bd=2)
+            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
                               highlightcolor=red, width=2)
             self.entry.grid(row=i+2, column=0)
         for i in range(15):
-            self.entry = Entry(bg="white", fg="black", bd=0)
-            self.entry.config(font=('Times 26'), highlightbackground=green,
+            self.entry = Entry(bg="white", fg="black", bd=2)
+            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=green,
                               highlightcolor=green, width=2)
             self.entry.grid(row=i+2, column=2)
 
