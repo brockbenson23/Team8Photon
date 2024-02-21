@@ -35,6 +35,7 @@ class Application(Frame):
         Frame.__init__(self, master)
         self.master = master
         self.master.title("Team8Photon")
+        self.master.resizable(False, False)
         self.frame1 = Frame(master, background=red)
         self.frame1.place(x=0, y=0, relwidth=0.5,
                           relheight=1.0, anchor="nw")
@@ -64,7 +65,7 @@ class Application(Frame):
 
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=0)
-            self.entry.config(highlightbackground=red,
+            self.entry.config(font=('Times 26'), highlightbackground=red,
                               highlightcolor=red)
 #           f = open("player.sql", "r():")
 #           for line in f:
@@ -72,22 +73,21 @@ class Application(Frame):
 #               if "VALUE (1," in str:
 #                   code = str[10:]
 
-
             self.entry.grid(row=i+2, column=1)
         for i in range(15):
-            self.entry=Entry(bg="white", fg="black", bd=0)
-            self.entry.config(highlightbackground=green,
+            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry.config(font=('Times 26'), highlightbackground=green,
                               highlightcolor=green)
             self.entry.grid(row=i+2, column=3)
         for i in range(15):
-            self.entry=Entry(bg="white", fg="black", bd=0)
-            self.entry.config(highlightbackground=red,
-                              highlightcolor=red)
+            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry.config(font=('Times 26'), highlightbackground=red,
+                              highlightcolor=red, width=2)
             self.entry.grid(row=i+2, column=0)
         for i in range(15):
-            self.entry=Entry(bg="white", fg="black", bd=0)
-            self.entry.config(highlightbackground=green,
-                              highlightcolor=green)
+            self.entry = Entry(bg="white", fg="black", bd=0)
+            self.entry.config(font=('Times 26'), highlightbackground=green,
+                              highlightcolor=green, width=2)
             self.entry.grid(row=i+2, column=2)
 
         # l1 = Label(win, text = "First:")
@@ -99,9 +99,8 @@ class Application(Frame):
         # e1 = Entry(master)
         # e2 = Entry(master)
 
-
         # e1.grid(row  = 0, column = 1, pady = 2)
         # e2.grid(row  = 1, column = 1, pady = 2)
-root=Tk()
-app=Application(root)
+root = Tk()
+app = Application(root)
 root.mainloop()
