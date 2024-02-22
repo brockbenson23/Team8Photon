@@ -1,6 +1,7 @@
 import socket
 
 print("in client")
+# read id(who hit someone) and id(who got hit) then send to server
 msgFromClient = "Hello UDP Server"
 bytesToSend = str.encode(msgFromClient)
 serverAddressPort = ("127.0.0.1", 7500)
