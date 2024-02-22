@@ -67,11 +67,19 @@ class Application(Frame):
             self.entry = Entry(bg="white", fg="black", bd=2)
             self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
                               highlightcolor=red)
-#           f = open("player.sql", "r():")
+#           f = open("player.sql", "r")
+#           list = [str(i) for i in range(1, 16)]
+#           index = 0
 #           for line in f:
-#               str = f.readline()
-#               if "VALUE (1," in str:
-#                   code = str[10:]
+#               word = f.readline()
+#               if f"VALUE ({list[index]}," in word:
+#                   code = word[10:]
+#                   index += 1
+#               else:
+#                   break
+#           f.close()
+#           f = open("player.sql", "a")
+#           f.write(f"VALUE ({list[index]}, \"newCodeName\")")
 
             self.entry.grid(row=i+2, column=1)
         for i in range(15):
