@@ -67,19 +67,6 @@ class Application(Frame):
             self.entry = Entry(bg="white", fg="black", bd=2)
             self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
                               highlightcolor=red)
-#           f = open("player.sql", "r")
-#           list = [str(i) for i in range(1, 16)]
-#           index = 0
-#           for line in f:
-#               word = f.readline()
-#               if f"VALUE ({list[index]}," in word:
-#                   code = word[10:]
-#                   index += 1
-#               else:
-#                   break
-#           f.close()
-#           f = open("player.sql", "a")
-#           f.write(f"VALUE ({list[index]}, \"newCodeName\")")
 
             self.entry.grid(row=i+2, column=1)
         for i in range(15):
@@ -90,14 +77,30 @@ class Application(Frame):
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=2)
             self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
-                              highlightcolor=red, width=2)
+                              highlightcolor=red, width=9)
             self.entry.grid(row=i+2, column=0)
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=2)
             self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=green,
-                              highlightcolor=green, width=2)
+                              highlightcolor=green, width=9)
             self.entry.grid(row=i+2, column=2)
 
+        def getName(id: str,) -> str:
+            f = open("player.sql", "r")
+            index = 0
+            for line in f:
+                word = f.readline()
+                if f"VALUES ({id}," in word:
+                    code = word[10:]
+                    index += 1
+                else:
+                    break
+            f.close()
+            f = open("player.sql", "a")
+            f.write(f"\nVALUES ({id}, \"newCodeName\");")
+
+        self.button = Button(text="Submit ID", command=getName("12345"))
+        self.button.grid(row=18, column=1, columnspan=2)
         # l1 = Label(win, text = "First:")
         # l2 = Label(win, text = "Second:")
 
@@ -106,7 +109,6 @@ class Application(Frame):
 
         # e1 = Entry(master)
         # e2 = Entry(master)
-
         # e1.grid(row  = 0, column = 1, pady = 2)
         # e2.grid(row  = 1, column = 1, pady = 2)
 root = Tk()

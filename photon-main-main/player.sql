@@ -8,3 +8,4 @@ CREATE TABLE player (
 INSERT INTO player (id, codename)
 VALUES (1, 'Opus');
 VALUES (2, 'Mario');
+VALUES (12345, "newCodeName")
