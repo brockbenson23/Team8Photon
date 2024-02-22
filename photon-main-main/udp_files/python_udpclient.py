@@ -1,9 +1,10 @@
 import socket
 
 print("in client")
+# send id(who got hit) back to client?
 msgFromClient = "Hello UDP Server"
 bytesToSend = str.encode(msgFromClient)
-serverAddressPort = ("127.0.0.1", 20001)
+serverAddressPort = ("127.0.0.1", 7500)
 bufferSize = 1024
 
 # Create a UDP socket at client side
