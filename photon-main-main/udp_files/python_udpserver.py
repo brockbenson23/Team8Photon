@@ -3,7 +3,7 @@ import socket
 localIP = "127.0.0.1"
 localPort = 7501
 bufferSize = 1024
-# send id(who got hit) back to client?
+# read id(who hit someone) and id(who got hit) then send to server
 msgFromServer = "Hello UDP Client"
 bytesToSend = str.encode(msgFromServer)
 
