@@ -17,3 +17,8 @@ msgFromServer = UDPClientSocket.recvfrom(bufferSize)
 msg = "Message from Server {}".format(msgFromServer[0])
 
 print(msg)
+
+# # Receiving equipment ID from the server
+# received_data, _ = UDPClientSocket.recvfrom(bufferSize)
+# equipment_id = received_data.decode()
+# print("Received Equipment ID:", equipment_id)
