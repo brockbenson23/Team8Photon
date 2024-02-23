@@ -3,6 +3,7 @@
 # from PIL import ImageTk, Image as im
 
 # Import required libraries
+import socket
 from tkinter import *
 from PIL import ImageTk, Image
 
@@ -64,11 +65,23 @@ class Application(Frame):
         self.Label.grid(row=1, column=3)
 
         for i in range(15):
-            self.entry = Entry(bg="white", fg="black", bd=2)
+            sv = StringVar()
+            names = StringVar()
+            self.entry = Entry(bg="white", fg="black", bd=2, textvariable=sv)
             self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
                               highlightcolor=red)
-
             self.entry.grid(row=i+2, column=1)
+
+            self.entry2 = Entry(bg="white", fg="black",
+                                bd=2, textvariable=names)
+            self.entry2.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
+                               highlightcolor=red, width=9)
+            self.entry2.grid(row=i+2, column=0)
+            sv.trace("w", lambda name, index, mode, sv=sv: getName(
+                sv, self.entry, names, self.entry2))
+            names.trace("w", lambda name, index, mode, names=names: getName(
+                sv, self.entry, names, self.entry2))
+
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=2)
             self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=green,
@@ -76,36 +89,38 @@ class Application(Frame):
             self.entry.grid(row=i+2, column=3)
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=2)
-            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
-                              highlightcolor=red, width=9)
-            self.entry.grid(row=i+2, column=0)
-        for i in range(15):
-            self.entry = Entry(bg="white", fg="black", bd=2)
             self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=green,
                               highlightcolor=green, width=9)
             self.entry.grid(row=i+2, column=2)
 
-        def getName(id: str,) -> str:
+        def getName(sv, entry, names, entry2) -> None:
             f = open("player.sql", "r")
             index = 0
             for line in f:
                 word = f.readline()
-                if f"VALUES ({id}," in word:
-                    code = word[10:]
+                if f"VALUES ({names.get()}," in word:
+                    code = word[10:-2]
                     index += 1
+                    entry.setvar(names, code)
+                    sv.set(code)
                 else:
                     break
             f.close()
             f = open("player.sql", "a")
-            f.write(f"\nVALUES ({id}, \"newCodeName\");")
+            print('sv = ', sv.get())
+            print('names  = ', names.get())
+            f.write(f"\nVALUES ({names.get()}, {sv.get()});")
 
-        self.button = Button(text="Submit ID", command=getName("12345"))
-        self.button.grid(row=18, column=1, columnspan=2)
+# make string with trace, use button to check when done typing
+
+#       self.button = Button(text="Submit ID", command=getName("12345"))
+#       self.button.grid(row=18, column=1, columnspan=2)
         # l1 = Label(win, text = "First:")
         # l2 = Label(win, text = "Second:")
 
         # l1.grid(row = 0, column = 0, sticky = W, pady = 2)
         # l2.grid(row = 1, column = 0, sticky = W, pady = 2)
+
 
         # e1 = Entry(master)
         # e2 = Entry(master)
