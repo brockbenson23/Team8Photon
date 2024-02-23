@@ -1,9 +1,9 @@
 import socket
 
 localIP = "127.0.0.1"
-localPort = 7501
+broadcastPort = 7500
+receivePort = 7501
 bufferSize = 1024
-# read id(who hit someone) and id(who got hit) then send to server
 msgFromServer = "Hello UDP Client"
 bytesToSend = str.encode(msgFromServer)
 
@@ -11,7 +11,7 @@ bytesToSend = str.encode(msgFromServer)
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 # Bind to address and ip
-UDPServerSocket.bind((localIP, localPort))
+UDPServerSocket.bind((localIP, receivePort))
 
 print("UDP server up and listening")
 
@@ -30,3 +30,7 @@ while (True):
 
     # Sending a reply to client
     UDPServerSocket.sendto(bytesToSend, address)
+
+    # # Broadcasting equipment ID to all clients
+    # broadcast_message = "123"  # Example equipment ID
+    # broadcastSocket.sendto(str.encode(broadcast_message), ('<broadcast>', broadcastPort))
