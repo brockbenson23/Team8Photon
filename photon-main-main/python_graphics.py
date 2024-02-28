@@ -11,10 +11,11 @@ def add_entries_to_vendor_table(supabase, name, codename):
     foreign_key_list = []
     fake.add_provider(faker_commerce.Provider)
     main_list = []
-    value = {'codename': name,'id': codename}
+    value = {'id': name,'codename': codename}
 
     main_list.append(value)
     data = supabase.table('player').insert(main_list).execute()
+    print(data)
     data_json = json.loads(data.json())
     data_entries = data_json['data']
     for i in range(len(data_entries)):
@@ -75,6 +76,9 @@ green = '#346C4E'
 
 
 class Application(Frame):
+    id = [0]
+    codename = [""]
+
     def __init__(self, master):
         Frame.__init__(self, master)
         self.master = master
@@ -88,6 +92,7 @@ class Application(Frame):
                           relheight=1.0, anchor="nw")
         self.grid()
         self.createWidgets()
+        self.createButton()
         self.master.columnconfigure(0, weight=1)
         self.master.rowconfigure(0, weight=1)
 
@@ -150,21 +155,33 @@ class Application(Frame):
                     break
             f.close()
             f = open("player.sql", "a")
-            print('sv = ', sv.get())
-            print('names  = ', names.get())
-            namess = names.get()
-            szz = sv.get()
+            nam = sv.get()
+            idd = names.get()
+            if nam != '':
+                print('nam = ', nam)
+                self.codename.append(nam)
+            if idd is not None:
+                if idd == '':
+                    idd = 0
+                self.id.append(int(idd))
             f.write(f"\nVALUES ({names.get()}, {sv.get()});")
-            load_dotenv()
-            url: str = "https://rqavdtetomzeacidtuys.supabase.co"
-            key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxYXZkdGV0b216ZWFjaWR0dXlzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzQyMzc4MCwiZXhwIjoyMDIyOTk5NzgwfQ.6IKKyRyCOJjHYe-2-TsvoN7LF-wgChURyVxSrR2RgnQ"
-            supabase: Client = create_client(url, key)
-            fk_list = add_entries_to_vendor_table(supabase, szz,namess)
 
 # make string with trace, use button to check when done typing
 
-#       self.button = Button(text="Submit ID", command=getName("12345"))
-#       self.button.grid(row=18, column=1, columnspan=2)
+    def createButton(self):
+        self.button = Button(text="Submit ID", command=self.addData)
+        self.button.grid(row=18, column=1, columnspan=2)
+
+    def addData(self) -> str:
+        load_dotenv()
+        url: str = "https://rqavdtetomzeacidtuys.supabase.co"
+        key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxYXZkdGV0b216ZWFjaWR0dXlzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzQyMzc4MCwiZXhwIjoyMDIyOTk5NzgwfQ.6IKKyRyCOJjHYe-2-TsvoN7LF-wgChURyVxSrR2RgnQ"
+        supabase: Client = create_client(url, key)
+        id = self.id.pop()
+        name = self.codename.pop()
+        print('id = ', id, ' name = ', name)
+        fk_list = add_entries_to_vendor_table(supabase, id, name)
+        return ""
         # l1 = Label(win, text = "First:")
         # l2 = Label(win, text = "Second:")
 
