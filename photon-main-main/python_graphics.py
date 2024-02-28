@@ -16,7 +16,8 @@ def add_entries_to_vendor_table(supabase, name, codename):
     main_list.append(value)
     data = supabase.table('player').insert(main_list).execute()
     print(data)
-    data_json = json.loads(data.json())
+    data_dict = data.dict()
+    data_json = json.dumps(data_dict)
     data_entries = data_json['data']
     for i in range(len(data_entries)):
         foreign_key_list.append(int(data_entries[i]['id']))
@@ -162,7 +163,7 @@ class Application(Frame):
                 self.codename.append(nam)
             if idd is not None:
                 if idd == '':
-                    idd = 0
+                    idd = -1
                 self.id.append(int(idd))
             f.write(f"\nVALUES ({names.get()}, {sv.get()});")
 
