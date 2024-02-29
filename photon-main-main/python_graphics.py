@@ -55,7 +55,7 @@ from PIL import ImageTk, Image
 # Create an instance of tkinter window
 win = Tk()
 win.title("Team8Photon")
-win.geometry("500x500")
+win.geometry("700x700")
 
 path = "logo.jpg"
 
@@ -117,13 +117,13 @@ class Application(Frame):
             sv = StringVar()
             names = StringVar()
             self.entry = Entry(bg="white", fg="black", bd=2, textvariable=sv)
-            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
+            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
                               highlightcolor=red)
             self.entry.grid(row=i+2, column=1)
 
             self.entry2 = Entry(bg="white", fg="black",
                                 bd=2, textvariable=names)
-            self.entry2.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=red,
+            self.entry2.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
                                highlightcolor=red, width=9)
             self.entry2.grid(row=i+2, column=0)
             sv.trace("w", lambda name, index, mode, sv=sv: getName(
@@ -133,12 +133,12 @@ class Application(Frame):
 
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=2)
-            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=green,
+            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
                               highlightcolor=green)
             self.entry.grid(row=i+2, column=3)
         for i in range(15):
             self.entry = Entry(bg="white", fg="black", bd=2)
-            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 26'), highlightbackground=green,
+            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
                               highlightcolor=green, width=9)
             self.entry.grid(row=i+2, column=2)
 
