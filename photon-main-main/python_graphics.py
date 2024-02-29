@@ -55,7 +55,7 @@ from PIL import ImageTk, Image
 # Create an instance of tkinter window
 win = Tk()
 win.title("Team8Photon")
-win.geometry("700x700")
+win.geometry("500x500")
 
 path = "logo.jpg"
 
