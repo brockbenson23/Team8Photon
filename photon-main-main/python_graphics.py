@@ -172,9 +172,14 @@ class Application(Frame):
     def createButton(self):
         self.button = Button(text="Submit ID", command=self.addData)
         self.button.grid(row=18, column=1, columnspan=2)
-        self.button = Button(text="F12: Clear Players", command=self.addData)
+        self.button = Button(text="F12: Clear Players", command=self.clearPlayer)
         self.button.grid(row=19, column=1, columnspan=2)
 
+    def clearPlayer(self):
+    	for i in range(15):
+            	self.entry.delete(0, END) 
+            	self.entry2.delete(0, END) 
+        
     def addData(self) -> str:
         load_dotenv()
         url: str = "https://rqavdtetomzeacidtuys.supabase.co"
