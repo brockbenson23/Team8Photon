@@ -13,8 +13,12 @@ Use linux “cd” commands to enter into the correct file:
 Run the bash file:
      -“./run.bash”
 ========================================================================
-
-
+REQUIRED INSTALLATIONS
+pip install Pillow
+pip install faker
+pip install faker_commerce
+pip install supabase
+pip install tk
 ========================================================================
 GITHUB NAMES:
 
