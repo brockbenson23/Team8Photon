@@ -172,7 +172,7 @@ class Application(Frame):
     def createButton(self):
         self.button = Button(text="Submit ID", command=self.addData)
         self.button.grid(row=18, column=1, columnspan=2)
-        self.button = Button(text=“F12”, command=self.addData)
+        self.button = Button(text="F12: Clear Players", command=self.addData)
         self.button.grid(row=19, column=1, columnspan=2)
 
     def addData(self) -> str:
