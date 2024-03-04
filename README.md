@@ -19,7 +19,7 @@ pip install faker
 pip install faker_commerce
 pip install supabase
 pip install tk
-pip install dotenv
+pip install python-dotenv
 ========================================================================
 GITHUB NAMES:
 
