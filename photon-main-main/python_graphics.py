@@ -120,11 +120,27 @@ class Application(Frame):
             self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
                               highlightcolor=red)
             self.entry.grid(row=i+2, column=1)
-
             self.entry2 = Entry(bg="white", fg="black",
                                 bd=2, textvariable=names)
             self.entry2.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
                                highlightcolor=red, width=9)
+            self.entry2.grid(row=i+2, column=0)
+            sv.trace("w", lambda name, index, mode, sv=sv: getName(
+                sv, self.entry, names, self.entry2))
+            names.trace("w", lambda name, index, mode, names=names: getName(
+                sv, self.entry, names, self.entry2))
+
+        for i in range(15):
+            sv = StringVar()
+            names = StringVar()
+            self.entry = Entry(bg="white", fg="black", bd=2, textvariable=sv)
+            self.entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
+                              highlightcolor=red)
+            self.entry.grid(row=i+2, column=1)
+            self.entry2 = Entry(bg="white", fg="black",
+                                bd=2, textvariable=names)
+            self.entry2.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
+                               highlightcolor=green, width=9)
             self.entry2.grid(row=i+2, column=0)
             sv.trace("w", lambda name, index, mode, sv=sv: getName(
                 sv, self.entry, names, self.entry2))
