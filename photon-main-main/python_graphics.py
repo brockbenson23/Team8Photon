@@ -79,6 +79,7 @@ green = '#346C4E'
 class Application(Frame):
     id = [0]
     codename = [""]
+    game_started = False
 
     def __init__(self, master):
         Frame.__init__(self, master)
@@ -174,8 +175,19 @@ class Application(Frame):
         self.button.grid(row=18, column=1, columnspan=2)
         # self.button = Button(text="F12: Clear Players", command=self.clearPlayer)
         # self.button.grid(row=19, column=1, columnspan=2)
-        # self.button = Button(text="F5: Start Game", command=self.startGame)
-        # self.button.grid(row=19, column=2, columnspan=2)
+        self.button = Button(text="F5: Start Game", command=self.startGame)
+        self.button.grid(row=19, column=2, columnspan=2)
+
+    def startGame(self):
+        if not self.game_started:
+            for widget in self.master.winfo_children():
+                widget.destroy()
+
+            # Create screen
+            self.Label = Label(text='Game Screen', bg='blue', fg='white')
+            self.Label.grid(row=0, column=0)
+
+            self.game_started = True
 
     # def clearPlayer(self):
     # 	for i in range(15):
