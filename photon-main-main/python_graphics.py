@@ -81,7 +81,43 @@ class GameScreen(Frame):
         self.master = master
         self.master.title("Game Screen")
         self.master.resizable(False, False)
+        self.createWidgets()
         # add game stuffs
+
+    def createWidgets(self):
+        red = '#990000'
+        green = '#346C4E'
+
+        Label(text='Red Team', bg=red, fg='white', padx=10, pady=10).grid(row=0, column=0, columnspan=2)
+        Label(text='Green Team', bg=green, fg='white', padx=20, pady=20).grid(row=0, column=2, columnspan=2)
+        Label(text='Codename', bg=red, fg='white').grid(row=1, column=0)
+        Label(text='Points', bg=red, fg='white').grid(row=1, column=1)
+        Label(text='Codename', bg=green, fg='white').grid(row=1, column=2)
+        Label(text='Points', bg=green, fg='white').grid(row=1, column=3)
+
+        # Red Team
+        for i in range(5):
+            sv = StringVar()
+            names = StringVar()
+            entry = Entry(bg="white", fg="black", bd=2, textvariable=sv)
+            entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
+                         highlightcolor=red)
+            entry.grid(row=i + 2, column=1)
+
+            entry2 = Entry(bg="white", fg="black", bd=2, textvariable=names)
+            entry2.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
+                          highlightcolor=red, width=9)
+            entry2.grid(row=i + 2, column=0)
+            sv.trace("w", lambda name, index, mode, sv=sv: self.getName(sv, entry, names, entry2))
+            names.trace("w", lambda name, index, mode, names=names: self.getName(sv, entry, names, entry2))
+
+        # Green Team
+        for i in range(5):
+            Entry(bg="white", fg="black", bd=2, justify="right", selectbackground="#D8D8D8", font=('Times 18'),
+                  highlightbackground=green, highlightcolor=green).grid(row=i + 2, column=3)
+        for i in range(5):
+            Entry(bg="white", fg="black", bd=2, justify="right", selectbackground="#D8D8D8", font=('Times 18'),
+                  highlightbackground=green, highlightcolor=green, width=9).grid(row=i + 2, column=2)
         
 class Application(Frame):
     id = [0]
@@ -186,10 +222,11 @@ class Application(Frame):
         self.start_button.grid(row=19, column=2, columnspan=2)
 
     def startGame(self):
-        # Hide the current screen
-        self.frame1.grid_remove()
-        self.frame2.grid_remove()
-        # Show screen
+        # Clear existing widgets
+        for widget in self.master.winfo_children():
+            widget.destroy()
+
+        # Create new game screen with 5 rows
         game_screen = GameScreen(self.master)
         game_screen.grid()
 
