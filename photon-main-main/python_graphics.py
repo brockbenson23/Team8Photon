@@ -75,7 +75,14 @@ win.mainloop()
 red = '#990000'
 green = '#346C4E'
 
-
+class GameScreen(Frame):
+    def __init__(self, master):
+        Frame.__init__(self, master)
+        self.master = master
+        self.master.title("Game Screen")
+        self.master.resizable(False, False)
+        # add game stuffs
+        
 class Application(Frame):
     id = [0]
     codename = [""]
@@ -179,15 +186,12 @@ class Application(Frame):
         self.button.grid(row=19, column=2, columnspan=2)
 
     def startGame(self):
-        if not self.game_started:
-            for widget in self.master.winfo_children():
-                widget.destroy()
-
-            # Create screen
-            self.Label = Label(text='Game Screen', bg='blue', fg='white')
-            self.Label.grid(row=0, column=0)
-
-            self.game_started = True
+        # Hide the current screen
+        self.frame1.grid_remove()
+        self.frame2.grid_remove()
+        # Show screen
+        game_screen = GameScreen(self.master)
+        game_screen.grid()
 
     # def clearPlayer(self):
     # 	for i in range(15):
