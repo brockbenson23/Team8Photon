@@ -178,12 +178,12 @@ class Application(Frame):
 # make string with trace, use button to check when done typing
 
     def createButton(self):
-        self.button = Button(text="Submit ID", command=self.addData)
-        self.button.grid(row=18, column=1, columnspan=2)
+        self.submit_button = Button(text="Submit ID", command=self.addData)
+        self.submit_button.grid(row=18, column=1, columnspan=2)
         # self.button = Button(text="F12: Clear Players", command=self.clearPlayer)
         # self.button.grid(row=19, column=1, columnspan=2)
-        self.button = Button(text="F5: Start Game", command=self.startGame)
-        self.button.grid(row=19, column=2, columnspan=2)
+        self.start_button = Button(text="F5: Start Game", command=self.startGame)
+        self.start_button.grid(row=19, column=2, columnspan=2)
 
     def startGame(self):
         # Hide the current screen
