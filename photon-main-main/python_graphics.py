@@ -44,37 +44,24 @@ class GameScreen(Frame):
     def createWidgets(self):
         red = '#990000'
         green = '#346C4E'
+        redpadx = 152
+        greenpadx = redpadx - 2
+        codenamex = 89
 
-        Label(text='Red Team', bg=red, fg='white', padx=10, pady=10).grid(row=0, column=0, columnspan=2)
-        Label(text='Green Team', bg=green, fg='white', padx=20, pady=20).grid(row=0, column=2, columnspan=2)
-        Label(text='Codename', bg=red, fg='white').grid(row=1, column=0)
-        Label(text='Points', bg=red, fg='white').grid(row=1, column=1)
-        Label(text='Codename', bg=green, fg='white').grid(row=1, column=2)
-        Label(text='Points', bg=green, fg='white').grid(row=1, column=3)
+        def createLabel(text, bg, fg, padx, pady, row, column, columnspan):
+            label = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
+            label.grid(row=row, column=column, columnspan=columnspan)
+            return label
 
-        # Red Team
-        for i in range(5):
-            sv = StringVar()
-            names = StringVar()
-            entry = Entry(bg="white", fg="black", bd=2, textvariable=sv)
-            entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
-                         highlightcolor=red)
-            entry.grid(row=i + 2, column=1)
-
-            entry2 = Entry(bg="white", fg="black", bd=2, textvariable=names)
-            entry2.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
-                          highlightcolor=red, width=9)
-            entry2.grid(row=i + 2, column=0)
-            sv.trace("w", lambda name, index, mode, sv=sv: self.getName(sv, entry, names, entry2))
-            names.trace("w", lambda name, index, mode, names=names: self.getName(sv, entry, names, entry2))
-
-        # Green Team
-        for i in range(5):
-            Entry(bg="white", fg="black", bd=2, justify="right", selectbackground="#D8D8D8", font=('Times 18'),
-                  highlightbackground=green, highlightcolor=green).grid(row=i + 2, column=3)
-        for i in range(5):
-            Entry(bg="white", fg="black", bd=2, justify="right", selectbackground="#D8D8D8", font=('Times 18'),
-                  highlightbackground=green, highlightcolor=green, width=9).grid(row=i + 2, column=2)
+        createLabel('Red Team', 'black', red, redpadx, 10, 0, 0, 2)
+        createLabel('Green Team', 'black', green, greenpadx, 10, 0, 2, 2)
+        createLabel('Codename', red, 'white', codenamex, 10, 1, 0, 1)
+        createLabel('Points', red, 'white', 40, 10, 1, 1, 1)
+        createLabel('Codename', green, 'white', codenamex + 4, 10, 1, 2, 1)
+        createLabel('Points', green, 'white', 40, 10, 1, 3, 1)
+        padloop = (greenpadx+redpadx)+70
+        for i in range(10):
+            createLabel('', 'black', 'black', padloop, 0, i+2, 0, 4)
 
 class Application(Frame):
     id = [0]
