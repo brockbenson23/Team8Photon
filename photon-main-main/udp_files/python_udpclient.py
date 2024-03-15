@@ -3,7 +3,7 @@ import socket
 print("in client")
 msgFromClient = "Hello UDP Server"
 bytesToSend = str.encode(msgFromClient)
-serverAddressPort = ("127.0.0.1", 7501)
+serverAddressPort = ("127.0.0.1", 7502)
 bufferSize = 1024
 
 # Create a UDP socket at client side
