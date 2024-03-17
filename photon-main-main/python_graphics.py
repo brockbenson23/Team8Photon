@@ -203,6 +203,12 @@ class Application(Frame):
             row=18, column=1, columnspan=2)
         Button(text="F5: Start Game", command=self.startGame).grid(
             row=19, column=2, columnspan=2)
+        Button(text="F12: Clear Players", command=self.clearPlayers).grid(
+            row=19, column=0, columnspan=2)
+    
+    # add functionality
+    def clearPlayers():
+        pass
 
     def startGame(self):
         # Clear existing widgets
