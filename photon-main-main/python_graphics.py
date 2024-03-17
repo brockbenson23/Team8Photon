@@ -6,6 +6,9 @@ import faker_commerce
 import socket
 from tkinter import *
 from PIL import ImageTk, Image
+import os
+import time
+
 
 def add_entries_to_vendor_table(supabase, name, codename):
     fake = Faker()
@@ -22,6 +25,7 @@ def add_entries_to_vendor_table(supabase, name, codename):
         foreign_key_list.append(int(entry['id']))
     return foreign_key_list
 
+
 def add_entries_to_product_table(supabase, vendor_id):
     fake = Faker()
     fake.add_provider(faker_commerce.Provider)
@@ -32,6 +36,7 @@ def add_entries_to_product_table(supabase, vendor_id):
         main_list.append(value)
     data = supabase.table('Product').insert(main_list).execute()
 
+
 class GameScreen(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
@@ -39,7 +44,8 @@ class GameScreen(Frame):
         self.master.title("Game Screen")
         self.master.resizable(False, False)
         self.createWidgets()
-        # add game stuffs
+        self.master.after(5000, self.clearScreen)
+        self.master.after(5000, self.countdowntimer)
 
     def createWidgets(self):
         red = '#990000'
@@ -62,6 +68,35 @@ class GameScreen(Frame):
         padloop = (greenpadx+redpadx)+70
         for i in range(10):
             createLabel('', 'black', 'black', padloop, 0, i+2, 0, 4)
+
+    def clearScreen(self):
+        # Destroy all widgets in the current window
+        for widget in self.master.winfo_children():
+            widget.destroy()
+
+    def countdowntimer(self, count=10):
+        if count >= 0:
+            # Get the current directory
+            current_directory = os.path.dirname(__file__)
+            # Combine the current directory with the directory containing the images and the filename
+            image_path = os.path.join(
+                current_directory, "countdown_images", f"{count}.tif")
+            # Open image
+            image = Image.open(image_path)
+            # Convert image to PhotoImage
+            photo = ImageTk.PhotoImage(image)
+            # Create label to display image
+            label = Label(image=photo)
+            label.image = photo
+            label.grid(row=2, column=1)
+
+            # Schedule the next iteration after 1 second
+            self.master.after(1000, self.countdowntimer, count-1)
+        else:
+            # Countdown completed, display createWidgets again
+            self.clearScreen()
+            self.createWidgets()
+
 
 class Application(Frame):
     id = [0]
@@ -89,8 +124,10 @@ class Application(Frame):
         red = '#990000'
         green = '#346C4E'
 
-        Label(text='Red Team', bg=red, fg='white', padx=20, pady=20).grid(row=0, column=0, columnspan=2)
-        Label(text='Green Team', bg=green, fg='white', padx=20, pady=20).grid(row=0, column=2, columnspan=2)
+        Label(text='Red Team', bg=red, fg='white', padx=20,
+              pady=20).grid(row=0, column=0, columnspan=2)
+        Label(text='Green Team', bg=green, fg='white', padx=20,
+              pady=20).grid(row=0, column=2, columnspan=2)
         Label(text='ID', bg=red, fg='white').grid(row=1, column=0)
         Label(text='Codename', bg=red, fg='white').grid(row=1, column=1)
         Label(text='ID', bg=green, fg='white').grid(row=1, column=2)
@@ -108,8 +145,10 @@ class Application(Frame):
             entry2.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
                           highlightcolor=red, width=9)
             entry2.grid(row=i + 2, column=0)
-            sv.trace("w", lambda name, index, mode, sv=sv: self.getName(sv, entry, names, entry2))
-            names.trace("w", lambda name, index, mode, names=names: self.getName(sv, entry, names, entry2))
+            sv.trace("w", lambda name, index, mode,
+                     sv=sv: self.getName(sv, entry, names, entry2))
+            names.trace("w", lambda name, index, mode,
+                        names=names: self.getName(sv, entry, names, entry2))
 
         for i in range(15):
             Entry(bg="white", fg="black", bd=2, justify="right", selectbackground="#D8D8D8", font=('Times 18'),
@@ -143,8 +182,10 @@ class Application(Frame):
             f.write(f"\nVALUES ({names.get()}, {sv.get()});")
 
     def createButton(self):
-        Button(text="Submit ID", command=self.addData).grid(row=18, column=1, columnspan=2)
-        Button(text="F5: Start Game", command=self.startGame).grid(row=19, column=2, columnspan=2)
+        Button(text="Submit ID", command=self.addData).grid(
+            row=18, column=1, columnspan=2)
+        Button(text="F5: Start Game", command=self.startGame).grid(
+            row=19, column=2, columnspan=2)
 
     def startGame(self):
         # Clear existing widgets
@@ -164,6 +205,7 @@ class Application(Frame):
         name = self.codename.pop()
         print('id = ', id, ' name = ', name)
         fk_list = add_entries_to_vendor_table(supabase, id, name)
+
 
 root = Tk()
 app = Application(root)
