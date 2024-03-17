@@ -66,8 +66,24 @@ class GameScreen(Frame):
         createLabel('Codename', green, 'white', codenamex + 4, 10, 1, 2, 1)
         createLabel('Points', green, 'white', 40, 10, 1, 3, 1)
         padloop = (greenpadx+redpadx)+70
+
+        def createblack(text, bg, fg, padx, pady, row, column, columnspan):
+            blacklabel = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
+            blacklabel.grid(row=row, column=column, columnspan=columnspan)
+            return blacklabel
+
+        def createblue(text, bg, fg, padx, pady, row, column, columnspan):
+            bluelabel = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
+            bluelabel.grid(row=row, column=column,
+                           columnspan=columnspan, sticky="ew")
+            return bluelabel
+
         for i in range(10):
-            createLabel('', 'black', 'black', padloop, 0, i+2, 0, 4)
+            createblack('', 'black', 'black', padloop, 0, i+2, 0, 4)
+
+        for i in range(10):
+            createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 0, 2)
+            createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 2, 2,)
 
     def clearScreen(self):
         # Destroy all widgets in the current window
