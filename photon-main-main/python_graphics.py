@@ -67,11 +67,12 @@ class GameScreen(Frame):
         createLabel('Points', green, 'white', 40, 10, 1, 3, 1)
         padloop = (greenpadx+redpadx)+70
 
+        # change this to entries with padding so that it can hold the user name
         def createblack(text, bg, fg, padx, pady, row, column, columnspan):
             blacklabel = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
             blacklabel.grid(row=row, column=column, columnspan=columnspan)
             return blacklabel
-
+        # change this to entries with padding to show who shot who
         def createblue(text, bg, fg, padx, pady, row, column, columnspan):
             bluelabel = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
             bluelabel.grid(row=row, column=column,
