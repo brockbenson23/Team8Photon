@@ -139,7 +139,8 @@ class Application(Frame):
     def createWidgets(self):
         red = '#990000'
         green = '#346C4E'
-        self.entries = []
+        self.red_entries = []
+        self.green_entries = []
 
         Label(text='Red Team', bg=red, fg='white', padx=20,
               pady=20).grid(row=0, column=0, columnspan=2)
@@ -150,31 +151,47 @@ class Application(Frame):
         Label(text='ID', bg=green, fg='white').grid(row=1, column=2)
         Label(text='Codename', bg=green, fg='white').grid(row=1, column=3)
 
+        # Red Team
         for i in range(15):
-            sv = StringVar()
-            names = StringVar()
-            entry = Entry(bg="white", fg="black", bd=2, textvariable=sv)
-            entry.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
-                         highlightcolor=red)
-            entry.grid(row=i + 2, column=1)
+            sv_red = StringVar()
+            names_red = StringVar()
+            entry_red = Entry(bg="white", fg="black",
+                              bd=2, textvariable=sv_red)
+            entry_red.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
+                             highlightcolor=red)
+            entry_red.grid(row=i + 2, column=1)
+            entry2_red = Entry(bg="white", fg="black",
+                               bd=2, textvariable=names_red)
+            entry2_red.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
+                              highlightcolor=red, width=9)
+            entry2_red.grid(row=i + 2, column=0)
+            sv_red.trace("w", lambda name, index, mode,
+                         sv_red=sv_red: self.getName(sv_red, entry_red, names_red, entry2_red))
+            names_red.trace("w", lambda name, index, mode,
+                            names_red=names_red: self.getName(sv_red, entry_red, names_red, entry2_red))
+            self.red_entries.append(entry_red)
+            self.red_entries.append(entry2_red)
 
-            entry2 = Entry(bg="white", fg="black", bd=2, textvariable=names)
-            entry2.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
-                          highlightcolor=red, width=9)
-            entry2.grid(row=i + 2, column=0)
-            sv.trace("w", lambda name, index, mode,
-                     sv=sv: self.getName(sv, entry, names, entry2))
-            names.trace("w", lambda name, index, mode,
-                        names=names: self.getName(sv, entry, names, entry2))
-            self.entries.append(entry)
-            self.entries.append(entry2)
-
+        # Green Team
         for i in range(15):
-            Entry(bg="white", fg="black", bd=2, justify="right", selectbackground="#D8D8D8", font=('Times 18'),
-                  highlightbackground=green, highlightcolor=green).grid(row=i + 2, column=3)
-        for i in range(15):
-            Entry(bg="white", fg="black", bd=2, justify="right", selectbackground="#D8D8D8", font=('Times 18'),
-                  highlightbackground=green, highlightcolor=green, width=9).grid(row=i + 2, column=2)
+            sv_green = StringVar()
+            names_green = StringVar()
+            entry_green = Entry(bg="white", fg="black",
+                                bd=2, textvariable=sv_green)
+            entry_green.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
+                               highlightcolor=green)
+            entry_green.grid(row=i + 2, column=3)
+            entry2_green = Entry(bg="white", fg="black",
+                                 bd=2, textvariable=names_green)
+            entry2_green.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
+                                highlightcolor=green, width=9)
+            entry2_green.grid(row=i + 2, column=2)
+            sv_green.trace("w", lambda name, index, mode,
+                           sv_green=sv_green: self.getName(sv_green, entry_green, names_green, entry2_green))
+            names_green.trace("w", lambda name, index, mode,
+                              names_green=names_green: self.getName(sv_green, entry_green, names_green, entry2_green))
+            self.green_entries.append(entry_green)
+            self.green_entries.append(entry2_green)
 
     def getName(self, sv, entry, names, entry2):
         with open("player.sql", "r") as f:
@@ -209,7 +226,9 @@ class Application(Frame):
             row=19, column=0, columnspan=2)
 
     def clearPlayers(self):
-        for entry in self.entries:
+        for entry in self.red_entries:
+            entry.delete(0, END)
+        for entry in self.green_entries:
             entry.delete(0, END)
 
     def startGame(self):
