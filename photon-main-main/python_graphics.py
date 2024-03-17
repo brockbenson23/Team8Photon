@@ -67,12 +67,11 @@ class GameScreen(Frame):
         createLabel('Points', green, 'white', 40, 10, 1, 3, 1)
         padloop = (greenpadx+redpadx)+70
 
-        # change this to entries with padding so that it can hold the user name
         def createblack(text, bg, fg, padx, pady, row, column, columnspan):
             blacklabel = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
             blacklabel.grid(row=row, column=column, columnspan=columnspan)
             return blacklabel
-        # change this to entries with padding to show who shot who
+
         def createblue(text, bg, fg, padx, pady, row, column, columnspan):
             bluelabel = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
             bluelabel.grid(row=row, column=column,
@@ -140,6 +139,7 @@ class Application(Frame):
     def createWidgets(self):
         red = '#990000'
         green = '#346C4E'
+        self.entries = []
 
         Label(text='Red Team', bg=red, fg='white', padx=20,
               pady=20).grid(row=0, column=0, columnspan=2)
@@ -166,6 +166,8 @@ class Application(Frame):
                      sv=sv: self.getName(sv, entry, names, entry2))
             names.trace("w", lambda name, index, mode,
                         names=names: self.getName(sv, entry, names, entry2))
+            self.entries.append(entry)
+            self.entries.append(entry2)
 
         for i in range(15):
             Entry(bg="white", fg="black", bd=2, justify="right", selectbackground="#D8D8D8", font=('Times 18'),
@@ -205,10 +207,10 @@ class Application(Frame):
             row=19, column=2, columnspan=2)
         Button(text="F12: Clear Players", command=self.clearPlayers).grid(
             row=19, column=0, columnspan=2)
-    
-    # add functionality
-    def clearPlayers():
-        pass
+
+    def clearPlayers(self):
+        for entry in self.entries:
+            entry.delete(0, END)
 
     def startGame(self):
         # Clear existing widgets
