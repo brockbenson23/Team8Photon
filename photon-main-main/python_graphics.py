@@ -1,58 +1,15 @@
-#import os
+# import os
 import json
 from dotenv import load_dotenv
 from supabase import create_client, Client
 from faker import Faker
 import faker_commerce
-
-
-def add_entries_to_vendor_table(supabase, name, codename):
-    fake = Faker()
-    foreign_key_list = []
-    fake.add_provider(faker_commerce.Provider)
-    main_list = []
-    value = {'id': name,'codename': codename}
-
-    main_list.append(value)
-    data = supabase.table('player').insert(main_list).execute()
-    print(data)
-    data_dict = data.dict()
-    data_json = json.dumps(data_dict)
-    data_entries = data_json['data']
-    for i in range(len(data_entries)):
-        foreign_key_list.append(int(data_entries[i]['id']))
-    return foreign_key_list
-
-
-def add_entries_to_product_table(supabase, vendor_id):
-    fake = Faker()
-    fake.add_provider(faker_commerce.Provider)
-    main_list = []
-    iterator = fake.random_int(1, 15)
-    for i in range(iterator):
-        value = {'id': vendor_id, 'codename': fake.ecommerce_name()}
-        main_list.append(value)
-    data = supabase.table('Product').insert(main_list).execute()
-
-
-def main():
-    vendor_count = 10
-    load_dotenv()
-    url: str = "https://rqavdtetomzeacidtuys.supabase.co"
-    key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxYXZkdGV0b216ZWFjaWR0dXlzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzQyMzc4MCwiZXhwIjoyMDIyOTk5NzgwfQ.6IKKyRyCOJjHYe-2-TsvoN7LF-wgChURyVxSrR2RgnQ"
-    supabase: Client = create_client(url, key)
-
-
-#Import required libraries
-# from tkinter import *
-# from PIL import ImageTk, Image as im
-
-# Import required libraries
 import socket
 from tkinter import *
 from PIL import ImageTk, Image
 
-# Create an instance of tkinter window
+
+# Splash Screen Stuff
 win = Tk()
 win.title("Team8Photon")
 win.geometry("700x700")
@@ -74,6 +31,26 @@ win.mainloop()
 
 red = '#990000'
 green = '#346C4E'
+
+# add words to supabase
+
+
+def add_entries_to_vendor_table(supabase, name, codename):
+    fake = Faker()
+    foreign_key_list = []
+    fake.add_provider(faker_commerce.Provider)
+    main_list = []
+    value = {'id': name, 'codename': codename}
+
+    main_list.append(value)
+    data = supabase.table('player').insert(main_list).execute()
+    print(data)
+    data_dict = data.dict()
+    data_json = json.dumps(data_dict)
+    data_entries = data_json['data']
+    for i in range(len(data_entries)):
+        foreign_key_list.append(int(data_entries[i]['id']))
+    return foreign_key_list
 
 
 class Application(Frame):
@@ -177,6 +154,17 @@ class Application(Frame):
     def createButton(self):
         self.button = Button(text="Submit ID", command=self.addData)
         self.button.grid(row=18, column=1, columnspan=2)
+        self.button = Button(text="TEST", command=self.testing)
+        self.button.grid(row=19, column=1, columnspan=1)
+
+    ent = Entry(self.master, bg="white", fg="black", bd=2)
+    ent.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
+                      highlightcolor=red)
+    ent.grid(row=19, column=0)
+    def testing(self) -> str:
+        text = ent.get()
+        print(text)
+        return "testing"
 
     def addData(self) -> str:
         load_dotenv()
@@ -186,19 +174,10 @@ class Application(Frame):
         id = self.id.pop()
         name = self.codename.pop()
         print('id = ', id, ' name = ', name)
-        fk_list = add_entries_to_vendor_table(supabase, id, name)
+        add_entries_to_vendor_table(supabase, id, name)
         return ""
-        # l1 = Label(win, text = "First:")
-        # l2 = Label(win, text = "Second:")
-
-        # l1.grid(row = 0, column = 0, sticky = W, pady = 2)
-        # l2.grid(row = 1, column = 0, sticky = W, pady = 2)
 
 
-        # e1 = Entry(master)
-        # e2 = Entry(master)
-        # e1.grid(row  = 0, column = 1, pady = 2)
-        # e2.grid(row  = 1, column = 1, pady = 2)
 root = Tk()
 app = Application(root)
 root.mainloop()
