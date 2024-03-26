@@ -88,8 +88,7 @@ class GameScreen(Frame):
 
 
 class Application(Frame):
-    id = [0]
-    codename = [""]
+    
     game_started = False
 
     def __init__(self, master):
@@ -139,9 +138,9 @@ class Application(Frame):
                               highlightcolor=red, width=9)
             entry2_red.grid(row=i + 2, column=0)
             sv_red.trace("w", lambda name, index, mode,
-                         sv_red=sv_red: self.getName(sv_red, entry_red, names_red, entry2_red))
+                         sv_red=sv_red: python_supabase.Database.getName(python_supabase.Database, sv_red, entry_red, names_red, entry2_red))
             names_red.trace("w", lambda name, index, mode,
-                            names_red=names_red: self.getName(sv_red, entry_red, names_red, entry2_red))
+                            names_red=names_red: python_supabase.Database.getName(python_supabase.Database, sv_red, entry_red, names_red, entry2_red))
             self.red_entries.append(entry_red)
             self.red_entries.append(entry2_red)
 
@@ -160,38 +159,14 @@ class Application(Frame):
                                 highlightcolor=green, width=9)
             entry2_green.grid(row=i + 2, column=2)
             sv_green.trace("w", lambda name, index, mode,
-                           sv_green=sv_green: self.getName(sv_green, entry_green, names_green, entry2_green))
+                           sv_green=sv_green: python_supabase.Database.getName(python_supabase.Database, sv_green, entry_green, names_green, entry2_green))
             names_green.trace("w", lambda name, index, mode,
-                              names_green=names_green: self.getName(sv_green, entry_green, names_green, entry2_green))
+                              names_green=names_green: python_supabase.Database.getName(python_supabase.Database, sv_green, entry_green, names_green, entry2_green))
             self.green_entries.append(entry_green)
             self.green_entries.append(entry2_green)
 
-    def getName(self, sv, entry, names, entry2):
-        with open("player.sql", "r") as f:
-            index = 0
-            for line in f:
-                word = f.readline()
-                if f"VALUES ({names.get()}," in word:
-                    code = word[10:-2]
-                    index += 1
-                    entry.setvar(names, code)
-                    sv.set(code)
-                else:
-                    break
-        with open("player.sql", "a") as f:
-            nam = sv.get()
-            idd = names.get()
-            if nam != '':
-                print('nam = ', nam)
-                self.codename.append(nam)
-            if idd is not None:
-                if idd == '':
-                    idd = -1
-                self.id.append(int(idd))
-            f.write(f"\nVALUES ({names.get()}, {sv.get()});")
-
     def createButton(self):
-        Button(text="Submit ID", command=python_supabase.addData).grid(
+        Button(text="Submit ID", command=python_supabase.Database.addData).grid(
             row=18, column=1, columnspan=2)
         Button(text="F5: Start Game", command=self.startGame).grid(
             row=19, column=2, columnspan=2)
