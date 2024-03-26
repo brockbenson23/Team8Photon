@@ -191,7 +191,7 @@ class Application(Frame):
             f.write(f"\nVALUES ({names.get()}, {sv.get()});")
 
     def createButton(self):
-        Button(text="Submit ID", command=self.addData).grid(
+        Button(text="Submit ID", command=python_supabase.addData).grid(
             row=18, column=1, columnspan=2)
         Button(text="F5: Start Game", command=self.startGame).grid(
             row=19, column=2, columnspan=2)
