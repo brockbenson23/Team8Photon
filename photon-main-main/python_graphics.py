@@ -10,6 +10,7 @@ import os
 import time
 
 
+
 def add_entries_to_vendor_table(supabase, name, codename):
     fake = Faker()
     foreign_key_list = []
@@ -241,10 +242,14 @@ class Application(Frame):
         game_screen.grid()
 
     def addData(self):
+
         load_dotenv()
-        url: str = "https://rqavdtetomzeacidtuys.supabase.co"
-        key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxYXZkdGV0b216ZWFjaWR0dXlzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNzQyMzc4MCwiZXhwIjoyMDIyOTk5NzgwfQ.6IKKyRyCOJjHYe-2-TsvoN7LF-wgChURyVxSrR2RgnQ"
+        ## connecting to supabase
+        url: str = os.environ.get("REACT_APP_SUPABASE_URL")
+        key: str = os.environ.get("REACT_APP_ANON_KEY")
         supabase: Client = create_client(url, key)
+
+        ## adding id and name to supabase table 
         id = self.id.pop()
         name = self.codename.pop()
         print('id = ', id, ' name = ', name)
