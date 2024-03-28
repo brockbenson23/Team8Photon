@@ -1,14 +1,8 @@
-import json
-from dotenv import load_dotenv
-from supabase import create_client, Client
-from faker import Faker
-import faker_commerce
-import socket
 from tkinter import *
 from PIL import ImageTk, Image
 import os
-import time
 import python_supabase
+
 
 class GameScreen(Frame):
     def __init__(self, master):
@@ -88,7 +82,7 @@ class GameScreen(Frame):
 
 
 class Application(Frame):
-    
+
     game_started = False
 
     def __init__(self, master):
@@ -111,8 +105,10 @@ class Application(Frame):
     def createWidgets(self):
         red = '#990000'
         green = '#346C4E'
-        self.red_entries = []
-        self.green_entries = []
+        self.red_codename = []
+        self.red_id = []
+        self.green_codename = []
+        self.green_id = []
 
         Label(text='Red Team', bg=red, fg='white', padx=20,
               pady=20).grid(row=0, column=0, columnspan=2)
@@ -125,58 +121,74 @@ class Application(Frame):
 
         # Red Team
         for i in range(15):
-            sv_red = StringVar()
-            names_red = StringVar()
             entry_red = Entry(bg="white", fg="black",
-                              bd=2, textvariable=sv_red)
+                              bd=2)
             entry_red.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
                              highlightcolor=red)
             entry_red.grid(row=i + 2, column=1)
             entry2_red = Entry(bg="white", fg="black",
-                               bd=2, textvariable=names_red)
+                               bd=2)
             entry2_red.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
                               highlightcolor=red, width=9)
             entry2_red.grid(row=i + 2, column=0)
-            sv_red.trace("w", lambda name, index, mode,
-                         sv_red=sv_red: python_supabase.Database.getName(python_supabase.Database, sv_red, entry_red, names_red, entry2_red))
-            names_red.trace("w", lambda name, index, mode,
-                            names_red=names_red: python_supabase.Database.getName(python_supabase.Database, sv_red, entry_red, names_red, entry2_red))
-            self.red_entries.append(entry_red)
-            self.red_entries.append(entry2_red)
+            self.red_codename.append(entry_red)
+            self.red_id.append(entry2_red)
 
         # Green Team
         for i in range(15):
-            sv_green = StringVar()
-            names_green = StringVar()
             entry_green = Entry(bg="white", fg="black",
-                                bd=2, textvariable=sv_green)
+                                bd=2)
             entry_green.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
                                highlightcolor=green)
             entry_green.grid(row=i + 2, column=3)
             entry2_green = Entry(bg="white", fg="black",
-                                 bd=2, textvariable=names_green)
+                                 bd=2)
             entry2_green.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
                                 highlightcolor=green, width=9)
             entry2_green.grid(row=i + 2, column=2)
-            sv_green.trace("w", lambda name, index, mode,
-                           sv_green=sv_green: python_supabase.Database.getName(python_supabase.Database, sv_green, entry_green, names_green, entry2_green))
-            names_green.trace("w", lambda name, index, mode,
-                              names_green=names_green: python_supabase.Database.getName(python_supabase.Database, sv_green, entry_green, names_green, entry2_green))
-            self.green_entries.append(entry_green)
-            self.green_entries.append(entry2_green)
+            self.green_codename.append(entry_green)
+            self.green_id.append(entry2_green)
 
     def createButton(self):
-        Button(text="Submit ID", command=python_supabase.Database.addData).grid(
+        Button(text="Submit ID", command=self.testing).grid(
             row=18, column=1, columnspan=2)
         Button(text="F5: Start Game", command=self.startGame).grid(
             row=19, column=2, columnspan=2)
         Button(text="F12: Clear Players", command=self.clearPlayers).grid(
             row=19, column=0, columnspan=2)
 
+    def testing(self) -> str:
+        codenames = []
+        ids = []
+        for entry in self.red_codename:
+            word = entry.get()
+            if word != '':
+                codenames.append(word)
+        for entry in self.green_codename:
+            word = entry.get()
+            if word != '':
+                codenames.append(word)
+        for entry in self.red_id:
+            word = entry.get()
+            if word != '':
+                ids.append(int(word))
+        for entry in self.green_id:
+            word = entry.get()
+            if word != '':
+                ids.append(int(word))
+        print(codenames)
+        print(ids)
+        python_supabase.Database.addData(ids, codenames)
+        return "testing"
+
     def clearPlayers(self):
-        for entry in self.red_entries:
+        for entry in self.red_codename:
             entry.delete(0, END)
-        for entry in self.green_entries:
+        for entry in self.red_id:
+            entry.delete(0, END)
+        for entry in self.green_codename:
+            entry.delete(0, END)
+        for entry in self.green_id:
             entry.delete(0, END)
 
     def startGame(self):

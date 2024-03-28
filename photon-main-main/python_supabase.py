@@ -7,49 +7,28 @@ import socket
 import os
 import time
 
-class Database():
+class Database:
     ## initializing lists
     id = [0]
     codename = [""]
 
-    def getName(self, sv, entry, names, entry2):
-            with open("player.sql", "r") as f:
-                index = 0
-                for line in f:
-                    word = f.readline()
-                    if f"VALUES ({names.get()}," in word:
-                        code = word[10:-2]
-                        index += 1
-                        entry.setvar(names, code)
-                        sv.set(code)
-                    else:
-                        break
-            with open("player.sql", "a") as f:
-                nam = sv.get()
-                idd = names.get()
-                if nam != '':
-                    print('nam = ', nam)
-                    self.codename.append(nam)
-                if idd is not None:
-                    if idd == '':
-                        idd = -1
-                    self.id.append(int(idd))
-                f.write(f"\nVALUES ({names.get()}, {sv.get()});")
-        
-    def addData():
-            print("submitting id...")
-            load_dotenv()
-            ## connecting to supabase
-            url: str = os.environ.get("REACT_APP_SUPABASE_URL")
-            key: str = os.environ.get("REACT_APP_ANON_KEY")
-            supabase: Client = create_client(url, key)
+    @staticmethod
+    def addData(ids: list[int], codenames):
+        print("submitting id...")
+        load_dotenv()
+        ## connecting to supabase
+        url: str = os.environ.get("REACT_APP_SUPABASE_URL")
+        key: str = os.environ.get("REACT_APP_ANON_KEY")
+        supabase: Client = create_client(url, key)
 
-            ## adding id and name to supabase table 
-            id = Database.id.pop()
-            name = Database.codename.pop()
+        ## adding id and name to supabase table
+        while ids and codenames:
+            id = ids.pop()
+            name = codenames.pop()
             print('id = ', id, ' name = ', name)
             fk_list = Database.add_entries_to_vendor_table(supabase, id, name)
 
+    @staticmethod
     def add_entries_to_vendor_table(supabase, name, codename):
         fake = Faker()
         foreign_key_list = []
@@ -64,14 +43,3 @@ class Database():
         for entry in data_entries:
             foreign_key_list.append(int(entry['id']))
         return foreign_key_list
-
-
-    def add_entries_to_product_table(supabase, vendor_id):
-        fake = Faker()
-        fake.add_provider(faker_commerce.Provider)
-        main_list = []
-        iterator = fake.random_int(1, 15)
-        for i in range(iterator):
-            value = {'id': vendor_id, 'codename': fake.ecommerce_name()}
-            main_list.append(value)
-        data = supabase.table('Product').insert(main_list).execute()
