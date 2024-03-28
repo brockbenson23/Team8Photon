@@ -1,45 +1,43 @@
-import json
+from supabase import create_client
 from dotenv import load_dotenv
-from supabase import create_client, Client
-from faker import Faker
-import faker_commerce
-import socket
 import os
-import time
+from typing import Dict
 
 class Database:
-    ## initializing lists
-    id = [0]
-    codename = [""]
-
     @staticmethod
-    def addData(ids: list[int], codenames):
+    def addData(values: Dict[int, str]) -> Dict[int, str]:
         print("submitting id...")
         load_dotenv()
-        ## connecting to supabase
+
         url: str = os.environ.get("REACT_APP_SUPABASE_URL")
         key: str = os.environ.get("REACT_APP_ANON_KEY")
-        supabase: Client = create_client(url, key)
+        supabase = create_client(url, key)
 
-        ## adding id and name to supabase table
-        while ids and codenames:
-            id = ids.pop()
-            name = codenames.pop()
+        for id, name in values.items():
             print('id = ', id, ' name = ', name)
-            fk_list = Database.add_entries_to_vendor_table(supabase, id, name)
+
+            # Check if the ID already exists in the table
+            existing_entry = Database.check_existing_entry(supabase, id)
+            if existing_entry is not None:
+                print(
+                    f"ID {id} already exists in the table. Codename: {existing_entry['codename']}")
+                return {id: existing_entry['codename']}
+            else:
+                Database.add_entry_to_player_table(supabase, id, name)
+                return {0: ''}
 
     @staticmethod
-    def add_entries_to_vendor_table(supabase, name, codename):
-        fake = Faker()
-        foreign_key_list = []
-        fake.add_provider(faker_commerce.Provider)
-        main_list = []
-        value = {'id': name, 'codename': codename}
-        main_list.append(value)
-        data = supabase.table('player').insert(main_list).execute()
+    def check_existing_entry(supabase, id):
+        data = supabase.table('player').select('*').eq('id', id).execute()
+        if 'error' in data:
+            print(f"Error fetching data: {data['error']}")
+            return None
+        else:
+            return data.data[0] if data.data else None
+
+    @staticmethod
+    def add_entry_to_player_table(supabase, id, codename):
+        data = supabase.table('player').insert(
+            {'id': id, 'codename': codename}).execute()
         print(data)
-        data_dict = data.dict()
-        data_entries = data_dict['data']
-        for entry in data_entries:
-            foreign_key_list.append(int(entry['id']))
-        return foreign_key_list
+

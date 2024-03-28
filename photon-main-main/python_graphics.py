@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import ImageTk, Image
 import os
 import python_supabase
+from typing import Dict
 
 
 class GameScreen(Frame):
@@ -157,29 +158,22 @@ class Application(Frame):
         Button(text="F12: Clear Players", command=self.clearPlayers).grid(
             row=19, column=0, columnspan=2)
 
-    def testing(self) -> str:
-        codenames = []
-        ids = []
-        for entry in self.red_codename:
-            word = entry.get()
-            if word != '':
-                codenames.append(word)
-        for entry in self.green_codename:
-            word = entry.get()
-            if word != '':
-                codenames.append(word)
-        for entry in self.red_id:
-            word = entry.get()
-            if word != '':
-                ids.append(int(word))
-        for entry in self.green_id:
-            word = entry.get()
-            if word != '':
-                ids.append(int(word))
-        print(codenames)
-        print(ids)
-        python_supabase.Database.addData(ids, codenames)
-        return "testing"
+    def testing(self):
+        values = {}
+        for codename, id_entry in zip(self.red_codename + self.green_codename, self.red_id + self.green_id):
+            name = codename.get()
+            id_value = id_entry.get()
+
+            if id_value:
+                values[int(id_value)] = name if name else ''
+
+        returned_dict = python_supabase.Database.addData(values)
+        for key, value in returned_dict.items():
+            for codename, id_entry in zip(self.red_codename + self.green_codename, self.red_id + self.green_id):
+                id_value = id_entry.get()
+                if id_value and int(id_value) == key:
+                    codename.delete(0, END)
+                    codename.insert(0, value)
 
     def clearPlayers(self):
         for entry in self.red_codename:
