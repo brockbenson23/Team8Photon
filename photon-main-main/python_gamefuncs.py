@@ -10,6 +10,7 @@ class Player():
         playerID = pID
         hardwareID = -1 ## implement when we find out what this is
         codeName = python_supabase.Database.fetch_name(pID)
+        points = 0 ## doesnt need to be on supabase
     
     def styleB(self) -> None:
         ## placeholder because idk where to find stylized B

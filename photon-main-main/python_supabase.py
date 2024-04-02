@@ -47,9 +47,15 @@ class Database:
         print(data)
 
     @staticmethod
-    def fetch_name(id):
+    def fetch_data(id):
         data = Database.supabase.table('player')
         codename = data.select(id).execute()
         print("codename = {}".format(codename))
         return codename
+    
+    @staticmethod
+    def fetch_data():
+        data = Database.supabase.table('player').select("*").execute()
+        print(data)
+        return data
 
