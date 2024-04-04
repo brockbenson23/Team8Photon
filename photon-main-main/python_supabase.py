@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 import os
 from typing import Dict
 
+## hopefully solves __pycache__ problem
+PYTHONDONTWRITEBYTECODE = "TRUE"
+
 class Database:
     load_dotenv()
     url: str = os.environ.get("REACT_APP_SUPABASE_URL")
