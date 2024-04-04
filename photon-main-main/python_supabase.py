@@ -1,5 +1,3 @@
-import sys; sys.dont_write_bytecode = True # i hate 
-PYTHONDONTWRITEBYTECODE = 1
 from supabase import create_client
 from dotenv import load_dotenv
 import os
