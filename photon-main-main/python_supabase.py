@@ -1,10 +1,10 @@
+import sys; sys.dont_write_bytecode = True # i hate 
+PYTHONDONTWRITEBYTECODE = 1
 from supabase import create_client
 from dotenv import load_dotenv
 import os
 from typing import Dict
 
-## hopefully solves __pycache__ problem
-PYTHONDONTWRITEBYTECODE = "TRUE"
 
 class Database:
     load_dotenv()
