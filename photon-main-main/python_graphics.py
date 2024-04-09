@@ -260,7 +260,7 @@ class Application(Frame):
             widget.destroy()
 
         
-        game_screen = GameScreen(self.master, self)
+        game_screen = GameScreen(self.master)
         game_screen.grid()
 
 
