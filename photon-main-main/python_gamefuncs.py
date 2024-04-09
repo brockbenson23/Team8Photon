@@ -18,16 +18,18 @@ class Player():
     def __init__(self, pID) -> None:
         ## take data from supabase
         self.playerID = pID
-        self.hardwareID = -1 ## implement when we find out what this is
-        self.codeName = python_supabase.Database.fetch_name(pID)
-        if ((pID % 2) == 1): self.color = "RED" ## IF ID == ODD -> RED TEAM
-        else: self.color = "GREEN" ## IF ID == EVEN -> GREEN TEAM
+        playerdata = python_supabase.Database.fetch_player_data(pID)
+        self.hardwareID = playerdata['equipment_id']
+        self.codeName = playerdata['codename']
+        print("self.codename = {}".format(self.codeName))
+        if ((pID % 2) == 1): self.team = "RED" ## IF ID == ODD -> RED TEAM
+        else: self.team = "GREEN" ## IF ID == EVEN -> GREEN TEAM
     
     def styleB(self) -> None:
         ## placeholder because idk where to find stylized B
-        self.codeName = self.codeName + 'B'
+        self.codeName = self.codeName + ' B'
         print("new codeName = {}".format(self.codeName))
-        python_supabase.Database.update_data(self.playerID, self.codeName)
+        python_supabase.Database.update_name(self.playerID, self.codeName)
 
 
 
