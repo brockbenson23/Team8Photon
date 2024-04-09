@@ -93,12 +93,24 @@ class GameScreen(Frame):
             self.gameTimer(0)
 
     def gameTimer(self, count):
-        if count <= 360:
+        if count <= 5:
             minutes = count // 60
             seconds = count % 60
             timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
             self.game_timer_label.config(text=timer_text)
             self.master.after(1000, self.gameTimer, count+1)
+        else:
+            black_strip = Label(self.master, bg="black")
+            black_strip.grid(row=24, column=0, columnspan=4, sticky="ew")
+            end_button = Button(self.master, text="Game Over", command=self.handleGameEnd)
+            end_button.grid(row=24, column=0, columnspan=4)
+
+    def handleGameEnd(self):
+        # Clear the current screen
+        self.clearScreen()
+        # Get the parent frame (Application frame)
+        self.application_instance.createWidgets()
+        self.application_instance.createButton()
 
 class Application(Frame):
 
@@ -247,8 +259,8 @@ class Application(Frame):
         for widget in self.master.winfo_children():
             widget.destroy()
 
-        # Create new game screen with 5 rows
-        game_screen = GameScreen(self.master)
+        
+        game_screen = GameScreen(self.master, self)
         game_screen.grid()
 
 
