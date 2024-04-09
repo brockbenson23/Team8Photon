@@ -9,15 +9,11 @@ bufferSize = 1024
 # Create a UDP socket at client side
 UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
-# Send to server using created UDP socket
-UDPClientSocket.sendto(bytesToSend, serverAddressPort)
+def transmitEquipmentCode(equipmentCode):
 
-msgFromServer = UDPClientSocket.recvfrom(bufferSize)
-msg = "Message from Server {}".format(msgFromServer[0])
+    # Convert equipment code to string then encode in bytes
+    ec = str(equipmentCode)
+    bytesToSend = str.encode(ec)
 
-print(msg)
-
-# # Receiving equipment ID from the server
-# received_data, _ = UDPClientSocket.recvfrom(bufferSize)
-# equipment_id = received_data.decode()
-# print("Received Equipment ID:", equipment_id)
+    # Send to server using created UDP socket
+    UDPClientSocket.sendto(bytesToSend, serverAddressPort)
