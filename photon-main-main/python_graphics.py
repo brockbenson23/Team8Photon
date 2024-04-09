@@ -30,13 +30,13 @@ class GameScreen(Frame):
 
         self.game_timer_label = Label(self.master, text="Game Timer: 00:00", font=("Arial", 16), bg='black', fg='white')
         self.game_timer_label.grid(row=1, column=0, columnspan=4, sticky="ew")
-        
+
         createLabel('Red Team', 'black', red, redpadx, 10, 0, 0, 2)
         createLabel('Green Team', 'black', green, greenpadx, 10, 0, 2, 2)
-        createLabel('Codename', red, 'white', codenamex, 10, 1, 0, 1)
-        createLabel('Points', red, 'white', 40, 10, 1, 1, 1)
-        createLabel('Codename', green, 'white', codenamex + 4, 10, 1, 2, 1)
-        createLabel('Points', green, 'white', 40, 10, 1, 3, 1)
+        createLabel('Codename', red, 'white', codenamex, 10, 2, 0, 1)         # Adjusted row
+        createLabel('Points', red, 'white', 40, 10, 2, 1, 1)                   # Adjusted row
+        createLabel('Codename', green, 'white', codenamex + 4, 10, 2, 2, 1)    # Adjusted row and column
+        createLabel('Points', green, 'white', 40, 10, 2, 3, 1)                 # Adjusted row
         padloop = (greenpadx+redpadx)+70
 
         def createblack(text, bg, fg, padx, pady, row, column, columnspan):
@@ -51,11 +51,11 @@ class GameScreen(Frame):
             return bluelabel
 
         for i in range(10):
-            createblack('', 'black', 'black', padloop, 0, i+2, 0, 4)
+            createblack('', 'black', 'black', padloop, 0, i+3, 0, 4)
 
         for i in range(10):
-            createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 0, 2)
-            createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 2, 2,)
+            createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+13, 0, 2)
+            createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+13, 2, 2,)
 
     def clearScreen(self):
         # Destroy all widgets in the current window
@@ -96,7 +96,6 @@ class GameScreen(Frame):
             timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
             self.game_timer_label.config(text=timer_text)
             self.master.after(1000, self.gameTimer, count+1)
-
 
 class Application(Frame):
 
