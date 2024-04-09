@@ -5,7 +5,7 @@ import python_supabase
 from typing import Dict
 
 ## comment this out its so useless but don't delete clifford needs it
-import test
+#import test
 
 
 class GameScreen(Frame):
@@ -255,7 +255,7 @@ class Application(Frame):
 root = Tk()
 app = Application(root)
 ## for testing functions
-root.bind("]", test.test())
+#root.bind("]", test.test())
 
 root.mainloop()
 
