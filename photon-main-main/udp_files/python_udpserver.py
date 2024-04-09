@@ -14,22 +14,14 @@ UDPServerSocket.bind((localIP, receivePort))
 
 print("UDP server up and listening")
 
-# Listen for incoming datagrams
-
-while (True):
-
+# Listen for incoming messages
+while(True):
+   
     bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
-    message = bytesAddressPair[0]
+    equipmentCode = bytesAddressPair[0]
     address = bytesAddressPair[1]
-    clientMsg = "Message from Client:{}".format(message)
-    clientIP = "Client IP Address:{}".format(address)
-
-    print(clientMsg)
+    clientMsg = "Message from Client:{}".format(equipmentCode)
+    clientIP  = "Client IP Address:{}".format(address)
+   
+    print(equipmentCode)
     print(clientIP)
-
-    # Sending a reply to client
-    UDPServerSocket.sendto(bytesToSend, address)
-
-    # # Broadcasting equipment ID to all clients
-    # broadcast_message = "123"  # Example equipment ID
-    # broadcastSocket.sendto(str.encode(broadcast_message), ('<broadcast>', broadcastPort))
