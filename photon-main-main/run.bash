@@ -1,6 +1,5 @@
 pushd udp_files
 echo "in udp"
-python3 python_trafficgenarator_v2.py &
 python3 python_udpserver.py &
 python3 python_udpclient.py &
 popd
