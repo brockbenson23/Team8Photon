@@ -2,6 +2,7 @@ from supabase import create_client
 from dotenv import load_dotenv
 import os
 from typing import Dict
+import udp_files.python_udpclient.py
 
 
 class Database:
@@ -59,6 +60,7 @@ class Database:
     def add_hardware(supabase, id, equipment_id):
         data = supabase.table('player').update(
             {'equipment_id': equipment_id}).eq('id', id).execute()
+        udp_files.python_udpclient.transmitEquipmentCode(equipment_id)
         print(data)
 
     @staticmethod
