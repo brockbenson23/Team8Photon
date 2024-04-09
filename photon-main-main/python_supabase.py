@@ -2,7 +2,7 @@ from supabase import create_client
 from dotenv import load_dotenv
 import os
 from typing import Dict
-import udp_files.python_udpclient.py
+import udp_files.python_udpclient
 
 
 class Database:
