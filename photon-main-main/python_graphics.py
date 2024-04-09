@@ -110,6 +110,7 @@ class Application(Frame):
         self.red_id = []
         self.green_codename = []
         self.green_id = []
+        self.List = {}
 
         Label(text='Red Team', bg=red, fg='white', padx=20,
               pady=20).grid(row=0, column=0, columnspan=2)
@@ -134,6 +135,7 @@ class Application(Frame):
             entry2_red.grid(row=i + 2, column=0)
             self.red_codename.append(entry_red)
             self.red_id.append(entry2_red)
+            self.List[entry2_red] = entry_red
 
         # Green Team
         for i in range(15):
@@ -149,31 +151,68 @@ class Application(Frame):
             entry2_green.grid(row=i + 2, column=2)
             self.green_codename.append(entry_green)
             self.green_id.append(entry2_green)
+            self.List[entry2_green] = entry_green
 
     def createButton(self):
-        Button(text="Submit ID", command=self.testing).grid(
+        Button(text="Submit ID", command=self.addPlayer).grid(
             row=18, column=1, columnspan=2)
         Button(text="F5: Start Game", command=self.startGame).grid(
             row=19, column=2, columnspan=2)
         Button(text="F12: Clear Players", command=self.clearPlayers).grid(
             row=19, column=0, columnspan=2)
 
-    def testing(self):
+    def addPlayer(self):
         values = {}
-        for codename, id_entry in zip(self.red_codename + self.green_codename, self.red_id + self.green_id):
-            name = codename.get()
-            id_value = id_entry.get()
+        for key in self.List:
+            name = self.List[key].get()
+            id_value = key.get()
 
             if id_value:
                 values[int(id_value)] = name if name else ''
 
         returned_dict = python_supabase.Database.addData(values)
         for key, value in returned_dict.items():
-            for codename, id_entry in zip(self.red_codename + self.green_codename, self.red_id + self.green_id):
-                id_value = id_entry.get()
+            for key2 in self.List:
+                id_value = key2.get()
                 if id_value and int(id_value) == key:
-                    codename.delete(0, END)
-                    codename.insert(0, value)
+                    self.List[key2].delete(0, END)
+                    self.List[key2].insert(0, value)
+        self.getHardware(self.List)
+
+    def getHardware(self, List: Dict):
+        values = {}
+        for key in List:
+            if len(key.get()) > 0:
+                values[int(key.get())] = self.popUpHardware(List[key].get())
+        python_supabase.Database.addHardware(values)
+
+    def popUpHardware(self, codename: str) -> int:
+        top = Toplevel(self.master)
+        top.geometry("250x250")
+        self.hardwareID = 0
+        Label(top, text=str(f'Enter Hardware ID for player: {codename}')).grid(
+            row=0, column=0)
+        entry = Entry(top, width=25)
+        entry.grid(row=1, column=0)
+
+        def submit_and_close():
+            self.hardwareID = int(entry.get())
+            top.destroy()
+
+        Button(top, text="Submit", command=submit_and_close).grid(
+            row=2, column=0)
+
+        top.wait_window(top)  # Wait until the popup window is closed
+
+        try:
+            return int(self.hardwareID)
+        except ValueError:
+            return 0
+
+    def insert_val(self, e, top) -> int:
+        value = int(e.get())
+        top.destroy()
+        return value
 
     def clearPlayers(self):
         for entry in self.red_codename:
@@ -198,3 +237,4 @@ class Application(Frame):
 root = Tk()
 app = Application(root)
 root.mainloop()
+
