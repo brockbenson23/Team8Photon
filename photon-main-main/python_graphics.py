@@ -14,6 +14,7 @@ class GameScreen(Frame):
         self.createWidgets()
         self.master.after(5000, self.clearScreen)
         self.master.after(5000, self.countdowntimer)
+        self.game_timer_label = None
 
     def createWidgets(self):
         red = '#990000'
@@ -27,6 +28,9 @@ class GameScreen(Frame):
             label.grid(row=row, column=column, columnspan=columnspan)
             return label
 
+        self.game_timer_label = Label(self.master, text="Game Timer: 00:00", font=("Arial", 16), bg='black', fg='white')
+        self.game_timer_label.grid(row=1, column=0, columnspan=4, sticky="ew")
+        
         createLabel('Red Team', 'black', red, redpadx, 10, 0, 0, 2)
         createLabel('Green Team', 'black', green, greenpadx, 10, 0, 2, 2)
         createLabel('Codename', red, 'white', codenamex, 10, 1, 0, 1)
@@ -80,6 +84,18 @@ class GameScreen(Frame):
             # Countdown completed, display createWidgets again
             self.clearScreen()
             self.createWidgets()
+            self.game_timer_label = Label(self.master, text="Game Timer: 00:00", font=("Arial", 16), bg="black", fg="white")
+            self.game_timer_label.grid(row=1, column=0, columnspan=4, sticky="ew")
+            # Start the game timer
+            self.gameTimer(0)
+
+    def gameTimer(self, count):
+        if count <= 360:
+            minutes = count // 60
+            seconds = count % 60
+            timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
+            self.game_timer_label.config(text=timer_text)
+            self.master.after(1000, self.gameTimer, count+1)
 
 
 class Application(Frame):
