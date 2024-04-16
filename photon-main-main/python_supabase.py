@@ -25,7 +25,7 @@ class Database:
                     f"ID {id} already exists in the table. Codename: {existing_entry['codename']}")
                 return {id: existing_entry['codename']}
             else:
-                Database.add_entry_to_player_table(Database.supabase, id, name)
+                Database.add_entry_to_player_table(id, name)
                 return {0: ''}
 
     @staticmethod
