@@ -3,6 +3,9 @@ from PIL import ImageTk, Image
 import os
 import python_supabase
 from typing import Dict
+import random
+from playsound import playsound
+import time
 
 ## comment this out its so useless but don't delete clifford needs it
 #import test
@@ -17,6 +20,7 @@ class GameScreen(Frame):
         self.createWidgets()
         self.master.after(5000, self.clearScreen)
         self.master.after(5000, self.countdowntimer)
+        self.pickSound()
         self.game_timer_label = None
 
     def createWidgets(self):
@@ -64,6 +68,29 @@ class GameScreen(Frame):
         # Destroy all widgets in the current window
         for widget in self.master.winfo_children():
             widget.destroy()
+
+    def pickSound(self):
+         # Play the countdown sound
+        randomInt = random.randint(1, 8)
+        print(randomInt)
+        match randomInt:
+            case 1: 
+                track = "Track01.mp3"
+            case 2:
+                track = "Track02.mp3"
+            case 3:
+                track = "Track03.mp3"
+            case 4:
+                track = "Track04.mp3"
+            case 5:
+                track = "Track05.mp3"
+            case 6:
+                track = "Track06.mp3"
+            case 7:
+                track = "Track07.mp3"
+            case 8:
+                track = "Track08.mp3"
+                    
 
     def countdowntimer(self, count=10):
         if count >= 0:
