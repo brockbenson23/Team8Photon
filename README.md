@@ -20,6 +20,8 @@ pip install faker_commerce
 pip install supabase
 pip install tk
 pip install python-dotenv
+pip install playsound
+(if pip install playsound doesn't work: pip install --upgrade wheel)
 ========================================================================
 GITHUB NAMES:
 
