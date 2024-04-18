@@ -4,7 +4,7 @@ import os
 import python_supabase
 from typing import Dict
 import random
-from playsound import playsound
+import pygame
 import time
 
 ## comment this out its so useless but don't delete clifford needs it
@@ -75,22 +75,24 @@ class GameScreen(Frame):
         print(randomInt)
         match randomInt:
             case 1: 
-                track = "Track01.mp3"
+                track = "photon_tracks\Track01.mp3"
             case 2:
-                track = "Track02.mp3"
+                track = "photon_tracks\Track02.mp3"
             case 3:
-                track = "Track03.mp3"
+                track = "photon_tracks\Track03.mp3"
             case 4:
-                track = "Track04.mp3"
+                track = "photon_tracks\Track04.mp3"
             case 5:
-                track = "Track05.mp3"
+                track = "photon_tracks\Track05.mp3"
             case 6:
-                track = "Track06.mp3"
+                track = "photon_tracks\Track06.mp3"
             case 7:
-                track = "Track07.mp3"
+                track = "photon_tracks\Track07.mp3"
             case 8:
-                track = "Track08.mp3"
-                    
+                track = "photon_tracks\Track08.mp3"
+        pygame.mixer.init()
+        pygame.mixer.music.load(track)
+        pygame.mixer.music.play()
 
     def countdowntimer(self, count=10):
         if count >= 0:
