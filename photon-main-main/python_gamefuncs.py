@@ -6,30 +6,35 @@ import python_supabase
 class Team():
     points = 0
     ## will initialize a green and red team
-    def __init__(self, color) -> None:
+    def __init__(self) -> None:
         self.players = []
-        self.color = color
     
     def addPlayer(self, player) -> None:
         self.players.append(player)
+    
+    def print(self) -> None:
+        for player in self.players:
+            player.print()
+            print("team has {} points".format(self.points))
 
 class Player():
     points = 0
     def __init__(self, pID) -> None:
         ## take data from supabase
         self.playerID = pID
-        playerdata = python_supabase.Database.fetch_player_data(pID)
-        self.hardwareID = playerdata['equipment_id']
-        self.codeName = playerdata['codename']
-        print("self.codename = {}".format(self.codeName))
-        if ((pID % 2) == 1): self.team = "RED" ## IF ID == ODD -> RED TEAM
-        else: self.team = "GREEN" ## IF ID == EVEN -> GREEN TEAM
+        self.hardwareID = -1 ## implement when we find out what this is
+        self.codeName = python_supabase.Database.fetch_name(pID)
+        if ((int(pID) % 2) == 1): self.color = "RED" ## IF ID == ODD -> RED TEAM
+        else: self.color = "GREEN" ## IF ID == EVEN -> GREEN TEAM
     
     def styleB(self) -> None:
         ## placeholder because idk where to find stylized B
         self.codeName = self.codeName + ' B'
         print("new codeName = {}".format(self.codeName))
         python_supabase.Database.update_name(self.playerID, self.codeName)
+
+    def print(self) -> None:
+        print("codename = {} hardwareID = {} playerID = {}".format(self.codeName, self.hardwareID, self.playerID))
 
 
 

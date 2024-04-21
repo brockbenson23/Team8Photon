@@ -1,10 +1,13 @@
 import socket
+from .. import python_gamefuncs
+from .. import python_graphics
 
 localIP = "127.0.0.1"
-receivePort = 7500
+receivePort = 7501
+broadcastPort = 7500
 bufferSize = 1024
-msgFromServer = "Hello UDP Client"
-bytesToSend = str.encode(msgFromServer)
+
+
 
 # Create a datagram socket
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -14,7 +17,18 @@ UDPServerSocket.bind((localIP, receivePort))
 
 print("UDP server up and listening")
 
-# Listen for incoming messages
+## equipID is ID client sent, IP is equipID of client
+def playerHit(equipID, clientIP, address): 
+    msgFromServer = str(clientIP) + ":" + str(equipID)
+    bytesToSend = str.encode(msgFromServer)
+    UDPServerSocket.sendto(bytesToSend, address)
+
+# Broadcasting equipment ID to all clients
+# broadcast_message = "123"  # Example equipment ID
+# UDPServerSocket.sendto(str.encode(broadcast_message), ('<broadcast>', broadcastPort))
+
+
+# Listen for incoming datagrams
 while (True):
 
     bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
@@ -25,3 +39,8 @@ while (True):
 
     print(equipmentCode)
     print(clientIP)
+
+    # Sending a reply to client
+    playerHit(clientMsg, clientIP, address)
+
+    

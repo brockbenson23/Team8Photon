@@ -5,9 +5,6 @@ from typing import Dict
 from typing import List
 import udp_files.python_udpclient
 
-## hopefully solves __pycache__ problem
-PYTHONDONTWRITEBYTECODE = "TRUE"
-
 class Database:
     load_dotenv()
     url: str = os.environ.get("REACT_APP_SUPABASE_URL")
@@ -69,8 +66,14 @@ class Database:
         print(data)
 
     @staticmethod
-    def fetch_player_data(id): # returns list of data associated with player ex. [{"id": x, etc..}]
+    def fetch_name(id):
         data = Database.supabase.table('player').select('*').eq('id', id).execute()
-        print(data.data[0])
-        return data.data[0]
+        codename = data.data[0]['codename'] if data.data else None
+        return codename
+    
+    @staticmethod
+    def fetch_data():
+        data = Database.supabase.table('player').select("*").execute()
+        print(data)
+        return data
 
