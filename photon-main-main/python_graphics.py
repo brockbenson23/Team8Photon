@@ -1,7 +1,9 @@
 from tkinter import *
 from PIL import ImageTk, Image
 import os
+import math
 import python_supabase
+import python_gamefuncs
 from typing import Dict
 
 
@@ -46,10 +48,12 @@ class GameScreen(Frame):
                            columnspan=columnspan, sticky="ew")
             return bluelabel
 
-        for i in range(10):
-            createblack('', 'black', 'black', padloop, 0, i+2, 0, 4)
+        for i in range(10): ## display players & points here
+            createblack('red codename', 'black', 'black', padloop/2, 0, i+2, 0, 2)
+            createblack('points ', 'black', 'black', padloop/2, 0, i+2, 2, 4)
 
-        for i in range(10):
+
+        for i in range(10): ## display game actions here
             createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 0, 2)
             createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 2, 2,)
 
@@ -85,6 +89,9 @@ class GameScreen(Frame):
 class Application(Frame):
 
     game_started = False
+    ## declaring teams
+    RED = python_gamefuncs.Team()
+    GREEN = python_gamefuncs.Team()
 
     def __init__(self, master):
         Frame.__init__(self, master)
@@ -166,6 +173,10 @@ class Application(Frame):
 
             if id_value:
                 values[int(id_value)] = name if name else ''
+                ## declare players here
+                if int(id_value) % 2 == 1: self.RED.addPlayer(python_gamefuncs.Player(id_value))
+                else: self.GREEN.addPlayer(python_gamefuncs.Player(id_value))
+                
 
         returned_dict = python_supabase.Database.addData(values)
         for key, value in returned_dict.items():

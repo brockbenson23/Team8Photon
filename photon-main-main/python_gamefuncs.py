@@ -6,12 +6,16 @@ import python_supabase
 class Team():
     points = 0
     ## will initialize a green and red team
-    def __init__(self, color) -> None:
+    def __init__(self) -> None:
         self.players = []
-        self.color = color
     
     def addPlayer(self, player) -> None:
         self.players.append(player)
+    
+    def print(self) -> None:
+        for player in self.players:
+            player.print()
+            print("team has {} points".format(self.points))
 
 class Player():
     points = 0
@@ -20,7 +24,7 @@ class Player():
         self.playerID = pID
         self.hardwareID = -1 ## implement when we find out what this is
         self.codeName = python_supabase.Database.fetch_name(pID)
-        if ((pID % 2) == 1): self.color = "RED" ## IF ID == ODD -> RED TEAM
+        if ((int(pID) % 2) == 1): self.color = "RED" ## IF ID == ODD -> RED TEAM
         else: self.color = "GREEN" ## IF ID == EVEN -> GREEN TEAM
     
     def styleB(self) -> None:
@@ -28,6 +32,9 @@ class Player():
         self.codeName = self.codeName + 'B'
         print("new codeName = {}".format(self.codeName))
         python_supabase.Database.update_data(self.playerID, self.codeName)
+
+    def print(self) -> None:
+        print("codename = {} hardwareID = {} playerID = {}".format(self.codeName, self.hardwareID, self.playerID))
 
 
 

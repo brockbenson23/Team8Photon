@@ -3,9 +3,6 @@ from dotenv import load_dotenv
 import os
 from typing import Dict
 
-## hopefully solves __pycache__ problem
-PYTHONDONTWRITEBYTECODE = "TRUE"
-
 class Database:
     load_dotenv()
     url: str = os.environ.get("REACT_APP_SUPABASE_URL")
@@ -50,10 +47,9 @@ class Database:
         print(data)
 
     @staticmethod
-    def fetch_data(id):
-        data = Database.supabase.table('player')
-        codename = data.select(id).execute()
-        print("codename = {}".format(codename))
+    def fetch_name(id):
+        data = Database.supabase.table('player').select('*').eq('id', id).execute()
+        codename = data.data[0]['codename'] if data.data else None
         return codename
     
     @staticmethod
