@@ -1,6 +1,7 @@
 from supabase import create_client
 from dotenv import load_dotenv
 import os
+import python_udpserver
 from typing import Dict
 from typing import List
 
@@ -55,13 +56,13 @@ class Database:
     def add_hardware(supabase, id, equipment_id):
         data = supabase.table('player').update(
             {'equipment_id': equipment_id}).eq('id', id).execute()
-        udp_files.python_udpclient.transmitEquipmentCode(equipment_id)
+        python_udpserver.transmitID(equipment_id)
         print(data)
         
     @staticmethod
-    def update_name(id, newname):
-        data = Database.supabase.table('player')
-        data.upsert({'id' : id, 'name' : newname})
+    def update_data(id, codename, equipmentid, hasBase, points):
+        data = Database.supabase.table('player').select('*').eq('id', id).execute()
+        data.upsert({'id' : id, 'name' : codename, 'equipment_id' : equipmentid, 'hasBase' : hasBase, 'points' : points})
         print(data)
 
     @staticmethod
@@ -71,8 +72,9 @@ class Database:
         return codename
     
     @staticmethod
-    def fetch_data():
-        data = Database.supabase.table('player').select("*").execute()
-        print(data)
+    def fetch_playerData(id):
+        data = Database.supabase.table('player').select('*').eq('id', id).execute()
+        data = data.data if data.data else None # checking if data exists, returns None if not
         return data
+    
 

@@ -1,5 +1,4 @@
 import socket
-import python_supabase
 
 print("in client")
 msgFromClient = "Hello UDP Server"

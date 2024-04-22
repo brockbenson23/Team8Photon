@@ -99,6 +99,7 @@ class GameScreen(Frame):
         pygame.mixer.music.play()
 
     def countdowntimer(self, count=10):
+
         if count >= 0:
             # Get the current directory
             current_directory = os.path.dirname(__file__)
