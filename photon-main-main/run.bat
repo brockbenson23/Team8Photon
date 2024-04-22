@@ -1,7 +1,5 @@
-echo "in udp"
-python3 python_udpserver.py &
-python3 python_udpclient.py &
-popd
+echo "python3 python_udpserver.py &"
+echo "python3 python_udpclient.py &"
 
 start python3 python_udpserver.py
 start python3 python_udpclient.py
