@@ -233,14 +233,10 @@ class Application(Frame):
         for key in self.List:
             name = self.List[key].get()
             id_value = key.get()
-
+            
             if id_value:
                 values[int(id_value)] = name if name else ''
-                ## declare players here
-                if int(id_value) % 2 == 1: self.RED.addPlayer(python_gamefuncs.Player(id_value))
-                else: self.GREEN.addPlayer(python_gamefuncs.Player(id_value))
                 
-
         returned_dict = python_supabase.Database.addData(values)
         for key, value in returned_dict.items():
             for key2 in self.List:
