@@ -61,8 +61,8 @@ class Database:
         
     @staticmethod
     def update_data(id, codename, equipmentid, hasBase, points):
-        data = Database.supabase.table('player').select('*').eq('id', id).execute()
-        data.upsert({'id' : id, 'name' : codename, 'equipment_id' : equipmentid, 'hasBase' : hasBase, 'points' : points})
+        data = Database.supabase.table('player')
+        data.upsert({'id' : id, 'name' : codename})
         print(data)
 
     @staticmethod
