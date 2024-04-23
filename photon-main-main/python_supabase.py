@@ -1,9 +1,10 @@
 from supabase import create_client
 from dotenv import load_dotenv
 import os
-#import python_udpserver
 from typing import Dict
 from typing import List
+import python_udpclient
+
 
 class Database:
     load_dotenv()
@@ -19,7 +20,8 @@ class Database:
             print('id = ', id, ' name = ', name)
 
             # Check if the ID already exists in the table
-            existing_entry = Database.check_existing_entry(Database.supabase, id)
+            existing_entry = Database.check_existing_entry(
+                Database.supabase, id)
             if existing_entry is not None:
                 print(
                     f"ID {id} already exists in the table. Codename: {existing_entry['codename']}")
@@ -28,7 +30,7 @@ class Database:
                 if name != '':
                     Database.add_entry_to_player_table(id, name)
         return entries
-    
+
     @staticmethod
     def addHardware(values: Dict[int, int]):
         load_dotenv()
@@ -56,25 +58,26 @@ class Database:
     def add_hardware(supabase, id, equipment_id):
         data = supabase.table('player').update(
             {'equipment_id': equipment_id}).eq('id', id).execute()
-        #python_udpserver.transmitID(equipment_id)
+        python_udpclient.broadcastID(id)
         print(data)
-        
+
     @staticmethod
     def update_data(id, codename, equipmentid, hasBase, points):
         data = Database.supabase.table('player')
-        data.upsert({'id' : id, 'name' : codename})
+        data.upsert({'id': id, 'name': codename})
         print(data)
 
     @staticmethod
     def fetch_name(id):
-        data = Database.supabase.table('player').select('*').eq('id', id).execute()
+        data = Database.supabase.table(
+            'player').select('*').eq('id', id).execute()
         codename = data.data[0]['codename'] if data.data else None
         return codename
-    
+
     @staticmethod
     def fetch_playerData(id):
-        data = Database.supabase.table('player').select('*').eq('id', id).execute()
+        data = Database.supabase.table(
+            'player').select('*').eq('id', id).execute()
         print(data)
-        return data.data if data.data else None # checking if data exists, returns None if not
-    
-
+        # checking if data exists, returns None if not
+        return data.data if data.data else None

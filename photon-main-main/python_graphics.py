@@ -4,13 +4,14 @@ import os
 import math
 import python_supabase
 import python_gamefuncs
+import python_udpclient
 from typing import Dict
 import random
 import pygame
 import time
 
-## comment this out its so useless but don't delete clifford needs it
-#import test
+# comment this out its so useless but don't delete clifford needs it
+# import test
 
 
 class GameScreen(Frame):
@@ -19,9 +20,7 @@ class GameScreen(Frame):
         self.master = master
         self.master.title("Game Screen")
         self.master.resizable(False, False)
-        self.createWidgets()
-        self.master.after(5000, self.clearScreen)
-        self.master.after(5000, self.countdowntimer)
+        self.countdowntimer()
         self.pickSound()
         self.game_timer_label = None
 
@@ -37,15 +36,20 @@ class GameScreen(Frame):
             label.grid(row=row, column=column, columnspan=columnspan)
             return label
 
-        self.game_timer_label = Label(self.master, text="Game Timer: 00:00", font=("Arial", 16), bg='black', fg='white')
+        self.game_timer_label = Label(self.master, text="Game Timer: 00:00", font=(
+            "Arial", 16), bg='black', fg='white')
         self.game_timer_label.grid(row=1, column=0, columnspan=4, sticky="ew")
 
         createLabel('Red Team', 'black', red, redpadx, 10, 0, 0, 2)
         createLabel('Green Team', 'black', green, greenpadx, 10, 0, 2, 2)
-        createLabel('Codename', red, 'white', codenamex, 10, 2, 0, 1)         # Adjusted row
-        createLabel('Points', red, 'white', 40, 10, 2, 1, 1)                   # Adjusted row
-        createLabel('Codename', green, 'white', codenamex + 4, 10, 2, 2, 1)    # Adjusted row and column
-        createLabel('Points', green, 'white', 40, 10, 2, 3, 1)                 # Adjusted row
+        createLabel('Codename', red, 'white', codenamex,
+                    10, 2, 0, 1)         # Adjusted row
+        createLabel('Points', red, 'white', 40, 10, 2, 1,
+                    1)                   # Adjusted row
+        createLabel('Codename', green, 'white', codenamex + 4,
+                    10, 2, 2, 1)    # Adjusted row and column
+        createLabel('Points', green, 'white', 40, 10, 2,
+                    3, 1)                 # Adjusted row
         padloop = (greenpadx+redpadx)+70
 
         def createblack(text, bg, fg, padx, pady, row, column, columnspan):
@@ -59,12 +63,12 @@ class GameScreen(Frame):
                            columnspan=columnspan, sticky="ew")
             return bluelabel
 
-        for i in range(10): ## display players & points here
-            createblack('red codename', 'black', 'black', padloop/2, 0, i+2, 0, 2)
+        for i in range(10):  # display players & points here
+            createblack('red codename', 'black',
+                        'black', padloop/2, 0, i+2, 0, 2)
             createblack('points ', 'black', 'black', padloop/2, 0, i+2, 2, 4)
 
-
-        for i in range(10): ## display game actions here
+        for i in range(10):  # display game actions here
             createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 0, 2)
             createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 2, 2,)
 
@@ -74,11 +78,11 @@ class GameScreen(Frame):
             widget.destroy()
 
     def pickSound(self):
-         # Play the countdown sound
+        # Play the countdown sound
         randomInt = random.randint(1, 8)
         print(randomInt)
         match randomInt:
-            case 1: 
+            case 1:
                 track = "photon_tracks\Track01.mp3"
             case 2:
                 track = "photon_tracks\Track02.mp3"
@@ -98,7 +102,7 @@ class GameScreen(Frame):
         pygame.mixer.music.load(track)
         pygame.mixer.music.play()
 
-    def countdowntimer(self, count=10):
+    def countdowntimer(self, count=30):
 
         if count >= 0:
             # Get the current directory
@@ -121,13 +125,16 @@ class GameScreen(Frame):
             # Countdown completed, display createWidgets again
             self.clearScreen()
             self.createWidgets()
-            self.game_timer_label = Label(self.master, text="Game Timer: 00:00", font=("Arial", 16), bg="black", fg="white")
-            self.game_timer_label.grid(row=1, column=0, columnspan=4, sticky="ew")
+            self.game_timer_label = Label(self.master, text="Game Timer: 00:00", font=(
+                "Arial", 16), bg="black", fg="white")
+            self.game_timer_label.grid(
+                row=1, column=0, columnspan=4, sticky="ew")
+            python_udpclient.broadcastID(202)
             # Start the game timer
             self.gameTimer(0)
 
     def gameTimer(self, count):
-        if count <= 5:
+        if count <= 360:
             minutes = count // 60
             seconds = count % 60
             timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
@@ -136,7 +143,8 @@ class GameScreen(Frame):
         else:
             black_strip = Label(self.master, bg="black")
             black_strip.grid(row=24, column=0, columnspan=4, sticky="ew")
-            end_button = Button(self.master, text="Game Over", command=self.handleGameEnd)
+            end_button = Button(self.master, text="Game Over",
+                                command=self.handleGameEnd)
             end_button.grid(row=24, column=0, columnspan=4)
 
     def handleGameEnd(self):
@@ -146,10 +154,11 @@ class GameScreen(Frame):
         self.application_instance.createWidgets()
         self.application_instance.createButton()
 
+
 class Application(Frame):
 
     game_started = False
-    ## declaring teams
+    # declaring teams
     RED = python_gamefuncs.Team()
     GREEN = python_gamefuncs.Team()
 
@@ -233,10 +242,10 @@ class Application(Frame):
         for key in self.List:
             name = self.List[key].get()
             id_value = key.get()
-            
+
             if id_value:
                 values[int(id_value)] = name if name else ''
-                
+
         returned_dict = python_supabase.Database.addData(values)
         for key, value in returned_dict.items():
             for key2 in self.List:
@@ -296,15 +305,13 @@ class Application(Frame):
         for widget in self.master.winfo_children():
             widget.destroy()
 
-        
         game_screen = GameScreen(self.master)
         game_screen.grid()
 
 
 root = Tk()
 app = Application(root)
-## for testing functions
-#root.bind("]", test.test())
+# for testing functions
+# root.bind("]", test.test())
 
 root.mainloop()
-
