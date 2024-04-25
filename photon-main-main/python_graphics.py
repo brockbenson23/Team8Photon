@@ -2,9 +2,11 @@ from tkinter import *
 from PIL import ImageTk, Image
 import os
 import math
+print('after math')
 import python_supabase
 import python_gamefuncs
-import python_udpclient
+print('after gamefuncs')
+#from python_udpclient import broadcastID
 from typing import Dict
 import random
 import pygame
@@ -129,7 +131,7 @@ class GameScreen(Frame):
                 "Arial", 16), bg="black", fg="white")
             self.game_timer_label.grid(
                 row=1, column=0, columnspan=4, sticky="ew")
-            python_udpclient.broadcastID(202)
+           # python_udpclient.broadcastID(202)
             # Start the game timer
             self.gameTimer(0)
 
@@ -313,5 +315,5 @@ root = Tk()
 app = Application(root)
 # for testing functions
 # root.bind("]", test.test())
-
+print('running')
 root.mainloop()

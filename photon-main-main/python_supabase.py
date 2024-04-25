@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from typing import Dict
 from typing import List
-import python_udpclient
+from python_udpclient import broadcastID
 
 
 class Database:
@@ -58,7 +58,7 @@ class Database:
     def add_hardware(supabase, id, equipment_id):
         data = supabase.table('player').update(
             {'equipment_id': equipment_id}).eq('id', id).execute()
-        python_udpclient.broadcastID(id)
+        broadcastID(id)
         print(data)
 
     @staticmethod

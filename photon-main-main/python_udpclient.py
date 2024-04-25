@@ -9,8 +9,10 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 UDPClientSocketTransmit = socket.socket(
     family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
+print("after socket")
 
 def broadcastID(id):
+    print('in broadcast')
     # Create a UDP socket
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -45,5 +47,5 @@ def sendMessage(bytePair0, bytePair1):  # equipID is the equipmentID of the play
     msg = "Message from Server {}".format(msgFromServer)
     print(msg)
 
-
-sendMessage(5556, 43)
+print('before sendmessage')
+print('leaving client')
