@@ -11,7 +11,7 @@ bufferSize = 1024
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 # Bind to address and ip
-UDPServerSocket.bind((localIP, receivePort))
+UDPServerSocket.bind((localIP, broadcastPort))
 
 print("UDP server up and listening")
 
