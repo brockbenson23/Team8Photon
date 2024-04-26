@@ -135,7 +135,7 @@ class GameScreen(Frame):
             # Start the game timer
             self.gameTimer(360)
 
-    def gameTimer(self, count):
+    def gameTimer(self, count = 360):
         if count <= 0:
             minutes = count // 60
             seconds = count % 60
