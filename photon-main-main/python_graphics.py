@@ -133,7 +133,7 @@ class GameScreen(Frame):
                 row=1, column=0, columnspan=4, sticky="ew")
             broadcastID('202')
             # Start the game timer
-            self.gameTimer(360)
+            self.gameTimer()
 
     def gameTimer(self, count = 360):
         if count <= 0:
