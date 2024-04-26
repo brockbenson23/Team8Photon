@@ -136,12 +136,12 @@ class GameScreen(Frame):
             self.gameTimer(0)
 
     def gameTimer(self, count):
-        if count >= 0:
+        if count <= 360:
             minutes = count // 60
             seconds = count % 60
             timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
             self.game_timer_label.config(text=timer_text)
-            self.master.after(1000, self.gameTimer, count-1)
+            self.master.after(1000, self.gameTimer, count+1)
         else:
             black_strip = Label(self.master, bg="black")
             black_strip.grid(row=24, column=0, columnspan=4, sticky="ew")
