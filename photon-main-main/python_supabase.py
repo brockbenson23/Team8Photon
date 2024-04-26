@@ -58,7 +58,7 @@ class Database:
     def add_hardware(supabase, id, equipment_id):
         data = supabase.table('player').update(
             {'equipment_id': equipment_id}).eq('id', id).execute()
-        broadcastID(id)
+        broadcastID(str(id))
         print(data)
 
     @staticmethod

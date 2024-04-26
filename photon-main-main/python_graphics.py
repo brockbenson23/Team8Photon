@@ -131,7 +131,7 @@ class GameScreen(Frame):
                 "Arial", 16), bg="black", fg="white")
             self.game_timer_label.grid(
                 row=1, column=0, columnspan=4, sticky="ew")
-            broadcastID(202)
+            broadcastID('202')
             # Start the game timer
             self.gameTimer(0)
 

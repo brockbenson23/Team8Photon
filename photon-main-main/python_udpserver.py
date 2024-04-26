@@ -3,15 +3,15 @@ import python_gamefuncs
 
 localIP = "127.0.0.1"
 receivePort = 7501
-broadcastPort = 7500
 bufferSize = 1024
-
+msgFromServer = "Hello UDP Client"
+bytesToSend = str.encode(msgFromServer)
 
 # Create a datagram socket
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 # Bind to address and ip
-UDPServerSocket.bind((localIP, broadcastPort))
+UDPServerSocket.bind((localIP, receivePort))
 
 print("UDP server up and listening")
 

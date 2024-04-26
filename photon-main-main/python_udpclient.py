@@ -1,34 +1,23 @@
 import socket
 
 print("in client")
-serverAddressPort = ("127.0.0.1", 7501)
+print("in client")
+msgFromClient = "Hello UDP Server"
+bytesToSend = str.encode(msgFromClient)
+serverAddressPort = ("127.0.0.1", 7500)
+bufferSize = 1024
 
 # Create a UDP socket at client side
 UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
-print("after socket")
-
 
 def broadcastID(id):
     print('in broadcast')
-    # Create a UDP socket
-    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    ec = str(id)
+    bytesToSend = str.encode(ec)
 
-    # Enable broadcasting on the socket
-    udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-
-    # Define the broadcast address
-    broadcast_address = ('<broadcast>', 7500)
-
-    try:
-        # Send the message to the broadcast address
-        udp_socket.sendto(id.encode(), broadcast_address)
-        print("Message sent successfully!")
-    except Exception as e:
-        print("Error:", e)
-    finally:
-        # Close the socket
-        udp_socket.close()
+    # Send to server using created UDP socket
+    UDPClientSocket.sendto(bytesToSend, serverAddressPort)
 
 
 def sendMessage(bytePair0, bytePair1):
@@ -45,4 +34,3 @@ def sendMessage(bytePair0, bytePair1):
 
 print('before sendmessage')
 print('leaving client')
-
