@@ -262,6 +262,8 @@ class Application(Frame):
                 value = self.popUpCodeName(str(key))
             for key2 in self.List:
                 id_value = key2.get()
+                if value == None:
+                    value = ''
                 if id_value and int(id_value) == key:
                     self.List[key2].delete(0, END)
                     self.List[key2].config(state=NORMAL)
