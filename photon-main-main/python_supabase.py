@@ -35,6 +35,7 @@ class Database:
             else:
                 if name != '':
                     Database.add_entry_to_player_table(id, name)
+                entries[id] = ''
         return entries
 
     @staticmethod
