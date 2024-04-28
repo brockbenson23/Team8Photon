@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Prompt user for branch name to merge
+read -p "Enter the name of the branch to merge with main: " branch_name
+
+# Check if branch name is provided
+if [ -z "$branch_name" ]; then
+    echo "Error: Branch name cannot be empty."
+    exit 1
+fi
+
+# Check if branch exists
+if ! git show-ref --verify --quiet "refs/heads/$branch_name"; then
+    echo "Error: Branch '$branch_name' does not exist."
+    exit 1
+fi
+
+# Inform user about the merge process
+echo "Pulling changes from main branch..."
+git checkout main
+git pull origin main
+
+echo "Merging branch '$branch_name' into main..."
+git merge "$branch_name"
+
+echo "Pushing changes to main branch..."
+git push -u origin main
+
+echo "Merge completed successfully."
