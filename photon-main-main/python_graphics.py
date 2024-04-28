@@ -253,9 +253,9 @@ class Application(Frame):
                 id_value = key2.get()
                 if id_value and int(id_value) == key:
                     self.List[key2].delete(0, END)
+                    self.List[key2].config(state=NORMAL)
                     self.List[key2].insert(0, value)
                     # Enable the corresponding codename entry field
-                    self.List[key2].config(state=NORMAL)
         self.getHardware(self.List)
 
     def getHardware(self, List: Dict):

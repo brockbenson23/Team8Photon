@@ -17,7 +17,7 @@ class Database:
 
         # Update all rows in the "player" table, setting their equipment IDs to an initial state (e.g., 0)
         data = Database.supabase.table('player').update(
-            {'equipment_id': 'NULL'}).execute()
+            {'equipment_id': 0}).eq('points', 0).execute()
         print("All equipment IDs cleared.")
 
     @staticmethod
