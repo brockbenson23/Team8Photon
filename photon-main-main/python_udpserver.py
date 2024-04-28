@@ -6,6 +6,7 @@ receivePort = 7501
 bufferSize = 1024
 msgFromServer = "Hello UDP Client"
 bytesToSend = str.encode(msgFromServer)
+clientAddressPort = ("127.0.0.1", 7501)
 
 # Create a datagram socket
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -15,13 +16,14 @@ UDPServerSocket.bind((localIP, receivePort))
 
 print("UDP server up and listening")
 
-
 def transmitID(ID, address):  # call this method after receiving equipID from player screen
     serverMsg = ID
     bytesToSend = str.encode(serverMsg)
     UDPServerSocket.sendto(bytesToSend, address)
 
-
+def updateGame(stri): #call this method to start or end game
+    bytesToSend = str.encode(stri)
+    UDPServerSocket.sendto(bytesToSend, clientAddressPort)
 # Listen for incoming datagrams
 while (True):
 
