@@ -35,7 +35,7 @@ class Player():
         playerdata = python_supabase.Database.fetch_playerData(pID)
         if playerdata[0]['hasBase'] == False:
             print("player has hit base")
-            python_supabase.Database.update_data(pID, "B " + playerdata[0]['codename'], playerdata[0]['equipment_id'], True, playerdata[0]['points'])
+            python_supabase.Database.update_data(pID, "🅑 " + playerdata[0]['codename'], playerdata[0]['equipment_id'], True, playerdata[0]['points'])
         else:
             print("player has already hit base")   
 
@@ -44,7 +44,8 @@ class Player():
         print("player has hit opponent")
         python_supabase.Database.update_data(pID, playerdata[0]['codename'], playerdata[0]['equipment_id'], playerdata[0]['hasBase'], playerdata[0]['points'] + 10)
 
-    def badOnHit(pID) -> None:
+    def badOnHit(hID) -> None:
+        pID = python_supabase.Database.fetchPID(hID)
         playerdata = python_supabase.Database.fetch_playerData(pID)
         print("player has hit teammate")
         python_supabase.Database.update_data(pID, playerdata[0]['codename'], playerdata[0]['equipment_id'], playerdata[0]['hasBase'], playerdata[0]['points'] - 10)
