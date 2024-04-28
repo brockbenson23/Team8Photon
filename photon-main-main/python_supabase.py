@@ -14,15 +14,12 @@ class Database:
 
     @staticmethod
     def clearEquipmentIds():
-
-        # Update all rows in the "player" table, setting their equipment IDs to an initial state (e.g., 0)
         data = Database.supabase.table('player').update(
             {'equipment_id': 0}).eq('points', 0).execute()
         print("All equipment IDs cleared.")
 
     @staticmethod
     def addData(values: Dict[int, str]) -> Dict[int, str]:
-        Database.clearEquipmentIds()
         print("submitting id...")
         entries = {}
         for id, name in values.items():

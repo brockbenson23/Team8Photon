@@ -163,6 +163,7 @@ class Application(Frame):
     # declaring teams
     RED = python_gamefuncs.Team()
     GREEN = python_gamefuncs.Team()
+    python_supabase.Database.clearEquipmentIds()
 
     def __init__(self, master):
         Frame.__init__(self, master)
