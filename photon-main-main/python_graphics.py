@@ -1,16 +1,16 @@
+import time
+import pygame
+import random
+from typing import Dict
+from python_udpclient import broadcastID
+import python_gamefuncs
+import python_supabase
 from tkinter import *
 from PIL import ImageTk, Image
 import os
 import math
 print('after math')
-import python_supabase
-import python_gamefuncs
 print('after gamefuncs')
-from python_udpclient import broadcastID
-from typing import Dict
-import random
-import pygame
-import time
 
 # comment this out its so useless but don't delete clifford needs it
 # import test
@@ -201,35 +201,34 @@ class Application(Frame):
 
         # Red Team
         for i in range(15):
-            entry_red = Entry(bg="white", fg="black",
-                              bd=2)
-            entry_red.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
-                             highlightcolor=red)
-            entry_red.grid(row=i + 2, column=1)
-            entry2_red = Entry(bg="white", fg="black",
-                               bd=2)
-            entry2_red.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
-                              highlightcolor=red, width=9)
-            entry2_red.grid(row=i + 2, column=0)
-            self.red_codename.append(entry_red)
-            self.red_id.append(entry2_red)
-            self.List[entry2_red] = entry_red
+            entry_red_id = Entry(bg="white", fg="black", bd=2, state=NORMAL)
+            entry_red_id.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
+                                highlightcolor=red, width=9)
+            entry_red_id.grid(row=i + 2, column=0)
+            entry_red_codename = Entry(
+                bg="white", fg="black", bd=2, state=DISABLED)
+            entry_red_codename.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
+                                      highlightcolor=red)
+            entry_red_codename.grid(row=i + 2, column=1)
+            self.red_codename.append(entry_red_codename)
+            self.red_id.append(entry_red_id)
+            self.List[entry_red_id] = entry_red_codename
 
         # Green Team
         for i in range(15):
-            entry_green = Entry(bg="white", fg="black",
-                                bd=2)
-            entry_green.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
-                               highlightcolor=green)
-            entry_green.grid(row=i + 2, column=3)
-            entry2_green = Entry(bg="white", fg="black",
-                                 bd=2)
-            entry2_green.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
-                                highlightcolor=green, width=9)
-            entry2_green.grid(row=i + 2, column=2)
-            self.green_codename.append(entry_green)
-            self.green_id.append(entry2_green)
-            self.List[entry2_green] = entry_green
+            entry_green_id = Entry(
+                bg="white", fg="black", bd=2, state=NORMAL)
+            entry_green_id.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
+                                  highlightcolor=green, width=9)
+            entry_green_id.grid(row=i + 2, column=2)
+            entry_green_codename = Entry(
+                bg="white", fg="black", bd=2, state=DISABLED)
+            entry_green_codename.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
+                                        highlightcolor=green)
+            entry_green_codename.grid(row=i + 2, column=3)
+            self.green_codename.append(entry_green_codename)
+            self.green_id.append(entry_green_id)
+            self.List[entry_green_id] = entry_green_codename
 
     def createButton(self):
         Button(text="Submit ID", command=self.addPlayer).grid(
@@ -255,6 +254,8 @@ class Application(Frame):
                 if id_value and int(id_value) == key:
                     self.List[key2].delete(0, END)
                     self.List[key2].insert(0, value)
+                    # Enable the corresponding codename entry field
+                    self.List[key2].config(state=NORMAL)
         self.getHardware(self.List)
 
     def getHardware(self, List: Dict):

@@ -13,7 +13,16 @@ class Database:
     supabase = create_client(url, key)
 
     @staticmethod
+    def clearEquipmentIds():
+
+        # Update all rows in the "player" table, setting their equipment IDs to an initial state (e.g., 0)
+        data = Database.supabase.table('player').update(
+            {'equipment_id': 'NULL'}).execute()
+        print("All equipment IDs cleared.")
+
+    @staticmethod
     def addData(values: Dict[int, str]) -> Dict[int, str]:
+        Database.clearEquipmentIds()
         print("submitting id...")
         entries = {}
         for id, name in values.items():
@@ -56,8 +65,21 @@ class Database:
 
     @staticmethod
     def add_hardware(supabase, id, equipment_id):
-        data = supabase.table('player').update(
-            {'equipment_id': equipment_id}).eq('id', id).execute()
+        # Check if the equipment_id already exists for the given id
+        existing_entry = supabase.table('player').select(
+            '*').eq('id', id).execute()
+
+        if existing_entry.data:
+            # If the equipment_id exists, update the existing row
+            data = supabase.table('player').update(
+                {'equipment_id': equipment_id}
+            ).eq('id', id).execute()
+        else:
+            # If the equipment_id doesn't exist, insert a new row
+            data = supabase.table('player').insert(
+                {'id': id, 'equipment_id': equipment_id}
+            ).execute()
+
         broadcastID(str(id))
         print(data)
 
