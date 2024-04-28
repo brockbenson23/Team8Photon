@@ -240,6 +240,7 @@ class Application(Frame):
             row=19, column=0, columnspan=2)
 
     def addPlayer(self):
+        print('in addPlayer')
         values = {}
         for key in self.List:
             name = self.List[key].get()
@@ -250,6 +251,15 @@ class Application(Frame):
 
         returned_dict = python_supabase.Database.addData(values)
         for key, value in returned_dict.items():
+            print('Processing player ID:', key)
+            for key2 in self.List:
+                id_value = key2.get()
+                if id_value and int(id_value) == key:
+                    print('Player ID:', key, 'has value:', value)
+                    if value is None or value == '':
+                        print('Codename is missing for player ID:', key)
+            if value == '' or value is None:
+                value = self.popUpCodeName(str(key))
             for key2 in self.List:
                 id_value = key2.get()
                 if value == None:
@@ -260,6 +270,33 @@ class Application(Frame):
                     self.List[key2].insert(0, value)
                     # Enable the corresponding codename entry field
         self.getHardware(self.List)
+
+    def popUpCodeName(self, id: str) -> str:
+        top = Toplevel(self.master)
+        top.geometry("250x250")
+        self.name = ''
+        Label(top, text=str(f'Enter Codename for ID: {id}')).grid(
+            row=0, column=0)
+        entry = Entry(top, width=25)
+        entry.grid(row=1, column=0)
+
+        def submit_and_close():
+            self.name = str(entry.get())
+            top.destroy()
+
+        Button(top, text="Submit", command=submit_and_close).grid(
+            row=2, column=0)
+
+        top.wait_window(top)  # Wait until the popup window is closed
+
+        dict = {}
+        dict[id] = self.name
+
+        try:
+            python_supabase.Database.addData(dict)
+            return str(self.name)
+        except ValueError:
+            return ''
 
     def getHardware(self, List: Dict):
         values = {}
