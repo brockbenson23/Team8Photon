@@ -6,6 +6,7 @@ from python_udpclient import broadcastID
 import python_gamefuncs
 import python_supabase
 from tkinter import *
+from tkinter import scrolledtext
 from PIL import ImageTk, Image
 import os
 import math
@@ -52,6 +53,12 @@ class GameScreen(Frame):
                     10, 2, 2, 1)    # Adjusted row and column
         createLabel('Points', green, 'white', 40, 10, 2,
                     3, 1)                 # Adjusted row
+        createLabel('Game Actions', 'black', 'white', 20, 10, 11, 0, 8)
+        
+        scroll_text = scrolledtext.ScrolledText(self.master, wrap=WORD, width=40, height=10)
+        scroll_text.grid(row=12, column=0, columnspan=4, sticky="ew")
+        scroll_text.insert(INSERT, "Game Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\n")
+
         padloop = (greenpadx+redpadx)+70
 
         def createblack(text, bg, fg, padx, pady, row, column, columnspan):
@@ -59,20 +66,20 @@ class GameScreen(Frame):
             blacklabel.grid(row=row, column=column, columnspan=columnspan)
             return blacklabel
 
-        def createblue(text, bg, fg, padx, pady, row, column, columnspan):
-            bluelabel = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
-            bluelabel.grid(row=row, column=column,
-                           columnspan=columnspan, sticky="ew")
-            return bluelabel
+        # def createblue(text, bg, fg, padx, pady, row, column, columnspan):
+        #     bluelabel = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
+        #     bluelabel.grid(row=row, column=column,
+        #                    columnspan=columnspan, sticky="ew")
+        #     return bluelabel
 
-        for i in range(10):  # display players & points here
-            createblack('red codename', 'black',
-                        'black', padloop/2, 0, i+2, 0, 2)
-            createblack('points ', 'black', 'black', padloop/2, 0, i+2, 2, 4)
+        # for i in range(10):  # display players & points here
+        #     createblack('red codename', 'black',
+        #                 'black', padloop/2, 0, i+2, 0, 2)
+        #     createblack('points ', 'black', 'black', padloop/2, 0, i+2, 2, 4)
 
-        for i in range(10):  # display game actions here
-            createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 0, 2)
-            createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 2, 2,)
+        # for i in range(10):  # display game actions here
+        #     createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 0, 2)
+        #     createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 2, 2,)
 
     def clearScreen(self):
         # Destroy all widgets in the current window
@@ -104,7 +111,7 @@ class GameScreen(Frame):
         pygame.mixer.music.load(track)
         pygame.mixer.music.play()
 
-    def countdowntimer(self, count=5):
+    def countdowntimer(self, count=1):
 
         if count >= 0:
             # Get the current directory
