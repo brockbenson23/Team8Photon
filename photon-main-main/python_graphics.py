@@ -33,6 +33,9 @@ class GameScreen(Frame):
         redpadx = 152
         greenpadx = redpadx - 2
         codenamex = 89
+        strings = ["Game Timer: 00:00", "Red Team", "Green Team", "Codename", "Points", "Game Actions"]
+        messages = []
+
 
         def createLabel(text, bg, fg, padx, pady, row, column, columnspan):
             label = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
@@ -57,7 +60,19 @@ class GameScreen(Frame):
         
         scroll_text = scrolledtext.ScrolledText(self.master, wrap=WORD, width=40, height=10)
         scroll_text.grid(row=12, column=0, columnspan=4, sticky="ew")
-        scroll_text.insert(INSERT, "Game Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\nGame Actions:\n")
+        def addText():
+            string = random.choice(strings)
+            messages.append(string)
+            scroll_text.delete('1.0', END)
+       
+            for message in messages[-5:]:
+                scroll_text.insert(END, message + '\n')
+
+            scroll_text.see('end')
+
+            scroll_text.after(1000, addText)
+
+        addText()
 
         padloop = (greenpadx+redpadx)+70
 
