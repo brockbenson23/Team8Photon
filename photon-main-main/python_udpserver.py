@@ -4,8 +4,6 @@ import python_gamefuncs
 localIP = "127.0.0.1"
 receivePort = 7501
 bufferSize = 1024
-msgFromServer = "Hello UDP Client"
-bytesToSend = str.encode(msgFromServer)
 clientAddressPort = ("127.0.0.1", 7501)
 
 # Create a datagram socket
@@ -64,4 +62,5 @@ while (True):
         print("player with id {} has hit player with id {}".format(str1, str2))
 
     # respond to client
+    print(f"responding to client at address {address} with {str1}")
     transmitID(str1, address)
