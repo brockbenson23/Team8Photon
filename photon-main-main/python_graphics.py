@@ -2,7 +2,7 @@ import time
 import pygame
 import random
 from typing import Dict
-from python_udpclient import broadcastID
+from python_udpserver import transmitCode
 import python_gamefuncs
 import python_supabase
 from tkinter import *
@@ -33,9 +33,9 @@ class GameScreen(Frame):
         redpadx = 152
         greenpadx = redpadx - 2
         codenamex = 89
-        strings = ["Game Timer: 00:00", "Red Team", "Green Team", "Codename", "Points", "Game Actions"]
+        strings = ["Game Timer: 00:00", "Red Team",
+            "Green Team", "Codename", "Points", "Game Actions"]
         messages = []
-
 
         def createLabel(text, bg, fg, padx, pady, row, column, columnspan):
             label = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
@@ -57,14 +57,16 @@ class GameScreen(Frame):
         createLabel('Points', green, 'white', 40, 10, 2,
                     3, 1)                 # Adjusted row
         createLabel('Game Actions', 'black', 'white', 20, 10, 11, 0, 8)
-        
-        scroll_text = scrolledtext.ScrolledText(self.master, wrap=WORD, width=40, height=10)
+
+        scroll_text = scrolledtext.ScrolledText(
+            self.master, wrap=WORD, width=40, height=10)
         scroll_text.grid(row=12, column=0, columnspan=4, sticky="ew")
+
         def addText():
             string = random.choice(strings)
             messages.append(string)
             scroll_text.delete('1.0', END)
-       
+
             for message in messages[-5:]:
                 scroll_text.insert(END, message + '\n')
 
@@ -153,21 +155,20 @@ class GameScreen(Frame):
                 "Arial", 16), bg="black", fg="white")
             self.game_timer_label.grid(
                 row=1, column=0, columnspan=4, sticky="ew")
-            broadcastID('202')
-            # Start the game timer
+            transmitCode('202')
             self.gameTimer(0)
 
     def gameTimer(self, count):
         if count <= 360:
-            minutes = count // 60
-            seconds = count % 60
-            timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
+            minutes=count // 60
+            seconds=count % 60
+            timer_text=f"Game Timer: {minutes:02d}:{seconds:02d}"
             self.game_timer_label.config(text=timer_text)
             self.master.after(1000, self.gameTimer, count+1)
         else:
-            black_strip = Label(self.master, bg="black")
+            black_strip=Label(self.master, bg="black")
             black_strip.grid(row=24, column=0, columnspan=4, sticky="ew")
-            end_button = Button(self.master, text="Game Over",
+            end_button=Button(self.master, text="Game Over",
                                 command=self.handleGameEnd)
             end_button.grid(row=24, column=0, columnspan=4)
 
@@ -181,21 +182,21 @@ class GameScreen(Frame):
 
 class Application(Frame):
 
-    game_started = False
+    game_started=False
     # declaring teams
-    RED = python_gamefuncs.Team()
-    GREEN = python_gamefuncs.Team()
+    RED=python_gamefuncs.Team()
+    GREEN=python_gamefuncs.Team()
     python_supabase.Database.clearEquipmentIds()
 
     def __init__(self, master):
         Frame.__init__(self, master)
-        self.master = master
+        self.master=master
         self.master.title("Team8Photon")
         self.master.resizable(False, False)
-        self.frame1 = Frame(master, background='#990000')
+        self.frame1=Frame(master, background='#990000')
         self.frame1.place(x=0, y=0, relwidth=0.5,
                           relheight=1.0, anchor="nw")
-        self.frame2 = Frame(master, background='#346C4E')
+        self.frame2=Frame(master, background='#346C4E')
         self.frame2.place(relx=0.5, y=0, relwidth=0.5,
                           relheight=1.0, anchor="nw")
         self.grid()
@@ -205,13 +206,13 @@ class Application(Frame):
         self.master.rowconfigure(0, weight=1)
 
     def createWidgets(self):
-        red = '#990000'
-        green = '#346C4E'
-        self.red_codename = []
-        self.red_id = []
-        self.green_codename = []
-        self.green_id = []
-        self.List = {}
+        red='#990000'
+        green='#346C4E'
+        self.red_codename=[]
+        self.red_id=[]
+        self.green_codename=[]
+        self.green_id=[]
+        self.List={}
 
         Label(text='Red Team', bg=red, fg='white', padx=20,
               pady=20).grid(row=0, column=0, columnspan=2)
@@ -224,34 +225,34 @@ class Application(Frame):
 
         # Red Team
         for i in range(15):
-            entry_red_id = Entry(bg="white", fg="black", bd=2, state=NORMAL)
+            entry_red_id=Entry(bg="white", fg="black", bd=2, state=NORMAL)
             entry_red_id.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
                                 highlightcolor=red, width=9)
             entry_red_id.grid(row=i + 2, column=0)
-            entry_red_codename = Entry(
+            entry_red_codename=Entry(
                 bg="white", fg="black", bd=2, state=DISABLED)
             entry_red_codename.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=red,
                                       highlightcolor=red)
             entry_red_codename.grid(row=i + 2, column=1)
             self.red_codename.append(entry_red_codename)
             self.red_id.append(entry_red_id)
-            self.List[entry_red_id] = entry_red_codename
+            self.List[entry_red_id]=entry_red_codename
 
         # Green Team
         for i in range(15):
-            entry_green_id = Entry(
+            entry_green_id=Entry(
                 bg="white", fg="black", bd=2, state=NORMAL)
             entry_green_id.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
                                   highlightcolor=green, width=9)
             entry_green_id.grid(row=i + 2, column=2)
-            entry_green_codename = Entry(
+            entry_green_codename=Entry(
                 bg="white", fg="black", bd=2, state=DISABLED)
             entry_green_codename.config(justify="right", selectbackground="#D8D8D8", font=('Times 18'), highlightbackground=green,
                                         highlightcolor=green)
             entry_green_codename.grid(row=i + 2, column=3)
             self.green_codename.append(entry_green_codename)
             self.green_id.append(entry_green_id)
-            self.List[entry_green_id] = entry_green_codename
+            self.List[entry_green_id]=entry_green_codename
 
     def createButton(self):
         Button(text="Submit ID", command=self.addPlayer).grid(
@@ -263,29 +264,29 @@ class Application(Frame):
 
     def addPlayer(self):
         print('in addPlayer')
-        values = {}
+        values={}
         for key in self.List:
-            name = self.List[key].get()
-            id_value = key.get()
+            name=self.List[key].get()
+            id_value=key.get()
 
             if id_value:
-                values[int(id_value)] = name if name else ''
+                values[int(id_value)]=name if name else ''
 
-        returned_dict = python_supabase.Database.addData(values)
+        returned_dict=python_supabase.Database.addData(values)
         for key, value in returned_dict.items():
             print('Processing player ID:', key)
             for key2 in self.List:
-                id_value = key2.get()
+                id_value=key2.get()
                 if id_value and int(id_value) == key:
                     print('Player ID:', key, 'has value:', value)
                     if value is None or value == '':
                         print('Codename is missing for player ID:', key)
             if value == '' or value is None:
-                value = self.popUpCodeName(str(key))
+                value=self.popUpCodeName(str(key))
             for key2 in self.List:
-                id_value = key2.get()
+                id_value=key2.get()
                 if value == None:
-                    value = ''
+                    value=''
                 if id_value and int(id_value) == key:
                     self.List[key2].delete(0, END)
                     self.List[key2].config(state=NORMAL)
@@ -294,16 +295,16 @@ class Application(Frame):
         self.getHardware(self.List)
 
     def popUpCodeName(self, id: str) -> str:
-        top = Toplevel(self.master)
+        top=Toplevel(self.master)
         top.geometry("250x250")
-        self.name = ''
+        self.name=''
         Label(top, text=str(f'Enter Codename for ID: {id}')).grid(
             row=0, column=0)
-        entry = Entry(top, width=25)
+        entry=Entry(top, width=25)
         entry.grid(row=1, column=0)
 
         def submit_and_close():
-            self.name = str(entry.get())
+            self.name=str(entry.get())
             top.destroy()
 
         Button(top, text="Submit", command=submit_and_close).grid(
@@ -311,8 +312,8 @@ class Application(Frame):
 
         top.wait_window(top)  # Wait until the popup window is closed
 
-        dict = {}
-        dict[id] = self.name
+        dict={}
+        dict[id]=self.name
 
         try:
             python_supabase.Database.addData(dict)
@@ -321,23 +322,23 @@ class Application(Frame):
             return ''
 
     def getHardware(self, List: Dict):
-        values = {}
+        values={}
         for key in List:
             if len(key.get()) > 0:
-                values[int(key.get())] = self.popUpHardware(List[key].get())
+                values[int(key.get())]=self.popUpHardware(List[key].get())
         python_supabase.Database.addHardware(values)
 
     def popUpHardware(self, codename: str) -> int:
-        top = Toplevel(self.master)
+        top=Toplevel(self.master)
         top.geometry("250x250")
-        self.hardwareID = 0
+        self.hardwareID=0
         Label(top, text=str(f'Enter Hardware ID for player: {codename}')).grid(
             row=0, column=0)
-        entry = Entry(top, width=25)
+        entry=Entry(top, width=25)
         entry.grid(row=1, column=0)
 
         def submit_and_close():
-            self.hardwareID = int(entry.get())
+            self.hardwareID=int(entry.get())
             top.destroy()
 
         Button(top, text="Submit", command=submit_and_close).grid(
@@ -351,7 +352,7 @@ class Application(Frame):
             return 0
 
     def insert_val(self, e, top) -> int:
-        value = int(e.get())
+        value=int(e.get())
         top.destroy()
         return value
 
@@ -370,13 +371,16 @@ class Application(Frame):
         for widget in self.master.winfo_children():
             widget.destroy()
 
-        game_screen = GameScreen(self.master)
+        game_screen=GameScreen(self.master)
         game_screen.grid()
 
 
-root = Tk()
-app = Application(root)
+root=Tk()
+app=Application(root)
 # for testing functions
 # root.bind("]", test.test())
 print('running')
+root.mainloop()
+print('running')
+root.mainloop()
 root.mainloop()

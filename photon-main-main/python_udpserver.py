@@ -3,25 +3,32 @@ import python_gamefuncs
 
 localIP = "127.0.0.1"
 receivePort = 7501
+broadcastPort = 7500
 bufferSize = 1024
 clientAddressPort = ("127.0.0.1", 7501)
 
 # Create a datagram socket
 UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
-
-# Bind to address and ip
 UDPServerSocket.bind((localIP, receivePort))
 
 print("UDP server up and listening")
 
-def transmitID(ID, address):  # call this method after receiving equipID from player screen
-    serverMsg = ID
-    bytesToSend = str.encode(serverMsg)
-    UDPServerSocket.sendto(bytesToSend, address)
+UDPBroadcastSocket = socket.socket(
+    family=socket.AF_INET, type=socket.SOCK_DGRAM)
+UDPBroadcastSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
-def updateGame(stri): #call this method to start or end game
+
+def transmitCode(code):
+    serverMsg = code
+    bytesToSend = str.encode(serverMsg)
+    UDPBroadcastSocket.sendto(bytesToSend, address)
+
+
+def updateGame(stri):  # call this method to start or end game
     bytesToSend = str.encode(stri)
-    UDPServerSocket.sendto(bytesToSend, clientAddressPort)
+    UDPBroadcastSocket.sendto(bytesToSend, clientAddressPort)
+
+
 # Listen for incoming datagrams
 while (True):
 
@@ -63,4 +70,4 @@ while (True):
 
     # respond to client
     print(f"responding to client at address {address} with {str1}")
-    transmitID(str1, address)
+    transmitCode(str1)
