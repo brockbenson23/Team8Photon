@@ -44,8 +44,9 @@ while (True):
     # deciper message
     serverMsg = str(bytesAddressPair[0])
     address = bytesAddressPair[1]  # may need to stringify
-    clientMsg = "Message from Client:{}".format(serverMsg)
-    clientIP = "Client IP Address:{}".format(address)
+    print("Message from Client:{}".format(serverMsg))
+    print("Client IP Address:{}".format(address))
+
     # separate message "1:2" into str1 = 1 and str2 = 2
     str1, str2 = decipherMsg(serverMsg)
 
