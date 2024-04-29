@@ -18,24 +18,28 @@ print('after gamefuncs')
 
 
 class GameScreen(Frame):
-    def __init__(self, master):
-        Frame.__init__(self, master)
+    baseData = {}
+    def __init__(self, master, baseData):
+        Frame.__init__(self, master )
         self.master = master
         self.master.title("Game Screen")
         self.master.resizable(False, False)
         self.countdowntimer()
         self.pickSound()
         self.game_timer_label = None
+        self.baseData = baseData
 
     def createWidgets(self):
         red = '#990000'
         green = '#346C4E'
+        back = '#323133'
         redpadx = 152
         greenpadx = redpadx - 2
         codenamex = 89
         strings = ["Game Timer: 00:00", "Red Team",
                    "Green Team", "Codename", "Points", "Game Actions"]
         messages = []
+        randNum = random.randint(750, 2000)
 
         def createLabel(text, bg, fg, padx, pady, row, column, columnspan):
             label = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
@@ -45,6 +49,8 @@ class GameScreen(Frame):
         self.game_timer_label = Label(self.master, text="Game Timer: 00:00", font=(
             "Arial", 16), bg='black', fg='white')
         self.game_timer_label.grid(row=1, column=0, columnspan=4, sticky="ew")
+
+        
 
         createLabel('Red Team', 'black', red, redpadx, 10, 0, 0, 2)
         createLabel('Green Team', 'black', green, greenpadx, 10, 0, 2, 2)
@@ -56,23 +62,33 @@ class GameScreen(Frame):
                     10, 2, 2, 1)    # Adjusted row and column
         createLabel('Points', green, 'white', 40, 10, 2,
                     3, 1)                 # Adjusted row
-        createLabel('Game Actions', 'black', 'white', 20, 10, 11, 0, 8)
+        
+        # 3rd number is row, 4th number is column, keep 10 and 10 for pads
+        createLabel('player1' , back, 'white', 10, 10, 3, 0, 1)
+        createLabel('point' , back, 'white', 10, 10, 3, 1, 1)
 
-        scroll_text = scrolledtext.ScrolledText(
-            self.master, wrap=WORD, width=40, height=10)
+        createLabel('Player2', back, 'white', 10, 10, 4, 0, 1)
+        createLabel('points', back, 'white', 10, 10, 4, 1, 1)
+
+        createLabel('Player3', back, 'white', 10, 10, 3, 2, 1)
+        createLabel('points', back, 'white', 10, 10, 3, 3, 1)
+
+        createLabel('Player4', back, 'white', 10, 10, 4, 2, 1)
+        createLabel('points', back, 'white', 10, 10, 4, 3, 1)
+
+        createLabel('Game Actions', back, 'white', 20, 10, 11, 0, 8)
+        
+        scroll_text = scrolledtext.ScrolledText(self.master, wrap=WORD, width=40, height=10)
         scroll_text.grid(row=12, column=0, columnspan=4, sticky="ew")
 
         def addText():
             string = random.choice(strings)
             messages.append(string)
             scroll_text.delete('1.0', END)
-
-            for message in messages[-5:]:
+            for message in messages[-100:]:
                 scroll_text.insert(END, message + '\n')
-
             scroll_text.see('end')
-
-            scroll_text.after(1000, addText)
+            scroll_text.after(randNum, addText)
 
         addText()
 
@@ -83,20 +99,6 @@ class GameScreen(Frame):
             blacklabel.grid(row=row, column=column, columnspan=columnspan)
             return blacklabel
 
-        # def createblue(text, bg, fg, padx, pady, row, column, columnspan):
-        #     bluelabel = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
-        #     bluelabel.grid(row=row, column=column,
-        #                    columnspan=columnspan, sticky="ew")
-        #     return bluelabel
-
-        # for i in range(10):  # display players & points here
-        #     createblack('red codename', 'black',
-        #                 'black', padloop/2, 0, i+2, 0, 2)
-        #     createblack('points ', 'black', 'black', padloop/2, 0, i+2, 2, 4)
-
-        # for i in range(10):  # display game actions here
-        #     createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 0, 2)
-        #     createblue('', 'blue', 'blue', (padloop/2)-3, 0, i+12, 2, 2,)
 
     def clearScreen(self):
         # Destroy all widgets in the current window
@@ -371,7 +373,8 @@ class Application(Frame):
         for widget in self.master.winfo_children():
             widget.destroy()
 
-        game_screen = GameScreen(self.master)
+        print('this is the gamescreen list',self.List)
+        game_screen = GameScreen(self.master,self.List)
         game_screen.grid()
 
 
