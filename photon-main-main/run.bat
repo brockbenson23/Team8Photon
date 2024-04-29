@@ -1,8 +1,8 @@
 @echo off
 
 REM Start UDP server and client
-start /B python python_udpserver.py
-start /B python python_udpclient.py
+start /B python3 python_udpserver.py
+start /B python3 python_udpclient.py
 
 REM Wait for some time to allow the servers to initialize
 timeout /t 2 /nobreak
@@ -22,8 +22,8 @@ if %ERRORLEVEL% EQU 0 (
 )
 
 REM Kill the UDP server and client processes
-taskkill /F /IM python.exe /FI "WINDOWTITLE eq python_udpserver.py"
-taskkill /F /IM python.exe /FI "WINDOWTITLE eq python_udpclient.py"
+taskkill /F /IM python3.exe /FI "WINDOWTITLE eq python_udpserver.py"
+taskkill /F /IM python3.exe /FI "WINDOWTITLE eq python_udpclient.py"
 
 echo done
 
