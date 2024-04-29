@@ -5,14 +5,15 @@ broadcastPort = 7500
 bufferSize = 1024
 needToSend = ''
 UDPBroadcastSocket = None
+UDPServerSocket = None
 
 
 def transmitCode(code):
     global UDPBroadcastSocket
+    print('in transmit: ', code)
     bytesToSend = str.encode(code)
     UDPBroadcastSocket.sendto(
         bytesToSend, ('<broadcast>', broadcastPort))
-    UDPBroadcastSocket.close()
 
 
 def decipherMsg(serverMsg):
@@ -37,6 +38,8 @@ def decipherMsg(serverMsg):
 
 def createSocket():
     global UDPBroadcastSocket
+    global UDPServerSocket
+    localIP = '127.0.0.1'
     UDPBroadcastSocket = socket.socket(
         socket.AF_INET, socket.SOCK_DGRAM)
     UDPBroadcastSocket.setsockopt(

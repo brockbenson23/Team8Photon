@@ -40,6 +40,7 @@ print('')
 counter = 0
 
 while True:
+    print('in while loop traffic')
     if random.randint(1, 2) == 1:
         redplayer = red1
     else:

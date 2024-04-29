@@ -76,7 +76,7 @@ class Database:
             data = supabase.table('player').insert(
                 {'id': id, 'equipment_id': equipment_id}
             ).execute()
-        python_udpserver.send(str(id))
+        python_udpserver.transmitCode(str(id))
         print(data)
 
     @staticmethod

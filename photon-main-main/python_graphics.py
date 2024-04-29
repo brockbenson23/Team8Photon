@@ -189,7 +189,6 @@ class Application(Frame):
     # declaring teams
     RED = python_gamefuncs.Team()
     GREEN = python_gamefuncs.Team()
-    python_supabase.Database.clearEquipmentIds()
 
     def __init__(self, master):
         Frame.__init__(self, master)
@@ -209,6 +208,7 @@ class Application(Frame):
         self.master.rowconfigure(0, weight=1)
         # Start creating the socket in the background
         threading.Thread(target=python_udpserver.createSocket).start()
+        python_supabase.Database.clearEquipmentIds()
 
     def createWidgets(self):
         red = '#990000'
