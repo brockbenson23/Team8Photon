@@ -77,7 +77,6 @@ class Database:
                 {'id': id, 'equipment_id': equipment_id}
             ).execute()
         python_udpserver.send(str(id))
-        python_udpclient.sendMessage(-1, -1)
         print(data)
 
     @staticmethod

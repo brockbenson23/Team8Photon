@@ -4,28 +4,16 @@ receivePort = 7501
 broadcastPort = 7500
 bufferSize = 1024
 needToSend = ''
+UDPBroadcastSocket = None
 
-class Socket:
 
-    def __init__(self) -> None:
-        # Setting up broadcast socket
-        self.UDPBroadcastSocket = socket.socket(
-            socket.AF_INET, socket.SOCK_DGRAM)
-        self.UDPBroadcastSocket.setsockopt(
-            socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        # Create a datagram socket for receiving
-        self.UDPServerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.UDPServerSocket.bind((localIP, receivePort))
-        print("UDP server up and listening")
+def transmitCode(code):
+    global UDPBroadcastSocket
+    bytesToSend = str.encode(code)
+    UDPBroadcastSocket.sendto(
+        bytesToSend, ('<broadcast>', broadcastPort))
+    UDPBroadcastSocket.close()
 
-    def recvfrom(self):
-        return self.UDPServerSocket.recvfrom(bufferSize)
-
-    def transmitCode(self, code):
-        bytesToSend = str.encode(code)
-        self.UDPBroadcastSocket.sendto(
-            bytesToSend, ('<broadcast>', broadcastPort))
-        self.UDPBroadcastSocket.close()
 
 def decipherMsg(serverMsg):
     colon = serverMsg.find(':')
@@ -46,25 +34,23 @@ def decipherMsg(serverMsg):
 
     return str1, str2
 
-def send(code):
-    global needToSend
-    if needToSend == '':
-        needToSend = code
-    else:
-        print(f"needToSend already has code {needToSend} to be sent")
 
-if __name__ == "__main__":
-    s = Socket()
+def createSocket():
+    global UDPBroadcastSocket
+    UDPBroadcastSocket = socket.socket(
+        socket.AF_INET, socket.SOCK_DGRAM)
+    UDPBroadcastSocket.setsockopt(
+        socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    # Create a datagram socket for receiving
+    UDPServerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    UDPServerSocket.bind((localIP, receivePort))
+    print("UDP server up and listening")
 
-    # Listen for incoming datagrams
-    while (True):
+    while True:
         # if graphics needs to send code, s.transmitCode will be called?
-        if needToSend != None:
-            print(f"sending {needToSend}")
-            s.transmitCode(needToSend)
-            needToSend = ''
+        print('in while loop')
 
-        bytesAddressPair = s.recvfrom()
+        bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 
         # deciper message
         serverMsg = str(bytesAddressPair[0])
@@ -73,7 +59,9 @@ if __name__ == "__main__":
         print("Client IP Address:{}".format(address))
 
         # separate message "1:2" into str1 = 1 and str2 = 2
-        str1, str2 = decipherMsg(serverMsg)
+        # str1, str2 = decipherMsg(serverMsg)
 
-        s.transmitCode(str1)
+        # transmitCode(str1)
 
+    # This line will never be reached because of the infinite loop above
+    # return UDPServerSocket.recvfrom(bufferSize)

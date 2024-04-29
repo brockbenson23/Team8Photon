@@ -10,6 +10,7 @@ from tkinter import scrolledtext
 from PIL import ImageTk, Image
 import os
 import math
+import threading
 print('after math')
 print('after gamefuncs')
 
@@ -50,7 +51,7 @@ class GameScreen(Frame):
             "Arial", 16), bg='black', fg='white')
         self.game_timer_label.grid(row=1, column=0, columnspan=4, sticky="ew")
 
-        
+
 
         createLabel('Red Team', 'black', red, redpadx, 10, 0, 0, 2)
         createLabel('Green Team', 'black', green, greenpadx, 10, 0, 2, 2)
@@ -62,7 +63,7 @@ class GameScreen(Frame):
                     10, 2, 2, 1)    # Adjusted row and column
         createLabel('Points', green, 'white', 40, 10, 2,
                     3, 1)                 # Adjusted row
-        
+
         # 3rd number is row, 4th number is column, keep 10 and 10 for pads
         createLabel('player1' , back, 'white', 10, 10, 3, 0, 1)
         createLabel('point' , back, 'white', 10, 10, 3, 1, 1)
@@ -77,7 +78,7 @@ class GameScreen(Frame):
         createLabel('points', back, 'white', 10, 10, 4, 3, 1)
 
         createLabel('Game Actions', back, 'white', 20, 10, 11, 0, 8)
-        
+
         scroll_text = scrolledtext.ScrolledText(self.master, wrap=WORD, width=40, height=10)
         scroll_text.grid(row=12, column=0, columnspan=4, sticky="ew")
 
@@ -157,7 +158,7 @@ class GameScreen(Frame):
                 "Arial", 16), bg="black", fg="white")
             self.game_timer_label.grid(
                 row=1, column=0, columnspan=4, sticky="ew")
-            python_udpserver.send('202')
+            python_udpserver.transmitCode('202')
             self.gameTimer(0)
 
     def gameTimer(self, count):
@@ -206,6 +207,8 @@ class Application(Frame):
         self.createButton()
         self.master.columnconfigure(0, weight=1)
         self.master.rowconfigure(0, weight=1)
+        # Start creating the socket in the background
+        threading.Thread(target=python_udpserver.createSocket).start()
 
     def createWidgets(self):
         red = '#990000'
