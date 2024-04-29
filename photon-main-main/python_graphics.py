@@ -68,10 +68,13 @@ class GameScreen(Frame):
                     3, 1)                 # Adjusted row
 
         # 3rd number is row, 4th number is column, keep 10 and 10 for pads
+        first = 3
+        second = 0
+        third = 1
         for key in self.baseData:
             print('baseData key: ', key, ' value: ', self.baseData[key])
             createLabel(self.baseData[key], back, 'white', 10, 10, 3, 0, 1)
-        createLabel('point', back, 'white', 10, 10, 3, 1, 1)
+            createLabel('point', back, 'white', 10, 10, 3, 1, 1)
 
         createLabel('Player2', back, 'white', 10, 10, 4, 0, 1)
         createLabel('points', back, 'white', 10, 10, 4, 1, 1)
