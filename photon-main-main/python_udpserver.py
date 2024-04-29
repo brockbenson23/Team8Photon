@@ -4,6 +4,7 @@ receivePort = 7501
 broadcastPort = 7500
 bufferSize = 1024
 
+
 def Start():
     # Setting up broadcast socket
     UDPBroadcastSocket = socket.socket(
@@ -20,6 +21,7 @@ def Start():
         UDPBroadcastSocket.sendto(bytesToSend, ('<broadcast>', broadcastPort))
         UDPBroadcastSocket.close()
     print("UDP server up and listening")
+
     def transmitCode(code):
         bytesToSend = str.encode(code)
         UDPBroadcastSocket.sendto(bytesToSend, ('<broadcast>', broadcastPort))
@@ -38,12 +40,14 @@ def Start():
         print(f"str1 = {str1}")
         print(f"str2 = {str2}")
         # check whether str2 is a base hit or an equipmentID
-        if str2 == '53': print("red base has been scored")
-        elif str2 == '43': print("green base has been scored")
-        else: print("player with id {} has hit player with id {}".format(str1, str2))
+        if str2 == '53':
+            print("red base has been scored")
+        elif str2 == '43':
+            print("green base has been scored")
+        else:
+            print("player with id {} has hit player with id {}".format(str1, str2))
 
         return str1, str2
-
 
     # Listen for incoming datagrams
     while (True):
@@ -59,10 +63,8 @@ def Start():
         # separate message "1:2" into str1 = 1 and str2 = 2
         str1, str2 = decipherMsg(serverMsg)
 
-
         transmitCode(str1)
+
 
 if __name__ == "__main__":
     Start()
-
-

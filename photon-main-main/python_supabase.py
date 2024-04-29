@@ -2,9 +2,7 @@ from supabase import create_client
 from dotenv import load_dotenv
 import os
 from typing import Dict
-from typing import List
-from python_udpserver import transmitCode
-
+import python_udpserver
 
 class Database:
     load_dotenv()
@@ -77,8 +75,7 @@ class Database:
             data = supabase.table('player').insert(
                 {'id': id, 'equipment_id': equipment_id}
             ).execute()
-
-        transmitCode(str(id))
+        python_udpserver.Start.transmitCode(str(id))
         print(data)
 
     @staticmethod
@@ -101,7 +98,7 @@ class Database:
         print(data)
         # checking if data exists, returns None if not
         return data.data if data.data else None
-    
+
     def HID_fetch_playerData(hID):
         data = Database.supabase.table(
             'player').select('*').eq('hardware_id', hID).execute()
