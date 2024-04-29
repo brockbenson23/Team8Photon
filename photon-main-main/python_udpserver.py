@@ -1,11 +1,31 @@
 import socket
+import selectors
 localIP = ""
 receivePort = 7501
 broadcastPort = 7500
 bufferSize = 1024
-needToSend = ''
 UDPBroadcastSocket = None
 UDPServerSocket = None
+
+# set up selector
+sel = selectors.DefaultSelector()
+
+def accept(sock, mask):
+    conn, addr = sock.accept()  # Should be ready
+    print('accepted', conn, 'from', addr)
+    conn.setblocking(False)
+    sel.register(conn, selectors.EVENT_READ, read)
+
+def read(conn, mask):
+    data = conn.recv(1000)  # Should be ready
+    if data:
+        print('echoing', repr(data), 'to', conn)
+        conn.send(data)  # Hope it won't block
+    else:
+        print('closing', conn)
+        sel.unregister(conn)
+        conn.close()
+
 
 
 def transmitCode(code):
@@ -44,26 +64,39 @@ def createSocket():
     global UDPBroadcastSocket
     global UDPServerSocket
     localIP = '127.0.0.1'
+
+    # Set up broadcast socket
     UDPBroadcastSocket = socket.socket(
         socket.AF_INET, socket.SOCK_DGRAM)
     UDPBroadcastSocket.setsockopt(
         socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    # Create a datagram socket for receiving
+    
+    # Set up receive socket
     UDPServerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     UDPServerSocket.bind((localIP, receivePort))
+    UDPServerSocket.setblocking(False)
+
+    # Setting up selector stuff
+    sel.register(UDPServerSocket, selectors.EVENT_READ, accept)
     print("UDP server up and listening")
+
+
+
 
     while True:
         # if graphics needs to send code, s.transmitCode will be called?
         print('in while loop')
-
-        bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
+        events = sel.select()
+        for key, mask in events:
+            callback = key.data
+            callback(key.fileobj, mask)
+        # bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 
         # deciper message
-        serverMsg = str(bytesAddressPair[0])
-        address = bytesAddressPair[1]  # may need to stringify
-        print("Message from Client:{}".format(serverMsg))
-        print("Client IP Address:{}".format(address))
+        # serverMsg = str(bytesAddressPair[0])
+        # address = bytesAddressPair[1]  # may need to stringify
+        # print("Message from Client:{}".format(serverMsg))
+        # print("Client IP Address:{}".format(address))
 
         # separate message "1:2" into str1 = 1 and str2 = 2
         # str1, str2 = decipherMsg(serverMsg)
