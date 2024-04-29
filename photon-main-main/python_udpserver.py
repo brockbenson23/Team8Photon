@@ -12,8 +12,12 @@ def transmitCode(code):
     global UDPBroadcastSocket
     print('in transmit: ', code)
     bytesToSend = str.encode(code)
-    UDPBroadcastSocket.sendto(
+    bytes_sent = UDPBroadcastSocket.sendto(
         bytesToSend, ('<broadcast>', broadcastPort))
+    if bytes_sent == len(bytesToSend):
+        print("Broadcast successful")
+    else:
+        print("Broadcast failed")
 
 
 def decipherMsg(serverMsg):
