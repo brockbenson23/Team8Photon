@@ -26,7 +26,6 @@ UDPClientSocketTransmit = socket.socket(
 UDPServerSocketReceive.bind(serverAddressPort)
 
 # wait for start from game software
-print("")
 print("waiting for start from game_software")
 
 received_data = ' '

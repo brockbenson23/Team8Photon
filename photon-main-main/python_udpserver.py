@@ -10,37 +10,20 @@ UDPServerSocket = None
 # set up selector
 sel = selectors.DefaultSelector()
 
-def accept(sock, mask):
-    conn, addr = sock.accept()  # Should be ready
-    print('accepted', conn, 'from', addr)
-    conn.setblocking(False)
-    sel.register(conn, selectors.EVENT_READ, read)
-
-def read(conn, mask):
-    data = conn.recv(1000)  # Should be ready
-    if data:
-        print('echoing', repr(data), 'to', conn)
-        conn.send(data)  # Hope it won't block
-    else:
-        print('closing', conn)
-        sel.unregister(conn)
-        conn.close()
-
-
-
 def transmitCode(code):
     global UDPBroadcastSocket
     print('in transmit: ', code)
     bytesToSend = str.encode(code)
     bytes_sent = UDPBroadcastSocket.sendto(
-        bytesToSend, ('<broadcast>', broadcastPort))
+        bytesToSend, ('127.0.0.1', broadcastPort))
     if bytes_sent == len(bytesToSend):
         print("Broadcast successful")
     else:
         print("Broadcast failed")
 
 
-def decipherMsg(serverMsg):
+def decipherMsg(sock, mask):
+    serverMsg = str(sock.recvfrom(1024)[0])
     colon = serverMsg.find(':')
     str1 = serverMsg[2:colon]  # starts at 2 because str1 starts with b'
     str2 = serverMsg[colon+1:-1]  # leaves out ' at the end
@@ -77,7 +60,7 @@ def createSocket():
     UDPServerSocket.setblocking(False)
 
     # Setting up selector stuff
-    sel.register(UDPServerSocket, selectors.EVENT_READ, accept)
+    sel.register(UDPServerSocket, selectors.EVENT_READ, decipherMsg)
     print("UDP server up and listening")
 
 
