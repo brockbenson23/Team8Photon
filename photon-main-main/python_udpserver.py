@@ -40,6 +40,8 @@ def decipherMsg(sock, mask):
     else:
         print("player with id {} has hit player with id {}".format(str1, str2))
 
+    # answer client
+    transmitCode(str1)
     return str1, str2
 
 
