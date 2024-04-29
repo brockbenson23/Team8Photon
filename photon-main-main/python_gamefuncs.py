@@ -31,20 +31,20 @@ class Player():
         if ((int(pID) % 2) == 1): self.color = "RED" ## IF ID == ODD -> RED TEAM
         else: self.color = "GREEN" ## IF ID == EVEN -> GREEN TEAM
 
-    def styleB(pID) -> None:
+    def styleB(self, pID) -> None:
         playerdata = python_supabase.Database.fetch_playerData(pID)
-        if playerdata[0]['hasBase'] == False:
+        if playerdata[0]['hasBase'] is False:
             print("player has hit base")
             python_supabase.Database.update_data(pID, "🅑 " + playerdata[0]['codename'], playerdata[0]['equipment_id'], True, playerdata[0]['points'])
         else:
             print("player has already hit base")
 
-    def onHit(hID) -> None:
+    def onHit(self, hID) -> None:
         playerdata = python_supabase.Database.HID_fetch_playerData(hID)
         print(f"player {playerdata} has hit opponent")
         python_supabase.Database.update_data(playerdata[0]['id'], playerdata[0]['codename'], hID, playerdata[0]['hasBase'], playerdata[0]['points'] + 10)
 
-    def badOnHit(hID) -> None:
+    def badOnHit(self, hID) -> None:
         playerdata = python_supabase.Database.HID_fetch_playerData(hID)
         print(f"player {playerdata} has hit teammate")
         python_supabase.Database.update_data(playerdata[0]['id'], playerdata[0]['codename'], hID, playerdata[0]['hasBase'], playerdata[0]['points'] - 10)
