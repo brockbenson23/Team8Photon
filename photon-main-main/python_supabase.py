@@ -100,3 +100,10 @@ class Database:
         print(data)
         # checking if data exists, returns None if not
         return data.data if data.data else None
+    
+    def HID_fetch_playerData(hID):
+        data = Database.supabase.table(
+            'player').select('*').eq('hardware_id', hID).execute()
+        print(data)
+        # checking if data exists, returns None if not
+        return data.data if data.data else None
