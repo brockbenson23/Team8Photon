@@ -20,17 +20,22 @@ print('after gamefuncs')
 
 class GameScreen(Frame):
     baseData = {}
-    def __init__(self, master, baseData):
-        Frame.__init__(self, master )
+
+    def __init__(self, master):
+        Frame.__init__(self, master)
         self.master = master
         self.master.title("Game Screen")
         self.master.resizable(False, False)
         self.countdowntimer()
         self.pickSound()
         self.game_timer_label = None
-        self.baseData = baseData
+
+    def getData(self, data):
+        self.baseData = data
+        print('data: ', data)
 
     def createWidgets(self):
+        print('in createWidgets, baseData: ', self.baseData)
         red = '#990000'
         green = '#346C4E'
         back = '#323133'
@@ -51,8 +56,6 @@ class GameScreen(Frame):
             "Arial", 16), bg='black', fg='white')
         self.game_timer_label.grid(row=1, column=0, columnspan=4, sticky="ew")
 
-
-
         createLabel('Red Team', 'black', red, redpadx, 10, 0, 0, 2)
         createLabel('Green Team', 'black', green, greenpadx, 10, 0, 2, 2)
         createLabel('Codename', red, 'white', codenamex,
@@ -65,8 +68,10 @@ class GameScreen(Frame):
                     3, 1)                 # Adjusted row
 
         # 3rd number is row, 4th number is column, keep 10 and 10 for pads
-        createLabel('player1' , back, 'white', 10, 10, 3, 0, 1)
-        createLabel('point' , back, 'white', 10, 10, 3, 1, 1)
+        for key in self.baseData:
+            print('baseData key: ', key, ' value: ', self.baseData[key])
+            createLabel(self.baseData[key], back, 'white', 10, 10, 3, 0, 1)
+        createLabel('point', back, 'white', 10, 10, 3, 1, 1)
 
         createLabel('Player2', back, 'white', 10, 10, 4, 0, 1)
         createLabel('points', back, 'white', 10, 10, 4, 1, 1)
@@ -79,7 +84,8 @@ class GameScreen(Frame):
 
         createLabel('Game Actions', back, 'white', 20, 10, 11, 0, 8)
 
-        scroll_text = scrolledtext.ScrolledText(self.master, wrap=WORD, width=40, height=10)
+        scroll_text = scrolledtext.ScrolledText(
+            self.master, wrap=WORD, width=40, height=10)
         scroll_text.grid(row=12, column=0, columnspan=4, sticky="ew")
 
         def addText():
@@ -100,35 +106,35 @@ class GameScreen(Frame):
             blacklabel.grid(row=row, column=column, columnspan=columnspan)
             return blacklabel
 
-
     def clearScreen(self):
         # Destroy all widgets in the current window
         for widget in self.master.winfo_children():
             widget.destroy()
 
     def pickSound(self):
+        current_directory = os.path.dirname(__file__)
         # Play the countdown sound
         randomInt = random.randint(1, 8)
         print(randomInt)
         match randomInt:
             case 1:
-                track = "photon_tracks\Track01.mp3"
+                track = "/photon_tracks/Track01.mp3"
             case 2:
-                track = "photon_tracks\Track02.mp3"
+                track = "/photon_tracks/Track02.mp3"
             case 3:
-                track = "photon_tracks\Track03.mp3"
+                track = "/photon_tracks/Track03.mp3"
             case 4:
-                track = "photon_tracks\Track04.mp3"
+                track = "/photon_tracks/Track04.mp3"
             case 5:
-                track = "photon_tracks\Track05.mp3"
+                track = "/photon_tracks/Track05.mp3"
             case 6:
-                track = "photon_tracks\Track06.mp3"
+                track = "/photon_tracks/Track06.mp3"
             case 7:
-                track = "photon_tracks\Track07.mp3"
+                track = "/photon_tracks/Track07.mp3"
             case 8:
-                track = "photon_tracks\Track08.mp3"
+                track = "/photon_tracks/Track08.mp3"
         pygame.mixer.init()
-        pygame.mixer.music.load(track)
+        pygame.mixer.music.load(current_directory + track)
         pygame.mixer.music.play()
 
     def countdowntimer(self, count=1):
@@ -372,14 +378,31 @@ class Application(Frame):
             entry.delete(0, END)
 
     def startGame(self):
+        values = {}
+        for key in self.List:
+            name = str(self.List[key].get())
+            id_value = str(key.get())
+
+            if id_value:
+                values[int(id_value)] = name if name else ''
+
         # Clear existing widgets
         for widget in self.master.winfo_children():
             widget.destroy()
 
-        print('this is the gamescreen list',self.List)
-        game_screen = GameScreen(self.master,self.List)
-        game_screen.grid()
+        print('values:', values)  # Check if values are correctly collected
 
+        # Create a new GameScreen instance and pass the values
+        print('Creating GameScreen instance...')
+        game_screen = GameScreen(self.master)
+        print('GameScreen instance created.')
+
+        # Pass the values to the GameScreen instance
+        print('Passing data to GameScreen...')
+        game_screen.getData(values)
+
+        print('this is the gamescreen list', values)
+        game_screen.grid()
 
 root = Tk()
 app = Application(root)
