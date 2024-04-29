@@ -155,7 +155,7 @@ class GameScreen(Frame):
                 "Arial", 16), bg="black", fg="white")
             self.game_timer_label.grid(
                 row=1, column=0, columnspan=4, sticky="ew")
-            python_udpserver.transmitCode('202')
+            python_udpserver.send('202')
             self.gameTimer(0)
 
     def gameTimer(self, count):

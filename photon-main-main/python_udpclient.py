@@ -13,7 +13,8 @@ def sendMessage(bytePair0, bytePair1):
     clientMsg = str(bytePair0) + ':' + str(bytePair1)
     bytesToSend = str.encode(clientMsg)
     UDPClientSocket.sendto(bytesToSend, serverAddressPort)
-
+    print(f"clientMsg = {clientMsg}")
+    
     # receive message
     UDPClientSocket.bind(broadcastPort)
     msgFromServer = str(UDPClientSocket.recvfrom(1024)[0])[2:-1]

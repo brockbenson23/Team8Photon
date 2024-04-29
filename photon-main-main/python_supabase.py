@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from typing import Dict
 import python_udpserver
+import python_udpclient
 
 class Database:
     load_dotenv()
@@ -75,7 +76,8 @@ class Database:
             data = supabase.table('player').insert(
                 {'id': id, 'equipment_id': equipment_id}
             ).execute()
-        python_udpserver.Start.transmitCode(str(id))
+        python_udpserver.send(str(id))
+        python_udpclient.sendMessage(-1, -1)
         print(data)
 
     @staticmethod

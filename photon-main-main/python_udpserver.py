@@ -3,7 +3,7 @@ localIP = ""
 receivePort = 7501
 broadcastPort = 7500
 bufferSize = 1024
-
+needToSend = ''
 
 class Socket:
 
@@ -27,20 +27,7 @@ class Socket:
             bytesToSend, ('<broadcast>', broadcastPort))
         self.UDPBroadcastSocket.close()
 
-    def transmitCode(self, code):
-        bytesToSend = str.encode(code)
-        self.UDPBroadcastSocket.sendto(
-            bytesToSend, ('<broadcast>', broadcastPort))
-        self.UDPBroadcastSocket.close()
-
-    def transmitCode(self, code):
-        bytesToSend = str.encode(code)
-        self.UDPBroadcastSocket.sendto(
-            bytesToSend, ('<broadcast>', broadcastPort))
-        self.UDPBroadcastSocket.close()
-
-
-def decipherMsg(self, serverMsg):
+def decipherMsg(serverMsg):
     colon = serverMsg.find(':')
     str1 = serverMsg[2:colon]  # starts at 2 because str1 starts with b'
     str2 = serverMsg[colon+1:-1]  # leaves out ' at the end
@@ -48,6 +35,8 @@ def decipherMsg(self, serverMsg):
     print(f"str1 = {str1}")
     print(f"str2 = {str2}")
     # check whether str2 is a base hit or an equipmentID
+    if (str1 == -1) and (str2 == -1):
+        print("dw bout it sweetheart")
     if str2 == '53':
         print("red base has been scored")
     elif str2 == '43':
@@ -57,11 +46,24 @@ def decipherMsg(self, serverMsg):
 
     return str1, str2
 
+def send(code):
+    global needToSend
+    if needToSend == '':
+        needToSend = code
+    else:
+        print(f"needToSend already has code {needToSend} to be sent")
 
 if __name__ == "__main__":
     s = Socket()
-# Listen for incoming datagrams
+
+    # Listen for incoming datagrams
     while (True):
+        # if graphics needs to send code, s.transmitCode will be called?
+        if needToSend != None:
+            print(f"sending {needToSend}")
+            s.transmitCode(needToSend)
+            needToSend = ''
+
         bytesAddressPair = s.recvfrom()
 
         # deciper message
