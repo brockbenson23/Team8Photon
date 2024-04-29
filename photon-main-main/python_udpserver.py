@@ -1,21 +1,24 @@
 import socket
-import errno
 
-localIP = ""
-receivePort = 7501
-broadcastPort = 7500
-bufferSize = 1024
+    localIP = ""
+    receivePort = 7501
+    broadcastPort = 7500
+    bufferSize = 1024
 
 # Setting up broadcast socket
-UDPBroadcastSocket = socket.socket(
-    socket.AF_INET, socket.SOCK_DGRAM)
-UDPBroadcastSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+    UDPBroadcastSocket = socket.socket(
+        socket.AF_INET, socket.SOCK_DGRAM)
+    UDPBroadcastSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 
 # Create a datagram socket for receiving
-UDPServerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-UDPServerSocket.bind((localIP, receivePort))
+    UDPServerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    UDPServerSocket.bind((localIP, receivePort))
 
-print("UDP server up and listening")
+    print("UDP server up and listening")
+def transmitCode(code):
+    bytesToSend = str.encode(code)
+    UDPBroadcastSocket.sendto(bytesToSend, ('<broadcast>', broadcastPort))
+    UDPBroadcastSocket.close()
 
 def transmitCode(code):
     bytesToSend = str.encode(code)
@@ -41,14 +44,16 @@ while (True):
 
     bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 
-    # deciper message
-    serverMsg = str(bytesAddressPair[0])
-    address = bytesAddressPair[1]  # may need to stringify
-    print("Message from Client:{}".format(serverMsg))
-    print("Client IP Address:{}".format(address))
-
-    # separate message "1:2" into str1 = 1 and str2 = 2
-    str1, str2 = decipherMsg(serverMsg)
-
+        # deciper message
+        serverMsg = str(bytesAddressPair[0])
+        address = bytesAddressPair[1]  # may need to stringify
+        clientMsg = "Message from Client:{}".format(serverMsg)
+        clientIP = "Client IP Address:{}".format(address)
+        # separate message "1:2" into str1 = 1 and str2 = 2
+        str1, str2 = decipherMsg(serverMsg)
 
     transmitCode(str1)
+
+
+if __name__ == "__main__":
+    Start()
