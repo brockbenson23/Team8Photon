@@ -95,14 +95,15 @@ class Database:
     @staticmethod
     def fetch_playerData(id):
         data = Database.supabase.table(
-            'player').select('*').eq('id', id).execute()
+            'player').select('*').eq('equipment_id', id).execute()
         print(data)
         # checking if data exists, returns None if not
         return data.data if data.data else None
 
+    @staticmethod
     def HID_fetch_playerData(hID):
         data = Database.supabase.table(
-            'player').select('*').eq('hardware_id', hID).execute()
+            'player').select('*').eq('equipment_id', hID).execute()
         print(data)
         # checking if data exists, returns None if not
         return data.data if data.data else None

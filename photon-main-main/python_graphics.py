@@ -29,10 +29,19 @@ class GameScreen(Frame):
         self.countdowntimer()
         self.pickSound()
         self.game_timer_label = None
+        self.greenTeam = python_gamefuncs.Team()
+        self.redTeam = python_gamefuncs.Team()
 
     def getData(self, data):
         self.baseData = data
         print('data: ', data)
+        for key in self.baseData:
+            player = python_gamefuncs.Player(key)
+            if (int(key) % 2) == 0:
+                self.greenTeam.addPlayer(player)
+            else:
+                self.redTeam.addPlayer(player)
+
 
     def createWidgets(self):
         print('in createWidgets, baseData: ', self.baseData)
@@ -69,21 +78,19 @@ class GameScreen(Frame):
 
         # 3rd number is row, 4th number is column, keep 10 and 10 for pads
         first = 3
-        second = 0
-        third = 1
+        second = 3
         for key in self.baseData:
-            print('baseData key: ', key, ' value: ', self.baseData[key])
-            createLabel(self.baseData[key], back, 'white', 10, 10, 3, 0, 1)
-            createLabel('point', back, 'white', 10, 10, 3, 1, 1)
-
-        createLabel('Player2', back, 'white', 10, 10, 4, 0, 1)
-        createLabel('points', back, 'white', 10, 10, 4, 1, 1)
-
-        createLabel('Player3', back, 'white', 10, 10, 3, 2, 1)
-        createLabel('points', back, 'white', 10, 10, 3, 3, 1)
-
-        createLabel('Player4', back, 'white', 10, 10, 4, 2, 1)
-        createLabel('points', back, 'white', 10, 10, 4, 3, 1)
+            if (int(key) % 2) == 0:
+                print('in if')
+                createLabel(self.baseData[key], back,
+                            'white', 10, 10, first, 2, 1)
+                createLabel('point', back, 'white', 10, 10, first, 3, 1)
+                first += 1
+            else:
+                createLabel(self.baseData[key], back,
+                            'white', 10, 10, second, 0, 1)
+                createLabel('point', back, 'white', 10, 10, second, 1, 1)
+                second += 1
 
         createLabel('Game Actions', back, 'white', 20, 10, 11, 0, 8)
 
@@ -215,6 +222,7 @@ class Application(Frame):
         self.createButton()
         self.master.columnconfigure(0, weight=1)
         self.master.rowconfigure(0, weight=1)
+        self.gameList = {}
         # Start creating the socket in the background
         threading.Thread(target=python_udpserver.createSocket).start()
         python_supabase.Database.clearEquipmentIds()
@@ -359,6 +367,7 @@ class Application(Frame):
             row=2, column=0)
 
         top.wait_window(top)  # Wait until the popup window is closed
+        self.gameList[self.hardwareID] = codename
 
         try:
             return int(self.hardwareID)
@@ -382,9 +391,9 @@ class Application(Frame):
 
     def startGame(self):
         values = {}
-        for key in self.List:
-            name = str(self.List[key].get())
-            id_value = str(key.get())
+        for key in self.gameList:
+            name = str(self.gameList[key])
+            id_value = str(key)
 
             if id_value:
                 values[int(id_value)] = name if name else ''
@@ -406,6 +415,7 @@ class Application(Frame):
 
         print('this is the gamescreen list', values)
         game_screen.grid()
+
 
 root = Tk()
 app = Application(root)
