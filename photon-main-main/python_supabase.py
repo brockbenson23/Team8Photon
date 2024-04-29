@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 from typing import Dict
 from typing import List
-from python_udpclient import broadcastID
+from python_udpserver import transmitCode
 
 
 class Database:
@@ -78,7 +78,7 @@ class Database:
                 {'id': id, 'equipment_id': equipment_id}
             ).execute()
 
-        broadcastID(str(id))
+        transmitCode(str(id))
         print(data)
 
     @staticmethod
@@ -101,7 +101,7 @@ class Database:
         print(data)
         # checking if data exists, returns None if not
         return data.data if data.data else None
-    
+
     def fetchPID(hID):
         data = Database.supabase.table(
             'player').select('*').eq('hardware_id', hID).execute()
