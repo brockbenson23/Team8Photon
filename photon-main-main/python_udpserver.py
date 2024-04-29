@@ -1,44 +1,28 @@
 import socket
-import python_gamefuncs
+import errno
 
-localIP = "127.0.0.1"
+localIP = ""
 receivePort = 7501
 broadcastPort = 7500
 bufferSize = 1024
-clientAddressPort = ("127.0.0.1", 7501)
 
-# Create a datagram socket
-UDPServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
+# Setting up broadcast socket
+UDPBroadcastSocket = socket.socket(
+    socket.AF_INET, socket.SOCK_DGRAM)
+UDPBroadcastSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+# Create a datagram socket for receiving
+UDPServerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 UDPServerSocket.bind((localIP, receivePort))
 
 print("UDP server up and listening")
 
-UDPBroadcastSocket = socket.socket(
-    family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPBroadcastSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-
-
 def transmitCode(code):
-    serverMsg = code
-    bytesToSend = str.encode(serverMsg)
-    UDPBroadcastSocket.sendto(bytesToSend, address)
+    bytesToSend = str.encode(code)
+    UDPBroadcastSocket.sendto(bytesToSend, ('<broadcast>', broadcastPort))
+    UDPBroadcastSocket.close()
 
-
-def updateGame(stri):  # call this method to start or end game
-    bytesToSend = str.encode(stri)
-    UDPBroadcastSocket.sendto(bytesToSend, clientAddressPort)
-
-
-# Listen for incoming datagrams
-while (True):
-
-    bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
-    serverMsg = str(bytesAddressPair[0])
-    address = bytesAddressPair[1]  # may need to stringify
-    clientMsg = "Message from Client:{}".format(serverMsg)
-    clientIP = "Client IP Address:{}".format(address)
-
-    # separate message "1:2" into str1 = 1 and str2 = 2
+def decipherMsg(serverMsg):
     colon = serverMsg.find(':')
     str1 = serverMsg[2:colon]  # starts at 2 because str1 starts with b'
     str2 = serverMsg[colon+1:-1]  # leaves out ' at the end
@@ -46,28 +30,24 @@ while (True):
     print(f"str1 = {str1}")
     print(f"str2 = {str2}")
     # check whether str2 is a base hit or an equipmentID
-    if str2 == '53':
-        print("red base has been scored")
-        python_gamefuncs.Player.styleB(str1)
-    elif str2 == '43':
-        print("green base has been scored")
-        python_gamefuncs.Player.styleB(str1)
-    else:
-        # checks if players are on same team
-        if ((int(str1) % 2 == 1) and (int(str2) % 2 == 1)) or ((int(str1) % 2 == 0) and (int(str2) % 2 == 0)):
-            match int(str1) % 2:  # ^^ check which team player is on, badOnHit means they hit a teammate and onHit means they hit an opposing player
-                case 0:
-                    python_gamefuncs.Player.badOnHit(str1)
-                case 1:
-                    python_gamefuncs.Player.badOnHit(str1)
-        else:
-            match int(str1) % 2:
-                case 0:
-                    python_gamefuncs.Player.onHit(str1)
-                case 1:
-                    python_gamefuncs.Player.onHit(str1)
-        print("player with id {} has hit player with id {}".format(str1, str2))
+    if str2 == '53': print("red base has been scored")
+    elif str2 == '43': print("green base has been scored")
+    else: print("player with id {} has hit player with id {}".format(str1, str2))
 
-    # respond to client
-    print(f"responding to client at address {address} with {str1}")
+    return str1, str2
+
+# Listen for incoming datagrams
+while (True):
+
+    bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
+
+    # deciper message
+    serverMsg = str(bytesAddressPair[0])
+    address = bytesAddressPair[1]  # may need to stringify
+    clientMsg = "Message from Client:{}".format(serverMsg)
+    clientIP = "Client IP Address:{}".format(address)
+    # separate message "1:2" into str1 = 1 and str2 = 2
+    str1, str2 = decipherMsg(serverMsg)
+
+
     transmitCode(str1)

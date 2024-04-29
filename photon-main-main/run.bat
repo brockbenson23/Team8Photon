@@ -1,14 +1,14 @@
 @echo off
 
 REM Start UDP server and client
-start /B python python_udpserver.py
-start /B python python_udpclient.py
+start /B python3 python_udpserver.py
+start /B python3 python_udpclient.py
 
 REM Wait for some time to allow the servers to initialize
 timeout /t 2 /nobreak
 
 REM Start graphics script
-start python python_graphics.py
+start python3 python_graphics.py
 
 REM Check if a process is listening on port 7501 and terminate it
 netstat -ano | findstr ":7501" | find "LISTENING" >nul

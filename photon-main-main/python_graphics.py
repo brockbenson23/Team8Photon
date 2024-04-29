@@ -377,8 +377,6 @@ class Application(Frame):
 
 root=Tk()
 app=Application(root)
-# for testing functions
-# root.bind("]", test.test())
 print('running')
 root.mainloop()
 print('running')
