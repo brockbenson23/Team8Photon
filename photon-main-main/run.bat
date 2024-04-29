@@ -22,8 +22,8 @@ if %ERRORLEVEL% EQU 0 (
 )
 
 REM Kill the UDP server and client processes
-taskkill /F /IM python.exe /FI "WINDOWTITLE eq python_udpserver.py"
-taskkill /F /IM python.exe /FI "WINDOWTITLE eq python_udpclient.py"
+taskkill /F /IM python3.exe /FI "WINDOWTITLE eq python_udpserver.py"
+taskkill /F /IM python3.exe /FI "WINDOWTITLE eq python_udpclient.py"
 
 echo done
 
