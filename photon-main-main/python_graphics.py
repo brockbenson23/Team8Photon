@@ -221,6 +221,7 @@ class Application(Frame):
         # Start creating the socket in the background
         threading.Thread(target=python_udpserver.createSocket).start()
         python_supabase.Database.clearEquipmentIds()
+        
 
     def createWidgets(self):
         red = '#990000'
