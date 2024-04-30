@@ -173,22 +173,22 @@ class GameScreen(Frame):
                 colon = string.find(':')
                 str1 = string[:colon]  # starts at 2 because str1 starts with b'
                 str2 = string[colon+1:]  # leaves out ' at the end
-                name1 = python_supabase.fetch_name(int(str1))
-                name2 = python_supabase.fetch_name(int(str2))
+                name1 = python_supabase.Database.HID_fetch_playerData(int(str1))[0]['codename']
+                name2 = python_supabase.Database.HID_fetch_playerData(int(str2))[0]['codename']
                 print(str1)
                 print(str2)
                 print(name1)
                 print(name2)
 
                 if (str2 == '53') and (int(str1) % 2 == 0):
-                    string = "red base has been scored by player with id " + str1 
+                    string = "red base has been scored by player " + name1
                 elif (str2 == '43') and (int(str1) % 2 == 1):
-                    string = "green base has been scored by player with id " + str1
+                    string = "green base has been scored by player " + name1
                 elif (str1 != '') and (str2 != ''):
-                    string = "player with id "+str1+" has hit player with id "+ str2
+                    string = "player "+name1+" has hit player with id "+ name2
                     # if players are on same team, do badhit
                     if (((int(str1) % 2 == 1) and (int(str2) % 2 == 1)) or ((int(str1) % 2 == 0) and (int(str2) % 2 == 0))):
-                        string = "player with id "+getname(str1)+" hit their own teammate"
+                        string = "player "+name1+" hit their own teammate"
                         
                 messages.append(string)
             scroll_text.delete('1.0', END)
