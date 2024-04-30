@@ -32,7 +32,7 @@ class GameScreen(Frame):
     def getData(self, data):
         self.baseData = data
         def createLabel(text, bg, fg, padx, pady, row, column, columnspan):
-            label = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
+            label = Label(textvariable=text, bg=bg, fg=fg, padx=padx, pady=pady)
             label.grid(row=row, column=column, columnspan=columnspan)
             return label
 
