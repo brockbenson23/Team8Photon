@@ -121,6 +121,7 @@ class Player():
         print(f"player {playerdata} has hit teammate")
         python_supabase.Database.update_data(
             playerdata[0]['id'], playerdata[0]['codename'], hID, playerdata[0]['hasBase'], playerdata[0]['points'] - 10)
+        
 
 
 def start():

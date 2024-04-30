@@ -32,9 +32,12 @@ class GameScreen(Frame):
     def getData(self, data):
         self.baseData = data
         def createLabel(text, bg, fg, padx, pady, row, column, columnspan):
-            label = Label(textvariable=text, bg=bg, fg=fg, padx=padx, pady=pady)
+            var = StringVar()
+            var.set(text)
+            label = Label(textvariable=var, bg=bg, fg=fg, padx=padx, pady=pady)
             label.grid(row=row, column=column, columnspan=columnspan)
-            return label
+            
+            return var, label
 
         back = '#323133'
         print('data: ', data)
@@ -50,13 +53,32 @@ class GameScreen(Frame):
             else:
                 self.redTeam.addPlayer(player)
                 self.redLabels[player] = (createLabel(player.codeName, back, 'white', 10, 10, first, 0, 1), createLabel(player.points, back, 'white', 10, 10, first, 1, 1))
-
+    
+    def blinking(self):
+        for i in self.greenLabels:
+            print(f"WHAT I WANT TO SEE :self.greenLabels[{i}][0] {self.greenLabels[i][0].var} --------------------------------")
+        team = "green"
+        for player in self.greenLabels:
+            if self.greenLabels[player][1] > highest[1]:
+                highest = self.greenLabels[player]
+        for player in self.redLabels:
+            if self.redLabels[player][1] > highest[1]:
+                highest = self.redLabels[player]
+                team = "red"
+        self.blinking_helper(highest, team)
+    
+    def blinking_helper(self, player, team):
+        print(f"{player[0]} on team {team} should be blinking")
+    
     def updatePoints(self):
-        for player in self.greenTeam:
+        for player in self.greenTeam.__iterate__():
             player = player.updateInfo()
+            self.blinking()
             player.print()
-        for player in self.redTeam:
+        for player in self.redTeam.__iterate__():
             player = player.updateInfo()
+            self.blinking()
+            player.print()
 
     def createWidgets(self):
         print('in createWidgets, baseData: ', self.baseData)
@@ -196,7 +218,8 @@ class GameScreen(Frame):
             seconds = count % 60
             timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
             self.game_timer_label.config(text=timer_text)
-            self.updatePlayers()
+            #self.updatePlayers()
+            self.updatePoints()
             self.master.after(1000, self.gameTimer, count+1)
         else:
             black_strip = Label(self.master, bg="black")
