@@ -23,28 +23,27 @@ def transmitCode(code):
     else:
         print("Broadcast failed")
 
-
-def decipherMsg(sock, mask):
+def receive(sock, mask):
     global received_message
     serverMsg = str(sock.recvfrom(1024)[0])
+    str1, str2 = decipherMsg(serverMsg)
+    # answer client
+    transmitCode(str2)
+    received_message = serverMsg
+
+def decipherMsg(serverMsg):
     colon = serverMsg.find(':')
     str1 = serverMsg[2:colon]  # starts at 2 because str1 starts with b'
     str2 = serverMsg[colon+1:-1]  # leaves out ' at the end
 
-    print(f"str1 = {str1}")
-    print(f"str2 = {str2}")
     # check whether str2 is a base hit or an equipmentID
     if str2 == '53':
         print("red base has been scored")
     elif str2 == '43':
         print("green base has been scored")
-    else:
+    elif (str1 != '') and (str2 != ''):
         print("player with id {} has hit player with id {}".format(str1, str2))
-
-    # answer client
-    transmitCode(str2)
-    received_message = serverMsg
-
+    return str1, str2
 
 def createSocket():
     global UDPBroadcastSocket
@@ -63,7 +62,7 @@ def createSocket():
     UDPServerSocket.setblocking(False)
 
     # Setting up selector stuff
-    sel.register(UDPServerSocket, selectors.EVENT_READ, decipherMsg)
+    sel.register(UDPServerSocket, selectors.EVENT_READ, receive)
     print("UDP server up and listening")
 
     while True:
