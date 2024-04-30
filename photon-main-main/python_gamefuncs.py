@@ -8,7 +8,7 @@ import time
 def listen_for_messages():
     last_message = ''
     while True:
-#       time.sleep(0.1)
+        #       time.sleep(0.1)
         try:
             # Receive a message from the server
             message = receive_message()
@@ -37,8 +37,10 @@ def receive_message():
             print("green base has been scored in gamefuncs")
             Player.styleB(str1)
         elif (str1 != '') and (str2 != ''):
-            print("player with id {} has hit player with id {} in gamefuncs".format(str1, str2))
-            if (((int(str1) % 2 == 1) and (int(str2) % 2 == 1)) or ((int(str1) % 2 == 0) and (int(str2) % 2 == 0))): # if players are on same team, do badhit
+            print(
+                "player with id {} has hit player with id {} in gamefuncs".format(str1, str2))
+            # if players are on same team, do badhit
+            if (((int(str1) % 2 == 1) and (int(str2) % 2 == 1)) or ((int(str1) % 2 == 0) and (int(str2) % 2 == 0))):
                 Player.badOnHit(str1)
             Player.onHit(str1)
         return str1 + ':' + str2
@@ -63,8 +65,13 @@ class Team():
         for player in self.players:
             self.points += player.points
 
+    def __iterate__(self):
+        return iter(self.players)
+
     def getPlayers(self):
         return self.players
+
+
 
 class Player():
     points = 0
