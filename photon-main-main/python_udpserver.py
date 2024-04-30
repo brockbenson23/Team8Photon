@@ -6,9 +6,11 @@ broadcastPort = 7500
 bufferSize = 1024
 UDPBroadcastSocket = None
 UDPServerSocket = None
+received_message = None
 
 # set up selector
 sel = selectors.DefaultSelector()
+
 
 def transmitCode(code):
     global UDPBroadcastSocket
@@ -23,6 +25,7 @@ def transmitCode(code):
 
 
 def decipherMsg(sock, mask):
+    global received_message
     serverMsg = str(sock.recvfrom(1024)[0])
     colon = serverMsg.find(':')
     str1 = serverMsg[2:colon]  # starts at 2 because str1 starts with b'
@@ -31,12 +34,17 @@ def decipherMsg(sock, mask):
     print(f"str1 = {str1}")
     print(f"str2 = {str2}")
     # check whether str2 is a base hit or an equipmentID
-    if str2 == '53': print("red base has been scored")
-    elif str2 == '43': print("green base has been scored")
-    else: print("player with id {} has hit player with id {}".format(str1, str2))
+    if str2 == '53':
+        print("red base has been scored")
+    elif str2 == '43':
+        print("green base has been scored")
+    else:
+        print("player with id {} has hit player with id {}".format(str1, str2))
 
     # answer client
     transmitCode(str2)
+    received_message = serverMsg
+
 
 def createSocket():
     global UDPBroadcastSocket
@@ -48,7 +56,7 @@ def createSocket():
         socket.AF_INET, socket.SOCK_DGRAM)
     UDPBroadcastSocket.setsockopt(
         socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-    
+
     # Set up receive socket
     UDPServerSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     UDPServerSocket.bind((localIP, receivePort))
@@ -65,4 +73,3 @@ def createSocket():
         for key, mask in events:
             callback = key.data
             callback(key.fileobj, mask)
-

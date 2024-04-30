@@ -219,9 +219,10 @@ class Application(Frame):
         self.master.rowconfigure(0, weight=1)
         self.gameList = {}
         # Start creating the socket in the background
-        threading.Thread(target=python_udpserver.createSocket).start()
+        python_gamefuncs.start()
         python_supabase.Database.clearEquipmentIds()
-        
+        print('socket created')
+
 
     def createWidgets(self):
         red = '#990000'

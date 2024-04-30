@@ -1,21 +1,29 @@
 import os
 import python_supabase
-import python_udpclient
+import python_udpserver  # Import the UDP server module
+import threading
+
 
 def listen_for_messages():
-
+    last_message = ''
     while True:
         try:
             # Receive a message from the server
-            UDPServerSocket = python_udpclient.socket.socket(
-                python_udpclient.socket.AF_INET, python_udpclient.socket.SOCK_DGRAM)
-            UDPServerSocket.bind(("0.0.0.0", 7501))
-            msgFromServer = str(UDPServerSocket.recvfrom(1024)[0])[2:-1]
-            print(f"message from server in gamefuncs: {msgFromServer}")
-            UDPServerSocket.close()
-            # You can process the message further here if needed
+            message = receive_message()
+            if message is not None and message != last_message:
+                print('in gamefuncs - message:', message)
+                last_message = message
+            if message is not None:
+                print('in gamefuncs - message: ', message)
+                lastmessage = message
         except Exception as e:
             print("Error receiving message:", e)
+
+
+def receive_message():
+    global python_udpserver
+    return python_udpserver.received_message
+
 
 class Team():
     points = 0
@@ -72,11 +80,13 @@ class Player():
         print(f"player {playerdata} has hit teammate")
         python_supabase.Database.update_data(
             playerdata[0]['id'], playerdata[0]['codename'], hID, playerdata[0]['hasBase'], playerdata[0]['points'] - 10)
-        
+
+
 def start():
     print("in game funcs")
-    # Start a thread to listen for messages
-    message_listener_thread = python_udpclient.threading.Thread(
+    server_thread = threading.Thread(
+        target=python_udpserver.createSocket)
+    server_thread.start()
+    message_listener_thread = threading.Thread(
         target=listen_for_messages)
     message_listener_thread.start()
-    

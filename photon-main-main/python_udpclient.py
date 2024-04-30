@@ -17,11 +17,11 @@ def sendMessage(clientMsg):
     print(f"clientMsg = {clientMsg}")
 
 
-def receiveMessage(serverAddressPort):
+def receiveMessage(port):
     UDPClientSocket = socket.socket(
         family=socket.AF_INET, type=socket.SOCK_DGRAM)
     # receive message
-    UDPClientSocket.bind(("127.0.0.1", serverAddressPort))
+    UDPClientSocket.bind(("127.0.0.1", port))
     msgFromServer = str(UDPClientSocket.recvfrom(1024)[0])[2:-1]
     UDPClientSocket.close()
     return msgFromServer
