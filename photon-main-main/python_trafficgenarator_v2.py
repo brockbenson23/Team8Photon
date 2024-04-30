@@ -1,6 +1,7 @@
 import socket
 import random
 import time
+import python_udpclient
 
 bufferSize = 1024
 serverAddressPort = ("127.0.0.1", 7500)
@@ -16,22 +17,13 @@ red2 = input('Enter equipment id of red player 2 ==> ')
 green1 = input('Enter equipment id of green player 1 ==> ')
 green2 = input('Enter equipment id of green player 2 ==> ')
 
-# Create datagram sockets
-UDPServerSocketReceive = socket.socket(
-    family=socket.AF_INET, type=socket.SOCK_DGRAM)
-UDPClientSocketTransmit = socket.socket(
-    family=socket.AF_INET, type=socket.SOCK_DGRAM)
-
-# bind server socket
-UDPServerSocketReceive.bind(serverAddressPort)
 
 # wait for start from game software
 print("waiting for start from game_software")
 
 received_data = ' '
 while received_data != '202':
-    received_data, address = UDPServerSocketReceive.recvfrom(bufferSize)
-    received_data = received_data.decode('utf-8')
+    received_data = python_udpclient.receiveMessage(7500)
     print("Received from game software: " + received_data)
 print('')
 
@@ -63,11 +55,9 @@ while True:
 
     print("transmitting to game: " + message)
 
-    UDPClientSocketTransmit.sendto(str.encode(str(message)), clientAddressPort)
+    python_udpclient.sendMessage(message)
     # receive answer from game softare
-
-    received_data, address = UDPServerSocketReceive.recvfrom(bufferSize)
-    received_data = received_data.decode('utf-8')
+    received_data = python_udpclient.receiveMessage(7500)
     print("Received from game software: " + received_data)
     print('')
     counter = counter + 1

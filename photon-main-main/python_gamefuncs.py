@@ -3,24 +3,6 @@ import python_supabase
 import python_udpclient
 
 
-def listen_for_messages():
-
-    while True:
-        try:
-            # Receive a message from the server
-            message = python_udpclient.receiveMessage(7501)
-            print('in client message: ', message)
-            # You can process the message further here if needed
-        except Exception as e:
-            print("Error receiving message:", e)
-
-
-# Start a thread to listen for messages
-message_listener_thread = python_udpclient.threading.Thread(
-    target=listen_for_messages)
-message_listener_thread.start()
-
-
 class Team():
     points = 0
     # will initialize a green and red team
