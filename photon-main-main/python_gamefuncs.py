@@ -28,7 +28,6 @@ def receive_message():
         colon = text.find(':')
         str1 = text[2:colon]  # starts at 2 because str1 starts with b'
         str2 = text[colon+1:-1]  # leaves out ' at the end
-        str1, str2 = python_udpserver.decipherMsg(text)
         if str2 == '53':
             print("red base has been scored in gamefuncs")
             Player.styleB(str1)
