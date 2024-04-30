@@ -36,6 +36,7 @@ class GameScreen(Frame):
             label.grid(row=row, column=column, columnspan=columnspan)
             return label
 
+        back = '#323133'
         print('data: ', data)
         first = 3
         second = 3
@@ -48,7 +49,7 @@ class GameScreen(Frame):
 
             else:
                 self.redTeam.addPlayer(player)
-                self.greenLabels[player] = (createLabel(player.codeName, back, 'white', 10, 10, first, 0, 1), createLabel(player.points, back, 'white', 10, 10, first, 1, 1))
+                self.redLabels[player] = (createLabel(player.codeName, back, 'white', 10, 10, first, 0, 1), createLabel(player.points, back, 'white', 10, 10, first, 1, 1))
 
     def updatePoints(self):
         for player in self.greenTeam:
