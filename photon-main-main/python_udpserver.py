@@ -28,6 +28,7 @@ def receive(sock, mask):
     serverMsg = str(sock.recvfrom(1024)[0])
     str1, str2 = decipherMsg(serverMsg)
     # answer client
+    print(f"transmitting {str2}")
     transmitCode(str2)
     received_message = serverMsg
 
