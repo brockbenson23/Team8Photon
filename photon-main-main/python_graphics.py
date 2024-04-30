@@ -53,8 +53,10 @@ class GameScreen(Frame):
                 print('player in getData: ', self.greenLabels[player])
             else:
                 self.redTeam.addPlayer(player)
-                self.redLabels[player] = (createLabel(player.codeName, back, 'white', 10, 10, first, 0, 1), createLabel(
-                    str(player.points), back, 'white', 10, 10, first, 1, 1))
+                text_var, label = createLabel(
+                    player.codeName, back, 'white', 10, 10, first, 2, 1)
+                self.redLabels[player] = (text_var, label)
+                print('player in getData: ', self.redLabels[player])
 
         print("greenLabels after getData:", self.greenLabels)
 
@@ -74,22 +76,38 @@ class GameScreen(Frame):
     def updatePoints(self):
         back = '#323133'
         print("greenLabels keys:", self.greenLabels.keys())  # Add this line to check the keys in greenLabels
+        print("redLabel keys:", self.redLabels.keys())  # Add this line to check the keys in greenLabels
         print("self.baseData:", self.baseData)  # Add this line to check the baseData
         print('in updatepoints')
         print('in updatepoints')
+        first = 3
+        second = 3
         for player in self.greenLabels:
             var = StringVar()
             label = Label(textvariable=var, bg=back, fg='white', padx=10, pady=10)
             player = player.updateInfo()
             player.print()
             var.set(player.codeName)
-            label.grid(row=3, column=0, columnspan=1)
+            label.grid(row=first, column=2, columnspan=1)
             var2 = StringVar()
             label = Label(textvariable=var2, bg=back, fg='white', padx=10, pady=10)
-            var2.set(player.codeName)
-            label.grid(row=3, column=0, columnspan=1)
-            #self.greenPointsLabels[player]['text'] = str(player.points)
-            
+            var2.set(str(player.points))
+            label.grid(row=first, column=3, columnspan=1)
+            first += 1
+        for player in self.redLabels:
+            var = StringVar()
+            label = Label(textvariable=var, bg=back, fg='white', padx=10, pady=10)
+            player = player.updateInfo()
+            player.print()
+            var.set(player.codeName)
+            label.grid(row=second, column=0, columnspan=1)
+            var2 = StringVar()
+            label = Label(textvariable=var2, bg=back, fg='white', padx=10, pady=10)
+            var2.set(str(player.points))
+            label.grid(row=second, column=1, columnspan=1)
+            second += 1
+
+
     def createWidgets(self):
         print('in createWidgets, baseData: ', self.baseData)
         red = '#990000'
