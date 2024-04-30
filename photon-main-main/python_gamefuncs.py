@@ -23,7 +23,7 @@ def receive_message():
     global python_udpserver
     text = python_udpserver.received_message
     python_udpserver.received_message = ''
-    if (text == '') or (text is None):
+    if text == '':
         return text
     else:
         # split up b'str1:str2' into str1, str2
@@ -70,7 +70,7 @@ class Player():
     def __init__(self, pID) -> None:
         # take data from supabase
         data = python_supabase.Database.fetch_playerData(pID)
-        self.hasBase = data[0]['hasBase']
+        self.hasBase = False
         self.playerID = pID
         self.equipmentID = data[0]['equipment_id']
         self.codeName = data[0]['codename']
