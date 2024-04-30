@@ -59,10 +59,6 @@ class GameScreen(Frame):
         print("greenLabels after getData:", self.greenLabels)
 
     def blinking(self):
-        for i in self.greenLabels:
-            print(
-                f"WHAT I WANT TO SEE :self.greenLabels[{i}][0] {self.greenLabels[i][0].var} --------------------------------")
-        team = "green"
         for player in self.greenLabels:
             if self.greenLabels[player][1] > highest[1]:
                 highest = self.greenLabels[player]
@@ -92,13 +88,8 @@ class GameScreen(Frame):
             label = Label(textvariable=var2, bg=back, fg='white', padx=10, pady=10)
             var2.set(player.codeName)
             label.grid(row=3, column=0, columnspan=1)
-            self.greenPointsLabels[player]['text'] = str(player.points)
-            if label.winfo_exists():  # Check if the label exists
-                label.grid()  # Grid the label
-                text_var.set(str(player.points))  # Update the text of the label
-            else:
-                print("Label does not exist.")
-
+            #self.greenPointsLabels[player]['text'] = str(player.points)
+            
     def createWidgets(self):
         print('in createWidgets, baseData: ', self.baseData)
         red = '#990000'
@@ -151,10 +142,26 @@ class GameScreen(Frame):
         scroll_text = scrolledtext.ScrolledText(
             self.master, wrap=WORD, width=40, height=10)
         scroll_text.grid(row=12, column=0, columnspan=4, sticky="ew")
-
+        thing = python_gamefuncs.Actions()
         def addText():
-            string = random.choice(strings)
-            messages.append(string)
+            previous = thing.shooting
+            thing.update()
+            string = thing.shooting
+            if string != previous:
+                colon = string.find(':')
+                str1 = string[:colon]  # starts at 2 because str1 starts with b'
+                str2 = string[colon+1:]  # leaves out ' at the end
+                if (str2 == '53') and (int(str1) % 2 == 0):
+                    string = "red base has been scored by player with id " + str1
+                elif (str2 == '43') and (int(str1) % 2 == 1):
+                    string = "green base has been scored by player with id " + str1
+                elif (str1 != '') and (str2 != ''):
+                    string = "player with id "+str1+" has hit player with id "+str2+" in gamefuncs"
+                    # if players are on same team, do badhit
+                    if (((int(str1) % 2 == 1) and (int(str2) % 2 == 1)) or ((int(str1) % 2 == 0) and (int(str2) % 2 == 0))):
+                        string = "player with id "+str1+" hit their own teammate"
+                        
+                messages.append(string)
             scroll_text.delete('1.0', END)
             for message in messages[-100:]:
                 scroll_text.insert(END, message + '\n')

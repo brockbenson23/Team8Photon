@@ -4,6 +4,7 @@ import python_udpserver  # Import the UDP server module
 import threading
 import time
 
+action = ''
 
 def listen_for_messages():
     last_message = ''
@@ -18,9 +19,9 @@ def listen_for_messages():
         except Exception as e:
             print("Error receiving message:", e)
 
-
 def receive_message():
     global python_udpserver
+    global action
     text = python_udpserver.received_message
     python_udpserver.received_message = ''
     if text == '':
@@ -43,8 +44,19 @@ def receive_message():
             if (((int(str1) % 2 == 1) and (int(str2) % 2 == 1)) or ((int(str1) % 2 == 0) and (int(str2) % 2 == 0))):
                 Player.badOnHit(str1)
             Player.onHit(str1)
+        action = str1 + ':' + str2
         return str1 + ':' + str2
 
+class Actions():
+    def __init__(self):
+        self.shooting = ""
+    def update(self):
+        global action
+        self.shooting = action
+        print(f"action = {action}")
+    
+    def shooting(self):
+        return self.shooting
 
 class Team():
     points = 0
