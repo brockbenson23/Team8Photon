@@ -19,7 +19,9 @@ def listen_for_messages():
 
 def receive_message():
     global python_udpserver
-    return python_udpserver.received_message
+    text = python_udpserver.received_message
+    python_udpserver.received_message = ''
+    return text
 
 
 class Team():
