@@ -56,6 +56,8 @@ class GameScreen(Frame):
                 self.redLabels[player] = (createLabel(player.codeName, back, 'white', 10, 10, first, 0, 1), createLabel(
                     str(player.points), back, 'white', 10, 10, first, 1, 1))
 
+        print("greenLabels after getData:", self.greenLabels)
+
     def blinking(self):
         for i in self.greenLabels:
             print(
@@ -74,14 +76,28 @@ class GameScreen(Frame):
         print(f"{player[0]} on team {team} should be blinking")
 
     def updatePoints(self):
+        back = '#323133'
+        print("greenLabels keys:", self.greenLabels.keys())  # Add this line to check the keys in greenLabels
+        print("self.baseData:", self.baseData)  # Add this line to check the baseData
+        print('in updatepoints')
         print('in updatepoints')
         for player in self.greenLabels:
+            var = StringVar()
+            label = Label(textvariable=var, bg=back, fg='white', padx=10, pady=10)
             player = player.updateInfo()
             player.print()
-            text_var, label = self.greenLabels[player]
-            label.grid()
-            text_var.set(str(player.points))
-            label.grid()
+            var.set(player.codeName)
+            label.grid(row=3, column=0, columnspan=1)
+            var2 = StringVar()
+            label = Label(textvariable=var2, bg=back, fg='white', padx=10, pady=10)
+            var2.set(player.codeName)
+            label.grid(row=3, column=0, columnspan=1)
+            self.greenPointsLabels[player]['text'] = str(player.points)
+            if label.winfo_exists():  # Check if the label exists
+                label.grid()  # Grid the label
+                text_var.set(str(player.points))  # Update the text of the label
+            else:
+                print("Label does not exist.")
 
     def createWidgets(self):
         print('in createWidgets, baseData: ', self.baseData)
