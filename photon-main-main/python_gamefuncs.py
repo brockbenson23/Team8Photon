@@ -70,18 +70,14 @@ class Player():
     points = 0
     codeNamess = []
 
-    def __init__(self, pID) -> None:
+    def __init__(self, hID) -> None:
         # take data from supabase
-        data = python_supabase.Database.fetch_playerData(pID)
+        data = python_supabase.Database.fetch_playerData(hID)
         self.hasBase = False
-        self.playerID = pID
-        self.equipmentID = data[0]['equipment_id']
+        self.playerID = data[0]['id']
+        self.equipmentID = hID
         self.codeName = data[0]['codename']
         self.codeNamess.append(self.codeName)
-        if ((int(pID) % 2) == 1):
-            self.color = "RED"  # IF ID == ODD -> RED TEAM
-        else:
-            self.color = "GREEN"  # IF ID == EVEN -> GREEN TEAM
 
     def updateInfo(self):
         data = python_supabase.Database.fetch_playerData(self.equipmentID)
