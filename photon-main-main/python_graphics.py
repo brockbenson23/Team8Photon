@@ -31,6 +31,7 @@ class GameScreen(Frame):
 
     def getData(self, data):
         self.baseData = data
+
         def createLabel(text, bg, fg, padx, pady, row, column, columnspan):
             var = StringVar()
             var.set(text)
@@ -46,30 +47,32 @@ class GameScreen(Frame):
             player = python_gamefuncs.Player(key)
             if (int(key) % 2) == 0:
                 self.greenTeam.addPlayer(player)
-                text_var, label = createLabel(player.codeName, back, 'white', 10, 10, first, 2, 1)
+                text_var, label = createLabel(
+                    player.codeName, back, 'white', 10, 10, first, 2, 1)
                 self.greenLabels[player] = (text_var, label)
                 print('player in getData: ', self.greenLabels[player])
             else:
                 self.redTeam.addPlayer(player)
-                self.redLabels[player] = (createLabel(player.codeName, back, 'white', 10, 10, first, 0, 1), createLabel(str(player.points), back, 'white', 10, 10, first, 1, 1))
-
+                self.redLabels[player] = (createLabel(player.codeName, back, 'white', 10, 10, first, 0, 1), createLabel(
+                    str(player.points), back, 'white', 10, 10, first, 1, 1))
 
     def blinking(self):
-    for i in self.greenLabels:
-        print(f"WHAT I WANT TO SEE :self.greenLabels[{i}][0] {self.greenLabels[i][0].var} --------------------------------")
-    team = "green"
-    for player in self.greenLabels:
-        if self.greenLabels[player][1] > highest[1]:
-            highest = self.greenLabels[player]
-    for player in self.redLabels:
-        if self.redLabels[player][1] > highest[1]:
-            highest = self.redLabels[player]
-            team = "red"
-    self.blinking_helper(highest, team)
-    
+        for i in self.greenLabels:
+            print(
+                f"WHAT I WANT TO SEE :self.greenLabels[{i}][0] {self.greenLabels[i][0].var} --------------------------------")
+        team = "green"
+        for player in self.greenLabels:
+            if self.greenLabels[player][1] > highest[1]:
+                highest = self.greenLabels[player]
+        for player in self.redLabels:
+            if self.redLabels[player][1] > highest[1]:
+                highest = self.redLabels[player]
+                team = "red"
+        self.blinking_helper(highest, team)
+
     def blinking_helper(self, player, team):
         print(f"{player[0]} on team {team} should be blinking")
-    
+
     def updatePoints(self):
         print('in updatepoints')
         for player in self.greenLabels:
@@ -218,7 +221,7 @@ class GameScreen(Frame):
             seconds = count % 60
             timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
             self.game_timer_label.config(text=timer_text)
-            #self.updatePlayers()
+            # self.updatePlayers()
             self.updatePoints()
             self.master.after(1000, self.gameTimer, count+1)
         else:
