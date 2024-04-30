@@ -26,16 +26,29 @@ class GameScreen(Frame):
         self.game_timer_label = None
         self.greenTeam = python_gamefuncs.Team()
         self.redTeam = python_gamefuncs.Team()
+        self.greenLabels = {}
+        self.redLabels = {}
 
     def getData(self, data):
         self.baseData = data
+        def createLabel(text, bg, fg, padx, pady, row, column, columnspan):
+            label = Label(text=text, bg=bg, fg=fg, padx=padx, pady=pady)
+            label.grid(row=row, column=column, columnspan=columnspan)
+            return label
+
         print('data: ', data)
+        first = 3
+        second = 3
+
         for key in self.baseData:
             player = python_gamefuncs.Player(key)
             if (int(key) % 2) == 0:
                 self.greenTeam.addPlayer(player)
+                self.greenLabels[player] = (createLabel(player.codeName, back, 'white', 10, 10, first, 2, 1), createLabel(player.points, back, 'white', 10, 10, first, 3, 1))
+
             else:
                 self.redTeam.addPlayer(player)
+                self.greenLabels[player] = (createLabel(player.codeName, back, 'white', 10, 10, first, 0, 1), createLabel(player.points, back, 'white', 10, 10, first, 1, 1))
 
     def updatePoints(self):
         for player in self.greenTeam:
@@ -43,8 +56,6 @@ class GameScreen(Frame):
             player.print()
         for player in self.redTeam:
             player = player.updateInfo()
-            player.print()
-
 
     def createWidgets(self):
         print('in createWidgets, baseData: ', self.baseData)
@@ -79,18 +90,6 @@ class GameScreen(Frame):
         createLabel('Points', green, 'white', 40, 10, 2,
                     3, 1)                 # Adjusted row
 
-        # 3rd number is row, 4th number is column, keep 10 and 10 for pads
-        first = 3
-        second = 3
-        for player in self.greenTeam.getPlayers():
-            createLabel(player.codeName, back, 'white', 10, 10, first, 2, 1)
-            createLabel(player.points, back, 'white', 10, 10, first, 3, 1)
-            first += 1
-
-        for player in self.redTeam.getPlayers():
-            createLabel(player.codeName, back, 'white', 10, 10, second, 0, 1)
-            createLabel(player.points, back, 'white', 10, 10, second, 1, 1)
-            second += 1
 
 #       for key in self.baseData:
 #           if (int(key) % 2) == 0:
@@ -196,6 +195,7 @@ class GameScreen(Frame):
             seconds = count % 60
             timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
             self.game_timer_label.config(text=timer_text)
+            self.updatePlayers()
             self.master.after(1000, self.gameTimer, count+1)
         else:
             black_strip = Label(self.master, bg="black")
@@ -240,7 +240,6 @@ class Application(Frame):
         python_gamefuncs.start()
         python_supabase.Database.clearEquipmentIds()
         print('socket created')
-
 
     def createWidgets(self):
         red = '#990000'
@@ -437,5 +436,6 @@ app = Application(root)
 print('running')
 root.mainloop()
 print('running')
+root.mainloop()
 root.mainloop()
 root.mainloop()
