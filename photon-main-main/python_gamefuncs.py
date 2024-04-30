@@ -1,9 +1,30 @@
 import os
 import python_supabase
+import python_udpclient
+
+
+def listen_for_messages():
+
+    while True:
+        try:
+            # Receive a message from the server
+            message = python_udpclient.receiveMessage(7501)
+            print('in client message: ', message)
+            # You can process the message further here if needed
+        except Exception as e:
+            print("Error receiving message:", e)
+
+
+# Start a thread to listen for messages
+message_listener_thread = python_udpclient.threading.Thread(
+    target=listen_for_messages)
+message_listener_thread.start()
+
 
 class Team():
     points = 0
-    ## will initialize a green and red team
+    # will initialize a green and red team
+
     def __init__(self) -> None:
         self.players = []
 
@@ -19,33 +40,39 @@ class Team():
         for player in self.players:
             self.points += player.points
 
+
 class Player():
     points = 0
+
     def __init__(self, pID) -> None:
-        ## take data from supabase
+        # take data from supabase
         data = python_supabase.Database.fetch_playerData(pID)
         self.hasBase = data[0]['hasBase']
         self.playerID = pID
         self.equipmentID = data[0]['equipment_id']
         self.codeName = data[0]['codename']
-        if ((int(pID) % 2) == 1): self.color = "RED" ## IF ID == ODD -> RED TEAM
-        else: self.color = "GREEN" ## IF ID == EVEN -> GREEN TEAM
+        if ((int(pID) % 2) == 1):
+            self.color = "RED"  # IF ID == ODD -> RED TEAM
+        else:
+            self.color = "GREEN"  # IF ID == EVEN -> GREEN TEAM
 
     def styleB(self, pID) -> None:
         playerdata = python_supabase.Database.fetch_playerData(pID)
         if playerdata[0]['hasBase'] is False:
             print("player has hit base")
-            python_supabase.Database.update_data(pID, "🅑 " + playerdata[0]['codename'], playerdata[0]['equipment_id'], True, playerdata[0]['points'])
+            python_supabase.Database.update_data(
+                pID, "🅑 " + playerdata[0]['codename'], playerdata[0]['equipment_id'], True, playerdata[0]['points'])
         else:
             print("player has already hit base")
 
     def onHit(self, hID) -> None:
         playerdata = python_supabase.Database.HID_fetch_playerData(hID)
         print(f"player {playerdata} has hit opponent")
-        python_supabase.Database.update_data(playerdata[0]['id'], playerdata[0]['codename'], hID, playerdata[0]['hasBase'], playerdata[0]['points'] + 10)
+        python_supabase.Database.update_data(
+            playerdata[0]['id'], playerdata[0]['codename'], hID, playerdata[0]['hasBase'], playerdata[0]['points'] + 10)
 
     def badOnHit(self, hID) -> None:
         playerdata = python_supabase.Database.HID_fetch_playerData(hID)
         print(f"player {playerdata} has hit teammate")
-        python_supabase.Database.update_data(playerdata[0]['id'], playerdata[0]['codename'], hID, playerdata[0]['hasBase'], playerdata[0]['points'] - 10)
-
+        python_supabase.Database.update_data(
+            playerdata[0]['id'], playerdata[0]['codename'], hID, playerdata[0]['hasBase'], playerdata[0]['points'] - 10)
