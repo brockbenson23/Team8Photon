@@ -2,11 +2,13 @@ import os
 import python_supabase
 import python_udpserver  # Import the UDP server module
 import threading
+import time
 
 
 def listen_for_messages():
     last_message = ''
     while True:
+        time.sleep(0.1)
         try:
             # Receive a message from the server
             message = receive_message()
@@ -21,7 +23,7 @@ def receive_message():
     global python_udpserver
     text = python_udpserver.received_message
     python_udpserver.received_message = ''
-    if text == '':
+    if (text == '') or (text is None):
         return text
     else:
         # split up b'str1:str2' into str1, str2
