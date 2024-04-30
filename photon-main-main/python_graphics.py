@@ -74,18 +74,28 @@ class GameScreen(Frame):
         # 3rd number is row, 4th number is column, keep 10 and 10 for pads
         first = 3
         second = 3
-        for key in self.baseData:
-            if (int(key) % 2) == 0:
-                print('in if')
-                createLabel(self.baseData[key], back,
-                            'white', 10, 10, first, 2, 1)
-                createLabel('point', back, 'white', 10, 10, first, 3, 1)
-                first += 1
-            else:
-                createLabel(self.baseData[key], back,
-                            'white', 10, 10, second, 0, 1)
-                createLabel('point', back, 'white', 10, 10, second, 1, 1)
-                second += 1
+        for player in self.greenTeam.getPlayers():
+            createLabel(player.codeName, back, 'white', 10, 10, first, 2, 1)
+            createLabel(player.points, back, 'white', 10, 10, first, 3, 1)
+            first += 1
+
+        for player in self.redTeam.getPlayers():
+            createLabel(player.codeName, back, 'white', 10, 10, second, 0, 1)
+            createLabel(player.points, back, 'white', 10, 10, second, 1, 1)
+            second += 1
+
+#       for key in self.baseData:
+#           if (int(key) % 2) == 0:
+#               print('in if')
+#               createLabel(self.baseData[key], back,
+#                           'white', 10, 10, first, 2, 1)
+#               createLabel('point', back, 'white', 10, 10, first, 3, 1)
+#               first += 1
+#           else:
+#               createLabel(self.baseData[key], back,
+#                           'white', 10, 10, second, 0, 1)
+#               createLabel('point', back, 'white', 10, 10, second, 1, 1)
+#               second += 1
 
         createLabel('Game Actions', back, 'white', 20, 10, 11, 0, 8)
 

@@ -59,6 +59,8 @@ class Team():
         for player in self.players:
             self.points += player.points
 
+    def getPlayers(self):
+        return self.players
 
 class Player():
     points = 0
