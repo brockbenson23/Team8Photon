@@ -87,7 +87,7 @@ class Database:
     @staticmethod
     def fetch_name(id):
         data = Database.supabase.table(
-            'player').select('*').eq('id', id).execute()
+            'player').select('*').eq('equipment_id', id).execute()
         codename = data.data[0]['codename'] if data.data else None
         return codename
 

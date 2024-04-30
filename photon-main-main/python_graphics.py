@@ -61,6 +61,10 @@ class GameScreen(Frame):
         print("greenLabels after getData:", self.greenLabels)
 
     def blinking(self):
+        for i in self.greenLabels:
+            print(
+                f"WHAT I WANT TO SEE :self.greenLabels[{i}][0] {self.greenLabels[i][0].var} --------------------------------")
+        team = "green"
         for player in self.greenLabels:
             if self.greenLabels[player][1] > highest[1]:
                 highest = self.greenLabels[player]
@@ -85,13 +89,13 @@ class GameScreen(Frame):
         for player in self.greenLabels:
             var = StringVar()
             label = Label(textvariable=var, bg=back, fg='white', padx=10, pady=10)
-            player = player.updateInfo()
-            player.print()
-            var.set(player.codeName)
+            player2 = player.updateInfo()
+            player2.print()
+            var.set(player2.codeName)
             label.grid(row=first, column=2, columnspan=1)
             var2 = StringVar()
             label = Label(textvariable=var2, bg=back, fg='white', padx=10, pady=10)
-            var2.set(str(player.points))
+            var2.set(str(player2.points))
             label.grid(row=first, column=3, columnspan=1)
             first += 1
         for player in self.redLabels:
@@ -169,15 +173,22 @@ class GameScreen(Frame):
                 colon = string.find(':')
                 str1 = string[:colon]  # starts at 2 because str1 starts with b'
                 str2 = string[colon+1:]  # leaves out ' at the end
+                name1 = python_supabase.fetch_name(int(str1))
+                name2 = python_supabase.fetch_name(int(str2))
+                print(str1)
+                print(str2)
+                print(name1)
+                print(name2)
+
                 if (str2 == '53') and (int(str1) % 2 == 0):
-                    string = "red base has been scored by player with id " + str1
+                    string = "red base has been scored by player with id " + str1 
                 elif (str2 == '43') and (int(str1) % 2 == 1):
                     string = "green base has been scored by player with id " + str1
                 elif (str1 != '') and (str2 != ''):
-                    string = "player with id "+str1+" has hit player with id "+str2+" in gamefuncs"
+                    string = "player with id "+str1+" has hit player with id "+ str2
                     # if players are on same team, do badhit
                     if (((int(str1) % 2 == 1) and (int(str2) % 2 == 1)) or ((int(str1) % 2 == 0) and (int(str2) % 2 == 0))):
-                        string = "player with id "+str1+" hit their own teammate"
+                        string = "player with id "+getname(str1)+" hit their own teammate"
                         
                 messages.append(string)
             scroll_text.delete('1.0', END)
@@ -195,6 +206,7 @@ class GameScreen(Frame):
             blacklabel.grid(row=row, column=column, columnspan=columnspan)
             return blacklabel
 
+    
     def clearScreen(self):
         # Destroy all widgets in the current window
         for widget in self.master.winfo_children():
