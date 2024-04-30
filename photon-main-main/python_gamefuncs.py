@@ -13,9 +13,6 @@ def listen_for_messages():
             if message is not None and message != last_message:
                 print('in gamefuncs - message:', message)
                 last_message = message
-            if message is not None:
-                print('in gamefuncs - message: ', message)
-                lastmessage = message
         except Exception as e:
             print("Error receiving message:", e)
 
