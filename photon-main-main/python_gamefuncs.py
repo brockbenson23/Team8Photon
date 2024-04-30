@@ -30,14 +30,16 @@ def receive_message():
         colon = text.find(':')
         str1 = text[2:colon]  # starts at 2 because str1 starts with b'
         str2 = text[colon+1:-1]  # leaves out ' at the end
-        if str2 == '53':
+        if (str2 == '53') and (int(str1) % 2 == 0):
             print("red base has been scored in gamefuncs")
             Player.styleB(str1)
-        elif str2 == '43':
+        elif (str2 == '43') and (int(str1) % 2 == 1):
             print("green base has been scored in gamefuncs")
             Player.styleB(str1)
         elif (str1 != '') and (str2 != ''):
             print("player with id {} has hit player with id {} in gamefuncs".format(str1, str2))
+            if (((int(str1) % 2 == 1) and (int(str2) % 2 == 1)) or ((int(str1) % 2 == 0) and (int(str2) % 2 == 0))): # if players are on same team, do badhit
+                Player.badOnHit(str1)
             Player.onHit(str1)
         return str1 + ':' + str2
 
@@ -81,14 +83,22 @@ class Player():
         else:
             self.color = "GREEN"  # IF ID == EVEN -> GREEN TEAM
 
+    def updateInfo(self):
+        data = python_supabase.Database.fetch_playerData(self.equipmentID)
+        self.playerID = data[0]['id']
+        self.codeName = data[0]['codename']
+        self.points = data[0]['points']
+        self.hasBase = data[0]['hasBase']
+        return self
+
     def styleB(hID) -> None:
         playerdata = python_supabase.Database.HID_fetch_playerData(hID)
         if playerdata[0]['hasBase'] is False:
             print("player has hit base")
             python_supabase.Database.update_data(
                 playerdata[0]['id'], "🅑 " + playerdata[0]['codename'], hID, True, playerdata[0]['points'])
-            name = self.codeNamess.pop()
-            self.codeNamess.append(str('🅑 ' + name))
+            name = Player.codeNamess.pop()
+            Player.codeNamess.append(str('🅑 ' + name))
         else:
             print("player has already hit base")
 
