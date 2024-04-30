@@ -84,7 +84,7 @@ class Player():
         self.playerID = data[0]['id']
         self.equipmentID = hID
         self.codeName = data[0]['codename']
-        self.codeNamess.append(self.codeName)
+        Player.codeNamess.append(self.codeName)
 
     def updateInfo(self):
         data = python_supabase.Database.fetch_playerData(self.equipmentID)
@@ -93,7 +93,8 @@ class Player():
         self.points = data[0]['points']
         self.hasBase = data[0]['hasBase']
         return self
-
+    
+   
     def styleB(hID) -> None:
         playerdata = python_supabase.Database.HID_fetch_playerData(hID)
         if playerdata[0]['hasBase'] is False:

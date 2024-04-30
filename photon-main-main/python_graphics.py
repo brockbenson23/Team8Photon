@@ -40,8 +40,10 @@ class GameScreen(Frame):
     def updatePoints(self):
         for player in self.greenTeam:
             player = player.updateInfo()
+            #player.print()
         for player in self.redTeam:
             player = player.updateInfo()
+            #player.print()
 
 
     def createWidgets(self):
