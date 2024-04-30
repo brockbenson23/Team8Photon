@@ -8,7 +8,7 @@ import time
 def listen_for_messages():
     last_message = ''
     while True:
-        time.sleep(0.1)
+#       time.sleep(0.1)
         try:
             # Receive a message from the server
             message = receive_message()
@@ -66,6 +66,7 @@ class Team():
 
 class Player():
     points = 0
+    codeNamess = []
 
     def __init__(self, pID) -> None:
         # take data from supabase
@@ -74,6 +75,7 @@ class Player():
         self.playerID = pID
         self.equipmentID = data[0]['equipment_id']
         self.codeName = data[0]['codename']
+        self.codeNamess.append(self.codeName)
         if ((int(pID) % 2) == 1):
             self.color = "RED"  # IF ID == ODD -> RED TEAM
         else:
@@ -85,6 +87,8 @@ class Player():
             print("player has hit base")
             python_supabase.Database.update_data(
                 playerdata[0]['id'], "🅑 " + playerdata[0]['codename'], hID, True, playerdata[0]['points'])
+            name = self.codeNamess.pop()
+            self.codeNamess.append(str('🅑 ' + name))
         else:
             print("player has already hit base")
 
