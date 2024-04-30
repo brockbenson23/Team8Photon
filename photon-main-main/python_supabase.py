@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 import os
 from typing import Dict
 import python_udpserver
-import python_udpclient
 
 class Database:
     load_dotenv()

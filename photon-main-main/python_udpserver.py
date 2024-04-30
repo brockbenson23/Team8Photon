@@ -31,19 +31,12 @@ def decipherMsg(sock, mask):
     print(f"str1 = {str1}")
     print(f"str2 = {str2}")
     # check whether str2 is a base hit or an equipmentID
-    if (str1 == -1) and (str2 == -1):
-        print("dw bout it sweetheart")
-    if str2 == '53':
-        print("red base has been scored")
-    elif str2 == '43':
-        print("green base has been scored")
-    else:
-        print("player with id {} has hit player with id {}".format(str1, str2))
+    if str2 == '53': print("red base has been scored")
+    elif str2 == '43': print("green base has been scored")
+    else: print("player with id {} has hit player with id {}".format(str1, str2))
 
     # answer client
-    transmitCode(str1)
-    return str1, str2
-
+    transmitCode(str2)
 
 def createSocket():
     global UDPBroadcastSocket
@@ -65,9 +58,6 @@ def createSocket():
     sel.register(UDPServerSocket, selectors.EVENT_READ, decipherMsg)
     print("UDP server up and listening")
 
-
-
-
     while True:
         # if graphics needs to send code, s.transmitCode will be called?
         print('in while loop')
@@ -75,18 +65,4 @@ def createSocket():
         for key, mask in events:
             callback = key.data
             callback(key.fileobj, mask)
-        # bytesAddressPair = UDPServerSocket.recvfrom(bufferSize)
 
-        # deciper message
-        # serverMsg = str(bytesAddressPair[0])
-        # address = bytesAddressPair[1]  # may need to stringify
-        # print("Message from Client:{}".format(serverMsg))
-        # print("Client IP Address:{}".format(address))
-
-        # separate message "1:2" into str1 = 1 and str2 = 2
-        # str1, str2 = decipherMsg(serverMsg)
-
-        # transmitCode(str1)
-
-    # This line will never be reached because of the infinite loop above
-    # return UDPServerSocket.recvfrom(bufferSize)

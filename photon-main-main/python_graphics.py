@@ -9,13 +9,8 @@ from tkinter import *
 from tkinter import scrolledtext
 from PIL import ImageTk, Image
 import os
-import math
 import threading
-print('after math')
 print('after gamefuncs')
-
-# comment this out its so useless but don't delete clifford needs it
-# import test
 
 
 class GameScreen(Frame):
