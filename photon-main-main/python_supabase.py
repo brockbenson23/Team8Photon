@@ -13,7 +13,7 @@ class Database:
     @staticmethod
     def clearEquipmentIds():
         data = Database.supabase.table('player').update(
-            {'equipment_id': 0}).eq('points', 0).execute()
+            {'equipment_id': 0}).gt('prime_key', 0).execute()
         print("All equipment IDs cleared.")
 
     @staticmethod
@@ -80,7 +80,7 @@ class Database:
 
     @staticmethod
     def update_data(id, codename, equipmentid, hasBase, points):
-        data = Database.supabase.table('player').update({'codename': codename, 
+        data = Database.supabase.table('player').update({'codename': codename,
         'equipment_id': equipmentid, 'hasBase': hasBase, 'points': points}).eq('id', id).execute()
         print(data)
 

@@ -12,6 +12,24 @@ import os
 import threading
 print('after gamefuncs')
 
+def quick_sort(arr, start, end):
+    if start < end:
+        piv = partition(arr, start, end)
+        quick_sort(arr, start, piv - 1)
+        quick_sort(arr, piv + 1, end)
+
+
+def partition(arr, start, end) -> int:
+    piv = arr[end][1]
+    i = start - 1
+
+    for j in range(start, end):
+        if arr[j][1] > piv:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+
+    arr[i + 1], arr[end] = arr[end], arr[i + 1]
+    return i + 1
 
 class GameScreen(Frame):
     baseData = {}
@@ -28,6 +46,7 @@ class GameScreen(Frame):
         self.redTeam = python_gamefuncs.Team()
         self.greenLabels = {}
         self.redLabels = {}
+        self.baseData = None
 
     def getData(self, data):
         self.baseData = data
@@ -60,57 +79,68 @@ class GameScreen(Frame):
 
         print("greenLabels after getData:", self.greenLabels)
 
-    def blinking(self):
-        for i in self.greenLabels:
-            print(
-                f"WHAT I WANT TO SEE :self.greenLabels[{i}][0] {self.greenLabels[i][0].var} --------------------------------")
-        team = "green"
-        for player in self.greenLabels:
-            if self.greenLabels[player][1] > highest[1]:
-                highest = self.greenLabels[player]
-        for player in self.redLabels:
-            if self.redLabels[player][1] > highest[1]:
-                highest = self.redLabels[player]
-                team = "red"
-        self.blinking_helper(highest, team)
+#   def blinking(self):
+#       for i in self.greenLabels:
+#           print(
+#               f"WHAT I WANT TO SEE :self.greenLabels[{i}][0] {self.greenLabels[i][0].var} --------------------------------")
+#       team = "green"
+#       for player in self.greenLabels:
+#           if self.greenLabels[player][1] > highest[1]:
+#               highest = self.greenLabels[player]
+#       for player in self.redLabels:
+#           if self.redLabels[player][1] > highest[1]:
+#               highest = self.redLabels[player]
+#               team = "red"
+#       self.blinking_helper(highest, team)
 
-    def blinking_helper(self, player, team):
-        print(f"{player[0]} on team {team} should be blinking")
+#   def blinking_helper(self, player, team):
+#       print(f"{player[0]} on team {team} should be blinking")
 
     def updatePoints(self):
         back = '#323133'
-        print("greenLabels keys:", self.greenLabels.keys())  # Add this line to check the keys in greenLabels
-        print("redLabel keys:", self.redLabels.keys())  # Add this line to check the keys in greenLabels
-        print("self.baseData:", self.baseData)  # Add this line to check the baseData
+        # Add this line to check the keys in greenLabels
+        print("greenLabels keys:", self.greenLabels.keys())
+        # Add this line to check the keys in greenLabels
+        print("redLabel keys:", self.redLabels.keys())
+        # Add this line to check the baseData
+        print("self.baseData:", self.baseData)
         print('in updatepoints')
         print('in updatepoints')
         first = 3
         second = 3
-        for player in self.greenLabels:
+            # Create a list of tuples containing player objects and their points
+        green_players = [(player, player.points) for player in self.greenLabels]
+        red_players = [(player, player.points) for player in self.redLabels]
+
+        # Sort the players using quick sort
+        quick_sort(green_players, 0, len(green_players) - 1)
+        quick_sort(red_players, 0, len(red_players) - 1)
+
+        # Update green team labels
+        for idx, (player, points) in enumerate(green_players):
             var = StringVar()
             label = Label(textvariable=var, bg=back, fg='white', padx=10, pady=10)
             player2 = player.updateInfo()
             player2.print()
             var.set(player2.codeName)
-            label.grid(row=first, column=2, columnspan=1)
+            label.grid(row=first + idx, column=2, columnspan=1)
             var2 = StringVar()
             label = Label(textvariable=var2, bg=back, fg='white', padx=10, pady=10)
             var2.set(str(player2.points))
-            label.grid(row=first, column=3, columnspan=1)
-            first += 1
-        for player in self.redLabels:
+            label.grid(row=first + idx, column=3, columnspan=1)
+
+        # Update red team labels
+        for idx, (player, points) in enumerate(red_players):
             var = StringVar()
             label = Label(textvariable=var, bg=back, fg='white', padx=10, pady=10)
             player = player.updateInfo()
             player.print()
             var.set(player.codeName)
-            label.grid(row=second, column=0, columnspan=1)
+            label.grid(row=second + idx, column=0, columnspan=1)
             var2 = StringVar()
             label = Label(textvariable=var2, bg=back, fg='white', padx=10, pady=10)
             var2.set(str(player.points))
-            label.grid(row=second, column=1, columnspan=1)
-            second += 1
-
+            label.grid(row=second + idx, column=1, columnspan=1)
 
     def createWidgets(self):
         print('in createWidgets, baseData: ', self.baseData)
@@ -165,16 +195,20 @@ class GameScreen(Frame):
             self.master, wrap=WORD, width=40, height=10)
         scroll_text.grid(row=12, column=0, columnspan=4, sticky="ew")
         thing = python_gamefuncs.Actions()
+
         def addText():
             previous = thing.shooting
             thing.update()
             string = thing.shooting
             if string != previous:
                 colon = string.find(':')
-                str1 = string[:colon]  # starts at 2 because str1 starts with b'
+                # starts at 2 because str1 starts with b'
+                str1 = string[:colon]
                 str2 = string[colon+1:]  # leaves out ' at the end
-                name1 = python_supabase.Database.HID_fetch_playerData(int(str1))[0]['codename']
-                name2 = python_supabase.Database.HID_fetch_playerData(int(str2))[0]['codename']
+                name1 = python_supabase.Database.HID_fetch_playerData(int(str1))[
+                    0]['codename']
+                name2 = python_supabase.Database.HID_fetch_playerData(int(str2))[
+                    0]['codename']
                 print(str1)
                 print(str2)
                 print(name1)
@@ -185,11 +219,11 @@ class GameScreen(Frame):
                 elif (str2 == '43') and (int(str1) % 2 == 1):
                     string = "green base has been scored by player " + name1
                 elif (str1 != '') and (str2 != ''):
-                    string = "player "+name1+" has hit player with id "+ name2
+                    string = "player "+name1+" has hit player with id " + name2
                     # if players are on same team, do badhit
                     if (((int(str1) % 2 == 1) and (int(str2) % 2 == 1)) or ((int(str1) % 2 == 0) and (int(str2) % 2 == 0))):
                         string = "player "+name1+" hit their own teammate"
-                        
+
                 messages.append(string)
             scroll_text.delete('1.0', END)
             for message in messages[-100:]:
@@ -206,7 +240,6 @@ class GameScreen(Frame):
             blacklabel.grid(row=row, column=column, columnspan=columnspan)
             return blacklabel
 
-    
     def clearScreen(self):
         # Destroy all widgets in the current window
         for widget in self.master.winfo_children():
