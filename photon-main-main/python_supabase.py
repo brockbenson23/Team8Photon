@@ -13,8 +13,22 @@ class Database:
     @staticmethod
     def clearEquipmentIds():
         data = Database.supabase.table('player').update(
-            {'equipment_id': 0}).gt('prime_key', 0).execute()
+                {'equipment_id': 0, 'hasBase': bool(False), 'points': 0}).gt('prime_key', 0).execute()
         print("All equipment IDs cleared.")
+
+    @staticmethod
+    def removeB():
+        # Fetch all player data
+        all_players_data = Database.supabase.table('player').select('*').execute().data
+
+        if all_players_data:
+            for player_data in all_players_data:
+                # Remove the '🅑' prefix from the code name
+                codename = player_data.get('codename', '')
+                if codename.startswith('🅑'):
+                    new_codename = codename[2:]
+                    # Update the database with the new code name
+                    Database.supabase.table('player').update({'codename': new_codename}).eq('id', player_data['id']).execute()
 
     @staticmethod
     def addData(values: Dict[int, str]) -> Dict[int, str]:

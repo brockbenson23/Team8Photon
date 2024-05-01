@@ -96,8 +96,35 @@ class GameScreen(Frame):
 #   def blinking_helper(self, player, team):
 #       print(f"{player[0]} on team {team} should be blinking")
 
+    def blink_top_players(self, label_dict, top_label):
+        for _ in range(3):  # Blink three times
+            top_label.config(fg="white" if top_label["fg"] == "black" else "black")
+            top_label.update_idletasks()
+            time.sleep(0.5)  # Adjust the delay as needed
+
     def updatePoints(self):
         back = '#323133'
+        # Calculate total scores for each team
+        green_total_score = sum(player.points for player in self.greenLabels)
+        red_total_score = sum(player.points for player in self.redLabels)
+
+        # Create labels to display total scores
+        green_score_label = Label(text=str(green_total_score), bg=back, fg='white', padx=10, pady=10)
+        green_score_label.grid(row=1, column=2, columnspan=2)  # Adjust row and column as needed
+        red_score_label = Label(text=str(red_total_score), bg=back, fg='white', padx=10, pady=10)
+        red_score_label.grid(row=1, column=0, columnspan=2)  # Adjust row and column as needed
+
+        # Determine the winning team
+        winning_team_label = None
+        if green_total_score > red_total_score:
+            winning_team_label = green_score_label
+        elif red_total_score > green_total_score:
+            winning_team_label = red_score_label
+
+        # If there is a winning team, make the label blink
+        if winning_team_label:
+            threading.Thread(target=self.blink_top_players, args=({winning_team_label: winning_team_label}, winning_team_label)).start()
+
         # Add this line to check the keys in greenLabels
         print("greenLabels keys:", self.greenLabels.keys())
         # Add this line to check the keys in greenLabels
@@ -129,6 +156,11 @@ class GameScreen(Frame):
             var2.set(str(player2.points))
             label.grid(row=first + idx, column=3, columnspan=1)
 
+            # If it's the top player, blink the label
+            if idx == 0:
+                threading.Thread(target=self.blink_top_players, args=(self.greenLabels, label)).start()
+
+
         # Update red team labels
         for idx, (player, points) in enumerate(red_players):
             var = StringVar()
@@ -141,6 +173,10 @@ class GameScreen(Frame):
             label = Label(textvariable=var2, bg=back, fg='white', padx=10, pady=10)
             var2.set(str(player.points))
             label.grid(row=second + idx, column=1, columnspan=1)
+
+            # If it's the top player, blink the label
+            if idx == 0:
+                threading.Thread(target=self.blink_top_players, args=(self.greenLabels, label)).start()
 
     def createWidgets(self):
         print('in createWidgets, baseData: ', self.baseData)
@@ -352,6 +388,7 @@ class Application(Frame):
         # Start creating the socket in the background
         python_gamefuncs.start()
         python_supabase.Database.clearEquipmentIds()
+        python_supabase.Database.removeB()
         print('socket created')
 
     def createWidgets(self):
