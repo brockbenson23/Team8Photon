@@ -338,7 +338,7 @@ class GameScreen(Frame):
             self.gameTimer(0)
 
     def gameTimer(self, count):
-        if count <= 360:
+        if count <= 10:
             minutes = count // 60
             seconds = count % 60
             timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
@@ -347,19 +347,25 @@ class GameScreen(Frame):
             self.updatePoints()
             self.master.after(1000, self.gameTimer, count+1)
         else:
-            black_strip = Label(self.master, bg="black")
-            black_strip.grid(row=24, column=0, columnspan=4, sticky="ew")
-            end_button = Button(self.master, text="Game Over",
-                                command=self.handleGameEnd)
-            end_button.grid(row=24, column=0, columnspan=4)
+            self.handleGameEnd()
 
     def handleGameEnd(self):
-        # Clear the current screen
+        # Display final score
         self.clearScreen()
-        # Get the parent frame (Application frame)
-        self.application_instance.createWidgets()
-        self.application_instance.createButton()
+        back = '#323133'
+        green_total_score = sum(player.points for player in self.greenLabels)
+        red_total_score = sum(player.points for player in self.redLabels)
+        final_score_label = Label(text=f"Final Score:\nGreen Team: {green_total_score}\nRed Team: {red_total_score}", bg=back, fg='white', font=("Arial", 16), padx=10, pady=10)
+        final_score_label.grid(row=0, column=0, columnspan=4)
 
+        self.master.after(5000, self.switchToEntryScreen)
+
+    def switchToEntryScreen(self):
+        # Open up the application entry screen
+        self.clearScreen()
+        app_instance = Application(self.master)
+        app_instance.createWidgets()
+        app_instance.createButton()
 
 class Application(Frame):
 
