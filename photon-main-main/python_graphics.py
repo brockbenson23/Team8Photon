@@ -307,7 +307,7 @@ class GameScreen(Frame):
         pygame.mixer.music.load(current_directory + track)
         pygame.mixer.music.play()
 
-    def countdowntimer(self, count=1):
+    def countdowntimer(self, count=30):
 
         if count >= 0:
             # Get the current directory
@@ -335,17 +335,17 @@ class GameScreen(Frame):
             self.game_timer_label.grid(
                 row=1, column=0, columnspan=4, sticky="ew")
             python_udpserver.transmitCode('202')
-            self.gameTimer(0)
+            self.gameTimer(360)
 
     def gameTimer(self, count):
-        if count <= 10:
+        if count >= 0:
             minutes = count // 60
             seconds = count % 60
             timer_text = f"Game Timer: {minutes:02d}:{seconds:02d}"
             self.game_timer_label.config(text=timer_text)
             # self.updatePlayers()
             self.updatePoints()
-            self.master.after(1000, self.gameTimer, count+1)
+            self.master.after(1000, self.gameTimer, count-1)
         else:
             self.handleGameEnd()
 
